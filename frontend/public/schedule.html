@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -29,6 +29,7 @@
             border-radius: 6px;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -73,7 +74,7 @@
                     notes: document.getElementById('notes').value
                 };
 
-                const response = await fetch('/api/sessions', {
+                const response = await fetch(API_BASE + '/api/sessions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',

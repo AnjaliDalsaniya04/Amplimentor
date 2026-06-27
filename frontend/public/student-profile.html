@@ -1,10 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile - Amplimentor</title>
     <link rel="stylesheet" href="/style.css?v=1.3">
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -207,7 +208,7 @@
             
             const studentPhoto = document.getElementById('studentPhoto');
             if (student.photo) {
-                studentPhoto.src = '/uploads/' + student.photo;
+                studentPhoto.src = API_BASE + '/uploads/' + student.photo;
             } else {
                 studentPhoto.src = '/default-avatar.svg';
             }
@@ -229,7 +230,7 @@
         }
 
         function fetchStudentProfile() {
-            fetch('/api/student/profile', { credentials: 'include' })
+            fetch(API_BASE + '/api/student/profile', { credentials: 'include' })
                 .then(res => res.ok ? res.json() : Promise.reject('Failed to load profile'))
                 .then(populateProfileData)
                 .catch(console.error);
@@ -265,7 +266,7 @@
             const photoFile = document.getElementById('edit-photo').files[0];
 
             const saveProfileData = () => {
-                fetch('/api/student/profile', {
+                fetch(API_BASE + '/api/student/profile', {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     credentials: 'include',
@@ -306,7 +307,7 @@
 
                 const formData = new FormData();
                 formData.append('photo', photoFile);
-                fetch('/api/student/upload-photo', {
+                fetch(API_BASE + '/api/student/upload-photo', {
                     method: 'POST',
                     credentials: 'include',
                     body: formData,

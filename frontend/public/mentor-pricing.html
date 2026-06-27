@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -200,6 +200,7 @@
             color: #666;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -418,7 +419,7 @@
 
         async function loadCurrentPricing() {
             try {
-                const response = await fetch('/api/profile', {
+                const response = await fetch(API_BASE + '/api/profile', {
                     credentials: 'include'
                 });
                 
@@ -450,7 +451,7 @@
                 currentPricing.sessionRate = (parseInt(document.getElementById('sessionRate').value) || 0) * 100;
                 currentPricing.subscriptionPlans = currentPricing.subscriptionPlans.map(plan => ({ ...plan, price: plan.price * 100 }));
                 
-                const response = await fetch('/api/mentor/pricing', {
+                const response = await fetch(API_BASE + '/api/mentor/pricing', {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',

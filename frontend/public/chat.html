@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -168,6 +168,7 @@
             z-index: 1000;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -219,8 +220,8 @@
     let allConversations = [];
         
         document.addEventListener('DOMContentLoaded', async function() {
-            const profile = await fetch('/api/profile', { credentials: 'include' }).then(res => res.json());
-        currentUserId = profile._id;
+            const profile = await fetch(API_BASE + '/api/profile', { credentials: 'include' }).then(res => res.json());
+        currentUserId = profile.id;
             // Adjust navigation based on role
             const profileLink = document.getElementById('profileLink');
         if (profile.role === 'mentor') profileLink.href = '/mentor/profile';
@@ -252,7 +253,7 @@
         list.innerHTML = '<div class="loading-spinner">Loading conversations...</div>';
         let conversations = [];
         try {
-            const response = await fetch('/api/chats', { credentials: 'include' });
+            const response = await fetch(API_BASE + '/api/chats', { credentials: 'include' });
             if (!response.ok) throw new Error('Failed to load conversations');
             conversations = await response.json();
         } catch (err) {
@@ -271,16 +272,16 @@
         }
             list.innerHTML = '';
         conversations.forEach(convo => {
-            const participant = convo.mentor && convo.mentor._id !== currentUserId ? convo.mentor : convo.student;
+            const participant = convo.mentor && convo.mentor.id !== currentUserId ? convo.mentor : convo.student;
             if (!participant) return;
-            const photoSrc = participant.photo ? `/uploads/${participant.photo}` : '/default-avatar.svg';
+            const photoSrc = participant.photo ? `${API_BASE}/uploads/${participant.photo}` : '/default-avatar.svg';
             const lastMsg = (convo.messages && convo.messages.length) ? convo.messages[convo.messages.length-1].content : '';
                 const div = document.createElement('div');
                 div.className = 'conversation';
-            if (activeChatId && convo._id === activeChatId) div.classList.add('active');
+            if (activeChatId && convo.id === activeChatId) div.classList.add('active');
             div.innerHTML = `<img src="${photoSrc}" alt="${participant.name}" onerror="this.onerror=null;this.src='/default-avatar.svg'">
                 <div class="conv-info"><div class="conv-name">${participant.name}</div><div class="conv-last">${lastMsg ? lastMsg.substring(0, 30) : ''}</div></div>`;
-                div.onclick = () => selectConversation(convo._id, participant.name, photoSrc);
+                div.onclick = () => selectConversation(convo.id, participant.name, photoSrc);
                 list.appendChild(div);
         });
     }
@@ -288,7 +289,7 @@
     function filterConversations(e) {
         const search = e.target.value.toLowerCase();
         const filtered = allConversations.filter(convo => {
-            const participant = convo.mentor && convo.mentor._id !== currentUserId ? convo.mentor : convo.student;
+            const participant = convo.mentor && convo.mentor.id !== currentUserId ? convo.mentor : convo.student;
             return participant && participant.name.toLowerCase().includes(search);
         });
         renderConversations(filtered, currentChatId);
@@ -328,8 +329,8 @@
 
         function appendMessage(msg) {
             const messagesDiv = document.getElementById('messages');
-        // Defensive: handle missing sender or sender._id
-        const isSent = msg.sender && (msg.sender._id === currentUserId || msg.sender === currentUserId);
+        // Defensive: handle missing sender or sender.id
+        const isSent = msg.sender && (msg.sender.id === currentUserId || msg.sender === currentUserId);
             const messageEl = document.createElement('div');
         messageEl.className = `message ${isSent ? 'sent' : 'received'}`;
         let content = `<p>${msg.content || '[No content]'}</p>`;
@@ -414,7 +415,7 @@
 
         async function loadNotifications() {
             try {
-                const response = await fetch('/api/notifications', { credentials: 'include' });
+                const response = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
                 if (!response.ok) return;
                 const data = await response.json();
                 const countSpan = document.getElementById('notificationCount');

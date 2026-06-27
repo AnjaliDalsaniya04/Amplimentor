@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,6 +28,7 @@
             object-fit: cover;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -77,7 +78,7 @@
                 return;
             }
             container.innerHTML = students.map(student => {
-                let photoSrc = (student.photo && student.photo.trim() !== '') ? `/uploads/${student.photo}` : '/default-avatar.svg';
+                let photoSrc = (student.photo && student.photo.trim() !== '') ? `${API_BASE}/uploads/${student.photo}` : '/default-avatar.svg';
                 return `
                 <div class="student-card">
                     <img src="${photoSrc}" alt="${student.name}" class="student-photo" onerror="this.onerror=null;this.src='/default-avatar.svg'">
@@ -86,8 +87,8 @@
                         <p>Grade ${student.grade || 'N/A'} • ${(student.subjects || []).join(', ')}</p>
                     </div>
                     <div style="margin-left: auto;">
-                        <button onclick="openChat('${student._id}')">Chat</button>
-                        <button onclick="scheduleSession('${student._id}')">Schedule Session</button>
+                        <button onclick="openChat('${student.id}')">Chat</button>
+                        <button onclick="scheduleSession('${student.id}')">Schedule Session</button>
                     </div>
                 </div>
             `}).join('');

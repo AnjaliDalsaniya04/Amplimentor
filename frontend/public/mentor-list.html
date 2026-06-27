@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -352,6 +352,7 @@
             font-style: italic;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -463,7 +464,7 @@
         
         async function loadMentors() {
             try {
-                const response = await fetch('/api/mentors', {
+                const response = await fetch(API_BASE + '/api/mentors', {
                     credentials: 'include'
                 });
                 
@@ -490,7 +491,7 @@
             }
             
             const mentorsHTML = mentorsToShow.map(mentor => {
-                const photoSrc = mentor.photo ? `/uploads/${mentor.photo}` : '/default-avatar.svg';
+                const photoSrc = mentor.photo ? `${API_BASE}/uploads/${mentor.photo}` : '/default-avatar.svg';
                 const expertiseText = mentor.expertiseAreas && mentor.expertiseAreas.length > 0 
                     ? mentor.expertiseAreas.join(', ') 
                     : 'General mentoring';
@@ -539,10 +540,10 @@
                     </div>
                         
                         <div class="mentor-actions">
-                            <button class="request-btn" onclick="openRequestModal('${mentor._id}', '${mentor.name}')">
+                            <button class="request-btn" onclick="openRequestModal('${mentor.id}', '${mentor.name}')">
                                 Request Mentorship
                             </button>
-                            <button class="payment-btn" onclick="bookSession('${mentor._id}', '${mentor.name}', ${mentor.sessionRate || 2000})">
+                            <button class="payment-btn" onclick="bookSession('${mentor.id}', '${mentor.name}', ${mentor.sessionRate || 2000})">
                                 Book Session
                     </button>
                         </div>
@@ -601,7 +602,7 @@
             }
             
             try {
-                const response = await fetch('/api/mentor-requests', {
+                const response = await fetch(API_BASE + '/api/mentor-requests', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -663,7 +664,7 @@
         document.querySelector('.logout-btn').addEventListener('click', function(e) {
             e.preventDefault();
             
-            fetch('/logout', {
+            fetch(API_BASE + '/logout', {
                 method: 'POST',
                 credentials: 'include'
             })

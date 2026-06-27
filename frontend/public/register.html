@@ -1,11 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - Amplimentor</title>
     <link rel="stylesheet" href="/style.css?v=2.5">
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
 </head>
+
 <body class="auth-page">
     <!-- Navbar -->
     <nav class="navbar">
@@ -13,18 +17,18 @@
             <!-- Left: Logo -->
             <a href="/" class="nav-brand">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#logoGrad)"/>
-                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#logoGrad)" />
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff" />
                     <defs>
                         <linearGradient id="logoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#2563EB"/>
-                            <stop offset="1" stop-color="#4F46E5"/>
+                            <stop stop-color="#2563EB" />
+                            <stop offset="1" stop-color="#4F46E5" />
                         </linearGradient>
                     </defs>
                 </svg>
                 <span>Amplimentor</span>
             </a>
-            
+
             <!-- Right: About & Log In (Action) -->
             <div class="nav-menu-right">
                 <a href="/#about" class="nav-link-simple">About</a>
@@ -39,11 +43,12 @@
             <div class="auth-hero">
                 <img src="/student_hero_bg.png" alt="Hero Background" class="hero-bg-img">
                 <div class="hero-overlay"></div>
-                
+
                 <div class="hero-content">
                     <div class="hero-header">
                         <h2>Learn Today,<br><span class="highlight-text">Lead Tomorrow</span></h2>
-                        <p>Connect with expert mentors, learn new skills, and achieve your career goals with Amplimentor.</p>
+                        <p>Connect with expert mentors, learn new skills, and achieve your career goals with
+                            Amplimentor.</p>
                     </div>
 
                     <!-- Stacked Feature Cards -->
@@ -55,7 +60,7 @@
                                 <p>Access industry-leading mentors and practical learning experiences.</p>
                             </div>
                         </div>
-                        
+
                         <div class="hero-feature-card">
                             <div class="feature-card-icon">👥</div>
                             <div class="feature-card-text">
@@ -63,7 +68,7 @@
                                 <p>Receive personalized guidance and mentorship from professionals.</p>
                             </div>
                         </div>
-                        
+
                         <div class="hero-feature-card">
                             <div class="feature-card-icon">📈</div>
                             <div class="feature-card-text">
@@ -90,9 +95,12 @@
                             <div class="form-group">
                                 <label for="name">Full Name</label>
                                 <div class="input-container">
-                                    <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+                                    <input type="text" id="name" name="name" placeholder="Enter your full name"
+                                        required>
                                     <!-- User Icon -->
-                                    <svg class="input-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg class="input-icon" viewBox="0 0 24 24" width="16" height="16"
+                                        stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                                         <circle cx="12" cy="7" r="4"></circle>
                                     </svg>
@@ -104,8 +112,12 @@
                                 <div class="input-container">
                                     <input type="email" id="email" name="email" placeholder="Enter your email" required>
                                     <!-- Mail Icon -->
-                                    <svg class="input-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <svg class="input-icon" viewBox="0 0 24 24" width="16" height="16"
+                                        stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path
+                                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                        </path>
                                         <polyline points="22,6 12,13 2,6"></polyline>
                                     </svg>
                                 </div>
@@ -114,25 +126,35 @@
                             <div class="form-group">
                                 <label for="password">Password</label>
                                 <div class="input-container">
-                                    <input type="password" id="password" name="password" placeholder="Create a password" required>
+                                    <input type="password" id="password" name="password" placeholder="Create a password"
+                                        required>
                                     <!-- Lock Icon -->
-                                    <svg class="input-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg class="input-icon" viewBox="0 0 24 24" width="16" height="16"
+                                        stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                                     </svg>
                                     <!-- Password Eye Toggle -->
-                                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password', this)" tabindex="-1">
-                                        <svg class="eye-open" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <button type="button" class="toggle-password"
+                                        onclick="togglePasswordVisibility('password', this)" tabindex="-1">
+                                        <svg class="eye-open" viewBox="0 0 24 24" width="18" height="18"
+                                            stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
                                             <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
                                             <circle cx="12" cy="12" r="3"></circle>
                                         </svg>
-                                        <svg class="eye-closed" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-                                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                        <svg class="eye-closed" viewBox="0 0 24 24" width="18" height="18"
+                                            stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round" style="display: none;">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
                                             <line x1="1" y1="1" x2="23" y2="23"></line>
                                         </svg>
                                     </button>
                                 </div>
-                                
+
                                 <!-- Password Requirements Validation Check -->
                                 <ul class="password-requirements">
                                     <li id="req-length" class="invalid">
@@ -165,7 +187,9 @@
                                     <div class="custom-select-trigger" id="roleSelectTrigger" tabindex="0">
                                         <div class="trigger-left">
                                             <!-- User Badge Icon -->
-                                            <svg class="trigger-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg class="trigger-icon" viewBox="0 0 24 24" width="16" height="16"
+                                                stroke="currentColor" stroke-width="2" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
                                                 <line x1="7" y1="8" x2="17" y2="8"></line>
                                                 <line x1="7" y1="12" x2="17" y2="12"></line>
@@ -174,11 +198,13 @@
                                             <span class="trigger-text">Select your role</span>
                                         </div>
                                         <!-- Custom ChevronDown icon -->
-                                        <svg class="chevron-icon" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <svg class="chevron-icon" viewBox="0 0 24 24" width="16" height="16"
+                                            stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round"
+                                            stroke-linejoin="round">
                                             <polyline points="6 9 12 15 18 9"></polyline>
                                         </svg>
                                     </div>
-                                    
+
                                     <!-- Custom Options Dropdown -->
                                     <div class="custom-options-menu" id="roleOptionsMenu">
                                         <div class="custom-option-item" data-value="student">
@@ -187,7 +213,9 @@
                                                 <span class="option-label">Student</span>
                                             </div>
                                             <!-- Blue Checkmark -->
-                                            <svg class="option-check" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg class="option-check" viewBox="0 0 24 24" width="16" height="16"
+                                                stroke="currentColor" stroke-width="3" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <polyline points="20 6 9 17 4 12"></polyline>
                                             </svg>
                                         </div>
@@ -197,17 +225,20 @@
                                                 <span class="option-label">Mentor</span>
                                             </div>
                                             <!-- Blue Checkmark -->
-                                            <svg class="option-check" viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg class="option-check" viewBox="0 0 24 24" width="16" height="16"
+                                                stroke="currentColor" stroke-width="3" fill="none"
+                                                stroke-linecap="round" stroke-linejoin="round">
                                                 <polyline points="20 6 9 17 4 12"></polyline>
                                             </svg>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="role-helper-text">Choose whether you want to join as a Student or Mentor.</div>
+                                <div class="role-helper-text">Choose whether you want to join as a Student or Mentor.
+                                </div>
                             </div>
 
                             <button type="submit" class="btn-auth-gradient">Create Account</button>
-                            
+
                             <div id="registerMessage" class="message-div"></div>
                         </form>
 
@@ -237,7 +268,7 @@
             const input = document.getElementById(id);
             const eyeOpen = btn.querySelector('.eye-open');
             const eyeClosed = btn.querySelector('.eye-closed');
-            
+
             if (input.type === 'password') {
                 input.type = 'text';
                 eyeOpen.style.display = 'none';
@@ -262,26 +293,26 @@
 
         function isPasswordComplex(val) {
             return val.length >= 8 &&
-                   /[A-Z]/.test(val) &&
-                   /[a-z]/.test(val) &&
-                   /[0-9]/.test(val) &&
-                   /[^A-Za-z0-9]/.test(val);
+                /[A-Z]/.test(val) &&
+                /[a-z]/.test(val) &&
+                /[0-9]/.test(val) &&
+                /[^A-Za-z0-9]/.test(val);
         }
 
         // Show/hide based on focus
-        passwordInput.addEventListener('focus', function() {
+        passwordInput.addEventListener('focus', function () {
             if (!isPasswordComplex(passwordInput.value)) {
                 reqs.style.display = 'grid';
             }
         });
 
-        passwordInput.addEventListener('blur', function() {
+        passwordInput.addEventListener('blur', function () {
             reqs.style.display = 'none';
         });
 
-        passwordInput.addEventListener('input', function() {
+        passwordInput.addEventListener('input', function () {
             const val = passwordInput.value;
-            
+
             // 1. Length
             toggleCheck(reqLength, val.length >= 8);
             // 2. Upper case
@@ -328,7 +359,7 @@
 
     <!-- Custom Select Dropdown Controller Logic -->
     <script>
-        (function() {
+        (function () {
             const selectWrapper = document.getElementById('customRoleSelectWrapper');
             const selectTrigger = document.getElementById('roleSelectTrigger');
             const hiddenRoleInput = document.getElementById('role');
@@ -383,22 +414,22 @@
 
     <!-- Form Submit logic -->
     <script>
-    document.getElementById('registrationForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const form = e.target;
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const msgDiv = document.getElementById('registerMessage');
-        const originalText = submitBtn.innerHTML;
-        
-        const password = form.password.value;
+        document.getElementById('registrationForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const msgDiv = document.getElementById('registerMessage');
+            const originalText = submitBtn.innerHTML;
 
-        // Complexity check
-        if (!isPasswordComplex(password)) {
-            msgDiv.style.display = 'flex';
-            msgDiv.style.background = 'rgba(239, 68, 68, 0.1)';
-            msgDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-            msgDiv.style.color = '#EF4444';
-            msgDiv.innerHTML = `
+            const password = form.password.value;
+
+            // Complexity check
+            if (!isPasswordComplex(password)) {
+                msgDiv.style.display = 'flex';
+                msgDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                msgDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+                msgDiv.style.color = '#EF4444';
+                msgDiv.innerHTML = `
                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -406,79 +437,96 @@
                 </svg>
                 <span>Password does not meet the complexity requirements.</span>
             `;
-            return;
-        }
+                return;
+            }
 
-        // Show loading state
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
             <svg viewBox="0 0 50 50" style="width: 18px; height: 18px; fill: none; animation: spin 1s linear infinite;">
                 <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-dasharray="1, 150" stroke-dashoffset="0" style="animation: dash 1.5s ease-in-out infinite;"></circle>
             </svg>
             <span>Creating account...</span>
         `;
-        
-        const data = {
-            name: form.name.value,
-            email: form.email.value,
-            password: password,
-            role: form.role.value
-        };
-        
-        // CSS injection for spinner animations
-        if (!document.getElementById('auth-spinner-style')) {
-            const style = document.createElement('style');
-            style.id = 'auth-spinner-style';
-            style.innerHTML = `
+
+            const data = {
+                name: form.name.value,
+                email: form.email.value,
+                password: password,
+                role: form.role.value
+            };
+
+            // CSS injection for spinner animations
+            if (!document.getElementById('auth-spinner-style')) {
+                const style = document.createElement('style');
+                style.id = 'auth-spinner-style';
+                style.innerHTML = `
                 @keyframes spin { 100% { transform: rotate(360deg); } }
                 @keyframes dash {
                     0% { stroke-dasharray: 1, 150; stroke-dashoffset: 0; }
                     50% { stroke-dasharray: 90, 150; stroke-dashoffset: -35; }
                     100% { stroke-dasharray: 90, 150; stroke-dashoffset: -124; }
+        const res = await fetch(API_BASE + '/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        const msgDiv = document.getElementById('registerMessage');
+        const result = await res.json();
+        if (res.ok) {
+            msgDiv.style.color = 'green';
+            msgDiv.textContent = result.message;
+            form.reset();
+            // Redirect to dashboard after short delay
+            setTimeout(() => {
+                if (data.role === 'student') {
+                    window.location.href = '/student-dashboard.html';
+                } else if (data.role === 'mentor') {
+                    window.location.href = '/mentor-dashboard.html';
                 }
             `;
-            document.head.appendChild(style);
-        }
+                document.head.appendChild(style);
+            }
 
-        try {
-            const res = await fetch('/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            });
-            
-            const result = await res.json();
-            
-            if (res.ok) {
-                msgDiv.style.display = 'flex';
-                msgDiv.style.background = 'rgba(34, 197, 94, 0.1)';
-                msgDiv.style.border = '1px solid rgba(34, 197, 94, 0.3)';
-                msgDiv.style.color = '#22C55E';
-                msgDiv.innerHTML = `
+            try {
+                const res = await fetch('/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await res.json();
+
+                if (res.ok) {
+                    msgDiv.style.display = 'flex';
+                    msgDiv.style.background = 'rgba(34, 197, 94, 0.1)';
+                    msgDiv.style.border = '1px solid rgba(34, 197, 94, 0.3)';
+                    msgDiv.style.color = '#22C55E';
+                    msgDiv.innerHTML = `
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     <span>Registration successful! Redirecting...</span>
                 `;
-                form.reset();
-                
-                // Redirect based on user role
-                let targetUrl = (data.role === 'mentor') ? '/mentor-dashboard.html' : '/student-dashboard.html';
-                if (localStorage.getItem('pending_booking_mentor_id') && data.role === 'student') {
-                    targetUrl = '/mentors.html';
-                }
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 1000);
-            } else {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
-                
-                msgDiv.style.display = 'flex';
-                msgDiv.style.background = 'rgba(239, 68, 68, 0.1)';
-                msgDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-                msgDiv.style.color = '#EF4444';
-                msgDiv.innerHTML = `
+                    form.reset();
+
+                    // Redirect based on user role
+                    let targetUrl = (data.role === 'mentor') ? '/mentor-dashboard.html' : '/student-dashboard.html';
+                    if (localStorage.getItem('pending_booking_mentor_id') && data.role === 'student') {
+                        targetUrl = '/mentors.html';
+                    }
+                    setTimeout(() => {
+                        window.location.href = targetUrl;
+                    }, 1000);
+                } else {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+
+                    msgDiv.style.display = 'flex';
+                    msgDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                    msgDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+                    msgDiv.style.color = '#EF4444';
+                    msgDiv.innerHTML = `
                     <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
                         <circle cx="12" cy="12" r="10"></circle>
                         <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -486,16 +534,16 @@
                     </svg>
                     <span>${result.message || 'Registration failed.'}</span>
                 `;
-            }
-        } catch (error) {
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = originalText;
-            
-            msgDiv.style.display = 'flex';
-            msgDiv.style.background = 'rgba(239, 68, 68, 0.1)';
-            msgDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
-            msgDiv.style.color = '#EF4444';
-            msgDiv.innerHTML = `
+                }
+            } catch (error) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+
+                msgDiv.style.display = 'flex';
+                msgDiv.style.background = 'rgba(239, 68, 68, 0.1)';
+                msgDiv.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+                msgDiv.style.color = '#EF4444';
+                msgDiv.innerHTML = `
                 <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; flex-shrink: 0;">
                     <circle cx="12" cy="12" r="10"></circle>
                     <line x1="12" y1="8" x2="12" y2="12"></line>
@@ -503,9 +551,10 @@
                 </svg>
                 <span>Network error. Please try again.</span>
             `;
-            console.error('Registration error:', error);
-        }
-    });
+                console.error('Registration error:', error);
+            }
+        });
     </script>
 </body>
+
 </html>

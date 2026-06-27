@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -152,6 +152,7 @@
             margin-top: 8px;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -248,7 +249,7 @@
         // Initialize Stripe
         async function initializeStripe() {
             try {
-                const response = await fetch('/api/payment/config');
+                const response = await fetch(API_BASE + '/api/payment/config');
                 const config = await response.json();
                 stripe = Stripe(config.publishableKey);
                 elements = stripe.elements();
@@ -416,7 +417,7 @@
                 setLoading(false);
             } else {
                 // Confirm payment with our server
-                const response = await fetch('/api/payment/confirm', {
+                const response = await fetch(API_BASE + '/api/payment/confirm', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
