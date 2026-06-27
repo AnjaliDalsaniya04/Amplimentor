@@ -1,34 +1,18 @@
 'use strict';
 const { User } = require('../models');
 
-// Redirect-based guard (for page routes)
+// API guard — checks session, returns 401 if not logged in
 function requireAuth(req, res, next) {
-  if (!req.session.userId) return res.redirect('/login');
+  if (!req.session.userId)
+    return res.status(401).json({ message: 'Not authenticated.' });
   next();
 }
 
+// API guard — checks session + role, returns 401/403
 function requireRole(role) {
   return async (req, res, next) => {
-    if (!req.session.userId) return res.redirect('/login');
-    try {
-      const user = await User.findByPk(req.session.userId);
-      if (!user || user.role !== role) return res.redirect('/login');
-      next();
-    } catch {
-      return res.redirect('/login');
-    }
-  };
-}
-
-// JSON-based guard (for API routes)
-function requireAuthApi(req, res, next) {
-  if (!req.session.userId) return res.status(401).json({ message: 'Not authenticated.' });
-  next();
-}
-
-function requireRoleApi(role) {
-  return async (req, res, next) => {
-    if (!req.session.userId) return res.status(401).json({ message: 'Not authenticated.' });
+    if (!req.session.userId)
+      return res.status(401).json({ message: 'Not authenticated.' });
     try {
       const user = await User.findByPk(req.session.userId);
       if (!user || user.role !== role)
@@ -40,5 +24,9 @@ function requireRoleApi(role) {
     }
   };
 }
+
+// Aliases — same behaviour, clearer naming in route files
+const requireAuthApi = requireAuth;
+const requireRoleApi = requireRole;
 
 module.exports = { requireAuth, requireRole, requireAuthApi, requireRoleApi };

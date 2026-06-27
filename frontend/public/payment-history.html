@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -171,6 +171,7 @@
             font-weight: 600;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -292,7 +293,7 @@
                         </div>
                         <div class="detail-item">
                             <div class="detail-label">Reference</div>
-                            <div class="detail-value">${payment._id.slice(-8)}</div>
+                            <div class="detail-value">${payment.id.slice(-8)}</div>
                         </div>
                     </div>
                     
@@ -373,7 +374,7 @@
 
         async function loadPaymentHistory() {
             try {
-                const response = await fetch('/api/payment/history', {
+                const response = await fetch(API_BASE + '/api/payment/history', {
                     credentials: 'include'
                 });
                 

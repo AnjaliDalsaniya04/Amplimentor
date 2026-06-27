@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,6 +73,7 @@
             z-index: 1000;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -163,7 +164,7 @@
         // Function to load user information
         async function loadUserInfo() {
             try {
-                const response = await fetch('/api/student/profile', { 
+                const response = await fetch(API_BASE + '/api/student/profile', { 
                     credentials: 'include' 
                 });
                 
@@ -171,7 +172,7 @@
                     const user = await response.json();
                     // Update welcome message with user's name
                     document.getElementById('studentName').textContent = user.name || 'Student';
-                    currentUserId = user._id; // Store user ID for chat functionality
+                    currentUserId = user.id; // Store user ID for chat functionality
                     
                     // Load mentor requests data
                     loadMentorRequests();
@@ -189,7 +190,7 @@
         // Function to load mentor requests
         async function loadMentorRequests() {
             try {
-                const response = await fetch('/api/student/requests', {
+                const response = await fetch(API_BASE + '/api/student/requests', {
                     credentials: 'include'
                 });
                 
@@ -230,7 +231,7 @@
             const requestsHTML = recentRequests.map(request => `
                 <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #e1e5e9;">
                     <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                        <img src="${request.mentor.photo ? `/uploads/${request.mentor.photo}` : '/default-avatar.svg'}" 
+                        <img src="${request.mentor.photo ? `${API_BASE}/uploads/${request.mentor.photo}` : '/default-avatar.svg'}" 
                              alt="${request.mentor.name}" 
                              style="width: 40px; height: 40px; border-radius: 50%; margin-right: 1rem;"
                              onerror="this.src='/default-avatar.svg'">
@@ -276,10 +277,10 @@
 
             container.innerHTML = mentors.map(mentorRequest => `
                 <div class="mentor-card">
-                    <img src="${mentorRequest.mentor.photo ? `/uploads/${mentorRequest.mentor.photo}` : '/default-avatar.svg'}" alt="${mentorRequest.mentor.name}" class="mentor-photo" onerror="this.onerror=null;this.src='/default-avatar.svg'">
+                    <img src="${mentorRequest.mentor.photo ? `${API_BASE}/uploads/${mentorRequest.mentor.photo}` : '/default-avatar.svg'}" alt="${mentorRequest.mentor.name}" class="mentor-photo" onerror="this.onerror=null;this.src='/default-avatar.svg'">
                     <h4>${mentorRequest.mentor.name}</h4>
                     <p>${mentorRequest.mentor.subjects ? mentorRequest.mentor.subjects.join(', ') : 'No subjects listed'}</p>
-                    <button onclick="openChatWithMentor('${mentorRequest.mentor._id}')">Chat</button>
+                    <button onclick="openChatWithMentor('${mentorRequest.mentor.id}')">Chat</button>
                 </div>
             `).join('');
         }
@@ -293,7 +294,7 @@
             e.preventDefault();
             
             // Call logout API
-            fetch('/logout', {
+            fetch(API_BASE + '/logout', {
                 method: 'POST',
                 credentials: 'include'
             })
@@ -310,7 +311,7 @@
 
         async function loadNotifications() {
             try {
-                const response = await fetch('/api/notifications', { credentials: 'include' });
+                const response = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
                 if (response.ok) {
                     const notifications = await response.json();
                     updateNotificationUI(notifications);

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -266,6 +266,7 @@
             font-size: 0.9rem;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -420,7 +421,7 @@
 
         async function loadUserInfo() {
             try {
-                const response = await fetch('/api/profile', { 
+                const response = await fetch(API_BASE + '/api/profile', { 
                     credentials: 'include' 
                 });
                 
@@ -450,7 +451,7 @@
 
         async function loadSessions() {
             try {
-                const response = await fetch('/api/sessions', {
+                const response = await fetch(API_BASE + '/api/sessions', {
                     credentials: 'include'
                 });
                 
@@ -486,7 +487,7 @@
                             <a href="${session.meetingLink}" target="_blank" class="btn-join">Join Meeting</a>
                         ` : ''}
                         ${currentUser && currentUser.role === 'mentor' && session.status === 'scheduled' ? `
-                            <button class="btn-add-link" onclick="openMeetingLinkModal('${session._id}', '${session.meetingLink || ''}')">
+                            <button class="btn-add-link" onclick="openMeetingLinkModal('${session.id}', '${session.meetingLink || ''}')">
                                 ${session.meetingLink ? 'Edit Link' : 'Add Link'}
                             </button>
                         ` : ''}
@@ -497,7 +498,7 @@
 
         async function loadMentoringHistory() {
             try {
-                const response = await fetch('/api/mentoring-history', {
+                const response = await fetch(API_BASE + '/api/mentoring-history', {
                     credentials: 'include'
                 });
                 
@@ -515,7 +516,7 @@
 
         async function loadHistoryStats() {
             try {
-                const response = await fetch('/api/mentoring-history/stats', {
+                const response = await fetch(API_BASE + '/api/mentoring-history/stats', {
                     credentials: 'include'
                 });
                 
@@ -578,10 +579,10 @@
                     ? history.notes.substring(0, 150) + '...' 
                     : history.notes || 'No summary provided.';
 
-                const photoSrc = participant.photo ? `/uploads/${participant.photo}` : '/default-avatar.png';
+                const photoSrc = participant.photo ? `${API_BASE}/uploads/${participant.photo}` : '/default-avatar.png';
 
                 return `
-                    <div class="history-item" id="history-${history._id}">
+                    <div class="history-item" id="history-${history.id}">
                         <div class="history-header">
                             <div class="history-participants">
                                 <div class="participant-info">
@@ -629,7 +630,7 @@
                         ${history.feedback ? `<p><strong>Feedback:</strong> ${history.feedback}</p>` : ''}
                         
                         ${history.status === 'active' ? `
-                            <button class="end-relationship-btn" onclick="openEndRelationshipModal('${history._id}')">
+                            <button class="end-relationship-btn" onclick="openEndRelationshipModal('${history.id}')">
                                 End Relationship
                             </button>
                         ` : ''}
@@ -742,7 +743,7 @@
                     
                     participants.forEach(participant => {
                         const option = document.createElement('option');
-                        option.value = participant._id;
+                        option.value = participant.id;
                         option.textContent = participant.name;
                         select.appendChild(option);
                     });

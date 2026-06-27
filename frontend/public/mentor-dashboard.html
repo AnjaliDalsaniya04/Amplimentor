@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -246,6 +246,7 @@
             z-index: 1000;
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -360,7 +361,7 @@
         // Load mentor information
         async function loadMentorInfo() {
             try {
-                const response = await fetch('/api/mentor/profile', { credentials: 'include' });
+                const response = await fetch(API_BASE + '/api/mentor/profile', { credentials: 'include' });
                 if (response.ok) {
                     const mentor = await response.json();
                     document.getElementById('mentorName').textContent = mentor.name;
@@ -373,7 +374,7 @@
         // Load mentor requests
         async function loadMentorRequests() {
             try {
-                const response = await fetch('/api/mentor/requests', { credentials: 'include' });
+                const response = await fetch(API_BASE + '/api/mentor/requests', { credentials: 'include' });
                 if (response.ok) {
                     const requests = await response.json();
                     displayRequests(requests);
@@ -405,9 +406,9 @@
                 ].filter(Boolean).join(' • ');
 
                 return `
-                <div class="request-card" id="request-${request._id}">
+                <div class="request-card" id="request-${request.id}">
                     <div class="request-header">
-                        <img src="${student.photo ? `/uploads/${student.photo}` : '/default-avatar.svg'}" alt="${student.name}'s photo" class="student-photo" onerror="this.onerror=null;this.src='/default-avatar.svg'">
+                        <img src="${student.photo ? `${API_BASE}/uploads/${student.photo}` : '/default-avatar.svg'}" alt="${student.name}'s photo" class="student-photo" onerror="this.onerror=null;this.src='/default-avatar.svg'">
                         <div class="student-info">
                             <h4>${student.name}</h4>
                             <p class="student-details">${studentDetails || 'No details provided'}</p>
@@ -419,13 +420,13 @@
                     </div>
                     ${request.status === 'pending' ? `
                         <div class="request-actions">
-                            <button class="btn-accept" onclick="handleRequest('${request._id}', 'accepted')">Accept</button>
-                            <button class="btn-reject" onclick="handleRequest('${request._id}', 'rejected')">Reject</button>
+                            <button class="btn-accept" onclick="handleRequest('${request.id}', 'accepted')">Accept</button>
+                            <button class="btn-reject" onclick="handleRequest('${request.id}', 'rejected')">Reject</button>
                         </div>
                     ` : ''}
                     ${request.status === 'accepted' ? `
                         <div class="request-actions">
-                            <button class="btn-remove" data-student-id="${student._id}" data-request-id="${request._id}">Remove Student</button>
+                            <button class="btn-remove" data-student-id="${student.id}" data-request-id="${request.id}">Remove Student</button>
                         </div>
                     ` : ''}
                 </div>
@@ -484,7 +485,7 @@
 
         async function loadNotifications() {
             try {
-                const response = await fetch('/api/notifications', { credentials: 'include' });
+                const response = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
                 if (!response.ok) return;
 
                 const data = await response.json();

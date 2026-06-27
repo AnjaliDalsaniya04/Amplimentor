@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -114,6 +114,7 @@
             .nav-menu { gap: 1rem; }
         }
     </style>
+    <script src="/config.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -139,8 +140,8 @@
     let currentUserId = null;
     document.addEventListener('DOMContentLoaded', async function() {
         // Get current user
-        const profile = await fetch('/api/profile', { credentials: 'include' }).then(res => res.json());
-        currentUserId = profile._id;
+        const profile = await fetch(API_BASE + '/api/profile', { credentials: 'include' }).then(res => res.json());
+        currentUserId = profile.id;
         await loadChatHistory();
         await loadNotifications();
         // Notification dropdown logic
@@ -162,7 +163,7 @@
         container.innerHTML = '<div class="loading-spinner">Loading chat history...</div>';
         let conversations = [];
         try {
-            const response = await fetch('/api/chats', { credentials: 'include' });
+            const response = await fetch(API_BASE + '/api/chats', { credentials: 'include' });
             if (!response.ok) throw new Error('Failed to load conversations');
             conversations = await response.json();
         } catch (err) {
@@ -175,9 +176,9 @@
         }
         container.innerHTML = '';
         conversations.forEach(convo => {
-            const participant = convo.mentor && convo.mentor._id !== currentUserId ? convo.mentor : convo.student;
+            const participant = convo.mentor && convo.mentor.id !== currentUserId ? convo.mentor : convo.student;
             if (!participant) return;
-            const photoSrc = participant.photo ? `/uploads/${participant.photo}` : '/default-avatar.svg';
+            const photoSrc = participant.photo ? `${API_BASE}/uploads/${participant.photo}` : '/default-avatar.svg';
             const convDiv = document.createElement('div');
             convDiv.className = 'conversation-block';
             convDiv.innerHTML = `<div class="conv-header"><img src="${photoSrc}" alt="${participant.name}" onerror="this.onerror=null;this.src='/default-avatar.svg'"><span class="conv-name">${participant.name}</span></div><div class="messages-list"></div>`;
@@ -214,7 +215,7 @@
 
     async function loadNotifications() {
         try {
-            const response = await fetch('/api/notifications', { credentials: 'include' });
+            const response = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
             if (!response.ok) return;
             const data = await response.json();
             const countSpan = document.getElementById('notificationCount');
