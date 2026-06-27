@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meet Our Mentors - Amplimentor</title>
+    <link rel="stylesheet" href="/style.css?v=3.5">
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="landing-page mentors-directory-page">
+    <!-- Header Sticky Navbar -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="/" class="nav-brand">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#logoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Amplimentor</span>
+            </a>
+
+            <!-- Navigation Links -->
+            <div class="nav-menu-wrapper active-flex" id="navMenuWrapper">
+                <nav class="nav-menu">
+                    <a href="/index.html#about" class="nav-link">About</a>
+                    <a href="/index.html#features" class="nav-link">Features</a>
+                    <a href="/mentors.html" class="nav-link active">Mentors</a>
+                    <a href="/index.html#contact" class="nav-link">Contact</a>
+                </nav>
+                <div class="nav-actions">
+                    <a href="/login" class="btn-login-outlined">Log In</a>
+                    <a href="/register" class="btn-register-filled">Register</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="landing-main">
+        <!-- Mentors Hero Section -->
+        <section class="hero-section mentors-hero">
+            <div class="section-container hero-grid">
+                <div class="hero-content">
+                    <h1>Meet Our Mentors</h1>
+                    <p>Connect with experienced professionals who can guide your academic journey, career growth, and personal development.</p>
+                    
+                    <!-- Search inside Hero -->
+                    <div class="hero-search-wrapper">
+                        <svg class="hero-search-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2.5" fill="none">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="heroSearchInput" placeholder="Search mentors by name or subject..." class="hero-search-input">
+                    </div>
+                </div>
+                <div class="hero-graphic-wrapper">
+                    <div class="hero-graphic-card composite-card">
+                        <img src="/mentors_hero_composite.png" alt="Mentorship Graphic Overlay" class="hero-illustration">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Compact Search & Filter Section Wrapped in Card -->
+        <section class="filters-card-section" id="filtersBar">
+            <div class="section-container">
+                <div class="filters-card">
+                    <!-- Toolbar row -->
+                    <div class="filters-toolbar">
+                        
+                        <!-- Search Box -->
+                        <div class="search-input-wrapper">
+                            <svg class="search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                            <input type="text" id="filterSearchInput" placeholder="Search mentors by name or subject..." class="filter-search-input">
+                        </div>
+
+                        <!-- Custom Category select dropdown -->
+                        <div class="custom-select-wrapper" id="categorySelectWrapper">
+                            <input type="hidden" id="categorySelect" value="">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="trigger-label">Category</span>
+                                <svg class="chevron-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="custom-options-menu">
+                                <div class="custom-option-item selected" data-value="">Category</div>
+                                <div class="custom-option-item" data-value="JEE">JEE</div>
+                                <div class="custom-option-item" data-value="NEET">NEET</div>
+                                <div class="custom-option-item" data-value="CBSE">CBSE</div>
+                                <div class="custom-option-item" data-value="ICSE">ICSE</div>
+                                <div class="custom-option-item" data-value="Olympiad">Olympiad</div>
+                                <div class="custom-option-item" data-value="Coding">Coding</div>
+                                <div class="custom-option-item" data-value="Career Guidance">Career Guidance</div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Organization select dropdown -->
+                        <div class="custom-select-wrapper" id="industrySelectWrapper">
+                            <input type="hidden" id="industrySelect" value="">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="trigger-label">Organization</span>
+                                <svg class="chevron-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="custom-options-menu">
+                                <div class="custom-option-item selected" data-value="">Organization</div>
+                                <div class="custom-option-item" data-value="Coaching">Coaching Institute</div>
+                                <div class="custom-option-item" data-value="School">School</div>
+                                <div class="custom-option-item" data-value="College">College</div>
+                                <div class="custom-option-item" data-value="Independent">Independent Mentor</div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Experience select dropdown -->
+                        <div class="custom-select-wrapper" id="experienceSelectWrapper">
+                            <input type="hidden" id="experienceSelect" value="">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="trigger-label">Experience</span>
+                                <svg class="chevron-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="custom-options-menu">
+                                <div class="custom-option-item selected" data-value="">Experience</div>
+                                <div class="custom-option-item" data-value="0-2">0–2 Years</div>
+                                <div class="custom-option-item" data-value="3-5">3–5 Years</div>
+                                <div class="custom-option-item" data-value="6-10">6–10 Years</div>
+                                <div class="custom-option-item" data-value="10+">10+ Years</div>
+                            </div>
+                        </div>
+
+                        <!-- Custom Rating select dropdown -->
+                        <div class="custom-select-wrapper" id="ratingSelectWrapper">
+                            <input type="hidden" id="ratingSelect" value="">
+                            <div class="custom-select-trigger" tabindex="0">
+                                <span class="trigger-label">Rating</span>
+                                <svg class="chevron-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                </svg>
+                            </div>
+                            <div class="custom-options-menu">
+                                <div class="custom-option-item selected" data-value="">Rating</div>
+                                <div class="custom-option-item" data-value="5.0">5 Stars</div>
+                                <div class="custom-option-item" data-value="4.5">4.5+</div>
+                                <div class="custom-option-item" data-value="4.0">4+</div>
+                                <div class="custom-option-item" data-value="3.5">3.5+</div>
+                            </div>
+                        </div>
+
+                        <!-- Equal width buttons -->
+                        <div class="filter-actions">
+                            <button id="clearFiltersBtn" class="btn-reset">Reset</button>
+                            <button id="applyFiltersBtn" class="btn-apply-filters">Apply Filters</button>
+                        </div>
+
+                    </div>
+
+                    <!-- Active Filter Chips (removable chips display) -->
+                    <div class="active-chips-row" id="activeChipsRow" style="display: none;">
+                        <div class="chips-list" id="chipsList">
+                            <!-- Chips are appended here dynamically -->
+                        </div>
+                        <button class="clear-all-link" id="clearAllChipsBtn">Clear All</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mentor Cards Grid Section -->
+        <section class="mentor-grid-section">
+            <div class="section-container">
+                <!-- Grid Area -->
+                <div class="mentor-grid" id="mentorGrid">
+                    <!-- Cards populated dynamically -->
+                </div>
+
+                <!-- Empty State -->
+                <div class="empty-state-card" id="emptyState" style="display: none;">
+                    <div class="empty-state-icon">🔍</div>
+                    <h3>No mentors found.</h3>
+                    <p>Try changing your search or filters.</p>
+                    <button id="emptyStateClearBtn" class="btn-secondary" style="margin-top: 16px;">Clear Filters</button>
+                </div>
+
+                <!-- Pagination controls -->
+                <div class="pagination-wrapper" id="paginationWrapper">
+                    <button class="btn-pagination prev" id="pagPrev" aria-label="Previous Page">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </button>
+                    <div class="pagination-pages" id="pagPages">
+                        <!-- Pages buttons -->
+                    </div>
+                    <button class="btn-pagination next" id="pagNext" aria-label="Next Page">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none">
+                            <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Details Profile Modal Overlay -->
+    <div class="modal-overlay" id="profileModal" style="display: none;">
+        <div class="profile-modal-container">
+            <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close Profile">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="modal-scroll-content" id="modalContent">
+                <!-- Populates dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Authentication Required Modal Overlay -->
+    <div class="modal-overlay" id="authModal" style="display: none;">
+        <div class="auth-modal-container">
+            <button class="modal-close-btn" id="authModalCloseBtn" aria-label="Close">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="auth-modal-content">
+                <h2>Book a Mentoring Session</h2>
+                
+                <!-- Mentor Avatar & Name context badge -->
+                <div class="auth-modal-mentor-card">
+                    <img src="" id="authModalMentorPhoto" alt="Mentor portrait">
+                    <div class="auth-modal-mentor-info">
+                        <h4 id="authModalMentorName"></h4>
+                        <p id="authModalMentorSpecialty"></p>
+                    </div>
+                </div>
+
+                <p class="auth-modal-msg">You need an Amplimentor account to book a mentoring session. Please log in to your existing account or create a new account to continue.</p>
+                
+                <div class="auth-modal-actions">
+                    <button class="btn-primary" id="authModalLoginBtn">Login</button>
+                    <button class="btn-secondary" id="authModalRegisterBtn">Register</button>
+                </div>
+                <button class="btn-cancel-text" id="authModalCancelBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Multi-Step Modal Overlay -->
+    <div class="modal-overlay" id="bookingModal" style="display: none;">
+        <div class="booking-modal-container">
+            <button class="modal-close-btn" id="bookingModalCloseBtn" aria-label="Close">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2.5" fill="none">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <div class="booking-modal-content">
+                
+                <!-- Step 1: Select Date & Time -->
+                <div class="booking-step" id="bookingStep1">
+                    <h3>Select Date & Time</h3>
+                    <p class="booking-mentor-name-sub">Booking session with <strong id="bookingMentorName"></strong></p>
+                    
+                    <div class="booking-datetime-picker">
+                        <label for="bookingDate" class="booking-input-label">Select Date:</label>
+                        <input type="date" id="bookingDate" class="booking-input-field">
+                        
+                        <label for="bookingTime" class="booking-input-label" style="margin-top: 14px;">Select Time Slot:</label>
+                        <select id="bookingTime" class="booking-input-field">
+                            <option value="">Choose a slot...</option>
+                            <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                            <option value="11:30 AM - 12:30 PM">11:30 AM - 12:30 PM</option>
+                            <option value="2:00 PM - 3:00 PM">2:00 PM - 3:00 PM</option>
+                            <option value="4:30 PM - 5:30 PM">4:30 PM - 5:30 PM</option>
+                        </select>
+                    </div>
+
+                    <div class="booking-actions">
+                        <button class="btn-primary" id="bookingStep1NextBtn" disabled>Next</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Review Booking -->
+                <div class="booking-step" id="bookingStep2" style="display: none;">
+                    <h3>Review Booking Details</h3>
+                    
+                    <div class="booking-summary-card">
+                        <p><strong>Mentor:</strong> <span id="summaryMentorName"></span></p>
+                        <p><strong>Specialization:</strong> <span id="summarySpecialty"></span></p>
+                        <p><strong>Date:</strong> <span id="summaryDate"></span></p>
+                        <p><strong>Time:</strong> <span id="summaryTime"></span></p>
+                        <p><strong>Price:</strong> <span id="summaryFee"></span></p>
+                    </div>
+
+                    <div class="booking-actions">
+                        <button class="btn-secondary" id="bookingStep2BackBtn">Back</button>
+                        <button class="btn-primary" id="bookingStep2ConfirmBtn">Confirm Booking</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Success Confirmation -->
+                <div class="booking-step" id="bookingStep3" style="display: none; text-align: center;">
+                    <div style="font-size: 3.5rem; color: #10B981; margin-bottom: 16px;">🎉</div>
+                    <h3>Booking Confirmed!</h3>
+                    <p>Your mentoring session has been scheduled successfully. You can view it in your dashboard schedule.</p>
+                    
+                    <div class="booking-actions" style="justify-content: center; margin-top: 24px;">
+                        <button class="btn-primary" id="bookingStep3DoneBtn">Done</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-columns">
+                <!-- Column 1 Brand -->
+                <div class="footer-col brand-col">
+                    <a href="/" class="footer-logo">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#footerLogoGrad)"/>
+                            <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                            <defs>
+                                <linearGradient id="footerLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#3B82F6"/>
+                                    <stop offset="1" stop-color="#4F46E5"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>Amplimentor</span>
+                    </a>
+                    <p class="footer-tagline">Learn. Connect. Grow.</p>
+                    <p class="footer-desc">Connecting students with experienced mentors to accelerate learning and career growth.</p>
+                </div>
+                
+                <!-- Column 2 Links -->
+                <div class="footer-col links-col">
+                    <h4>Quick Links</h4>
+                    <nav class="footer-nav">
+                        <a href="/index.html#about">About</a>
+                        <a href="/index.html#features">Features</a>
+                        <a href="/mentors.html">Mentors</a>
+                        <a href="/index.html#contact">Contact</a>
+                    </nav>
+                </div>
+                
+                <!-- Column 3 Legal -->
+                <div class="footer-col links-col">
+                    <h4>Legal & Support</h4>
+                    <nav class="footer-nav">
+                        <a href="/privacy">Privacy Policy</a>
+                        <a href="/terms">Terms of Service</a>
+                        <a href="/support">Help Center / Support</a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2026 Amplimentor. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy">Privacy Policy</a>
+                    <span class="divider-bar">|</span>
+                    <a href="/terms">Terms</a>
+                    <span class="divider-bar">|</span>
+                    <a href="/support">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Mentors Logic script -->
+    <script>
+        (function() {
+            let mentors = [];
+            let filteredMentors = [];
+            let currentPage = 1;
+            const itemsPerPage = 12;
+            let debounceTimeout;
+            let currentUser = null;
+            let selectedMentor = null;
+
+            // DOM Elements
+            const mentorGrid = document.getElementById('mentorGrid');
+            const emptyState = document.getElementById('emptyState');
+            const paginationWrapper = document.getElementById('paginationWrapper');
+            
+            // Search Input Fields
+            const heroSearchInput = document.getElementById('heroSearchInput');
+            const filterSearchInput = document.getElementById('filterSearchInput');
+            
+            // Hidden Select Inputs
+            const categorySelect = document.getElementById('categorySelect');
+            const industrySelect = document.getElementById('industrySelect');
+            const experienceSelect = document.getElementById('experienceSelect');
+            const ratingSelect = document.getElementById('ratingSelect');
+            
+            // Active Chips Row
+            const activeChipsRow = document.getElementById('activeChipsRow');
+            const chipsList = document.getElementById('chipsList');
+            const clearAllChipsBtn = document.getElementById('clearAllChipsBtn');
+            const emptyStateClearBtn = document.getElementById('emptyStateClearBtn');
+            
+            // Action Buttons
+            const clearFiltersBtn = document.getElementById('clearFiltersBtn');
+            const applyFiltersBtn = document.getElementById('applyFiltersBtn');
+            
+            // Pagination controls
+            const pagPrev = document.getElementById('pagPrev');
+            const pagNext = document.getElementById('pagNext');
+            const pagPages = document.getElementById('pagPages');
+            
+            // Modal Elements
+            const profileModal = document.getElementById('profileModal');
+            const modalCloseBtn = document.getElementById('modalCloseBtn');
+            const modalContent = document.getElementById('modalContent');
+
+            // Authentication Required Modal Elements
+            const authModal = document.getElementById('authModal');
+            const authModalCloseBtn = document.getElementById('authModalCloseBtn');
+            const authModalCancelBtn = document.getElementById('authModalCancelBtn');
+            const authModalLoginBtn = document.getElementById('authModalLoginBtn');
+            const authModalRegisterBtn = document.getElementById('authModalRegisterBtn');
+            const authModalMentorPhoto = document.getElementById('authModalMentorPhoto');
+            const authModalMentorName = document.getElementById('authModalMentorName');
+            const authModalMentorSpecialty = document.getElementById('authModalMentorSpecialty');
+
+            // Booking Modal Elements
+            const bookingModal = document.getElementById('bookingModal');
+            const bookingModalCloseBtn = document.getElementById('bookingModalCloseBtn');
+            const bookingMentorName = document.getElementById('bookingMentorName');
+            const bookingDate = document.getElementById('bookingDate');
+            const bookingTime = document.getElementById('bookingTime');
+            const bookingStep1NextBtn = document.getElementById('bookingStep1NextBtn');
+            const bookingStep2BackBtn = document.getElementById('bookingStep2BackBtn');
+            const bookingStep2ConfirmBtn = document.getElementById('bookingStep2ConfirmBtn');
+            const bookingStep3DoneBtn = document.getElementById('bookingStep3DoneBtn');
+            
+            const summaryMentorName = document.getElementById('summaryMentorName');
+            const summarySpecialty = document.getElementById('summarySpecialty');
+            const summaryDate = document.getElementById('summaryDate');
+            const summaryTime = document.getElementById('summaryTime');
+            const summaryFee = document.getElementById('summaryFee');
+
+            // Sync search fields with debounce
+            const handleSearchChange = (e) => {
+                const val = e.target.value;
+                if(e.target === heroSearchInput) {
+                    filterSearchInput.value = val;
+                } else {
+                    heroSearchInput.value = val;
+                }
+                
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    filterMentors();
+                }, 300);
+            };
+
+            heroSearchInput.addEventListener('input', handleSearchChange);
+            filterSearchInput.addEventListener('input', handleSearchChange);
+
+            // Fetch current user authentication status
+            const checkAuth = async () => {
+                try {
+                    const res = await fetch('/api/profile');
+                    if (res.ok) {
+                        currentUser = await res.json();
+                    }
+                } catch (e) {
+                    console.error("Authentication check failed:", e);
+                }
+            };
+
+            // Map organization types
+            const getOrganizationType = (org) => {
+                const o = org.toLowerCase();
+                if (['allen', 'fiitjee', 'resonance', 'motion', 'narayana', 'chaitanya', 'byju', 'aakash', 'vidyapeeth', 'medical', 'unacademy'].some(i => o.includes(i))) return 'Coaching';
+                if (['iit', 'nit', 'nirma', 'daiict', 'charusat', 'gtu', 'university', 'college'].some(u => o.includes(u))) return 'University';
+                if (['school', 'vidyalaya', 'international', 'faculty'].some(s => o.includes(s))) return 'School';
+                return 'Other';
+            };
+
+            // Initialize custom selects logic
+            const initCustomSelects = () => {
+                const wrappers = document.querySelectorAll('.custom-select-wrapper');
+
+                wrappers.forEach(wrapper => {
+                    const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+                    const trigger = wrapper.querySelector('.custom-select-trigger');
+                    const label = trigger.querySelector('.trigger-label');
+                    const menu = wrapper.querySelector('.custom-options-menu');
+                    const items = wrapper.querySelectorAll('.custom-option-item');
+                    let activeIndex = -1;
+
+                    const defaultPlaceholder = label.innerText;
+
+                    // Toggle open/close
+                    trigger.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        // Close all others
+                        wrappers.forEach(w => {
+                            if (w !== wrapper) w.classList.remove('open');
+                        });
+                        wrapper.classList.toggle('open');
+                        activeIndex = -1;
+                        updateActiveItemVisuals();
+                    });
+
+                    // Option click selection
+                    items.forEach((item, index) => {
+                        item.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            selectItem(item);
+                        });
+                    });
+
+                    const selectItem = (item) => {
+                        const val = item.getAttribute('data-value');
+                        const text = item.innerText.replace('✓', '').trim();
+                        
+                        hiddenInput.value = val;
+                        
+                        // Update placeholder label
+                        if (val === '') {
+                            label.innerText = defaultPlaceholder;
+                            label.classList.remove('has-value');
+                        } else {
+                            label.innerText = text;
+                            label.classList.add('has-value');
+                        }
+
+                        // Update selected checkmarks
+                        items.forEach(i => {
+                            i.classList.remove('selected');
+                            if (i.innerHTML.includes('✓')) {
+                                i.innerHTML = i.innerHTML.replace('✓', '').trim();
+                            }
+                        });
+
+                        item.classList.add('selected');
+                        if (val !== '') {
+                            item.innerHTML = `✓ ${item.innerHTML}`;
+                        }
+
+                        wrapper.classList.remove('open');
+                    };
+
+                    const updateActiveItemVisuals = () => {
+                        items.forEach(i => i.classList.remove('keyboard-active'));
+                        if (activeIndex >= 0 && activeIndex < items.length) {
+                            items[activeIndex].classList.add('keyboard-active');
+                            items[activeIndex].scrollIntoView({ block: 'nearest' });
+                        }
+                    };
+
+                    // Keyboard navigation
+                    trigger.addEventListener('keydown', (e) => {
+                        if (!wrapper.classList.contains('open')) {
+                            if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === ' ' || e.key === 'Enter') {
+                                e.preventDefault();
+                                wrapper.classList.add('open');
+                                return;
+                            }
+                        }
+
+                        if (wrapper.classList.contains('open')) {
+                            if (e.key === 'Escape') {
+                                e.preventDefault();
+                                wrapper.classList.remove('open');
+                                trigger.focus();
+                            } else if (e.key === 'ArrowDown') {
+                                e.preventDefault();
+                                activeIndex = (activeIndex + 1) % items.length;
+                                updateActiveItemVisuals();
+                            } else if (e.key === 'ArrowUp') {
+                                e.preventDefault();
+                                activeIndex = (activeIndex - 1 + items.length) % items.length;
+                                updateActiveItemVisuals();
+                            } else if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                if (activeIndex >= 0 && activeIndex < items.length) {
+                                    selectItem(items[activeIndex]);
+                                    trigger.focus();
+                                }
+                            }
+                        }
+                    });
+                });
+
+                // Click outside to close
+                document.addEventListener('click', () => {
+                    wrappers.forEach(w => w.classList.remove('open'));
+                });
+            };
+
+            // Render skeleton cards for simulated loads
+            const renderSkeletons = () => {
+                mentorGrid.innerHTML = '';
+                emptyState.style.display = 'none';
+                paginationWrapper.style.display = 'none';
+                
+                for(let i = 0; i < 8; i++) {
+                    mentorGrid.innerHTML += `
+                        <div class="skeleton-card">
+                            <div class="skeleton-avatar"></div>
+                            <div class="skeleton-line skeleton-title"></div>
+                            <div class="skeleton-line skeleton-subtitle"></div>
+                            <div class="skeleton-line skeleton-body"></div>
+                            <div class="skeleton-line skeleton-body short"></div>
+                            <div class="skeleton-skills">
+                                <span class="skeleton-badge"></span>
+                                <span class="skeleton-badge"></span>
+                                <span class="skeleton-badge"></span>
+                            </div>
+                            <div class="skeleton-buttons">
+                                <span class="skeleton-btn"></span>
+                                <span class="skeleton-btn"></span>
+                            </div>
+                        </div>
+                    `;
+                }
+            };
+
+            // Apply active searches and filters logic
+            const filterMentors = () => {
+                const searchVal = filterSearchInput.value.toLowerCase().trim();
+                const categoryVal = categorySelect.value;
+                const industryVal = industrySelect.value;
+                const experienceVal = experienceSelect.value;
+                const ratingVal = parseFloat(ratingSelect.value) || 0;
+
+                filteredMentors = mentors.filter(mentor => {
+                    // Match Search Keywords
+                    const matchesSearch = !searchVal || 
+                        mentor.name.toLowerCase().includes(searchVal) ||
+                        mentor.organization.toLowerCase().includes(searchVal) ||
+                        mentor.designation.toLowerCase().includes(searchVal) ||
+                        mentor.skills.some(skill => skill.toLowerCase().includes(searchVal));
+
+                    // Match Category
+                    let matchesCategory = true;
+                    if(categoryVal) {
+                        const spec = mentor.specialization.toLowerCase();
+                        if (categoryVal === 'JEE') matchesCategory = spec.includes('jee');
+                        else if (categoryVal === 'NEET') matchesCategory = spec.includes('neet');
+                        else if (categoryVal === 'CBSE') matchesCategory = spec.includes('cbse');
+                        else if (categoryVal === 'ICSE') matchesCategory = spec.includes('icse');
+                        else if (categoryVal === 'Olympiad') matchesCategory = spec.includes('olympiad');
+                        else if (categoryVal === 'Coding') matchesCategory = (spec.includes('coding') || spec.includes('robotics'));
+                        else if (categoryVal === 'Career Guidance') matchesCategory = (spec.includes('career') || spec.includes('counselling'));
+                    }
+
+                    // Match Org Type
+                    let matchesIndustry = true;
+                    if(industryVal) {
+                        const type = getOrganizationType(mentor.organization);
+                        if (industryVal === 'Coaching') matchesIndustry = (type === 'Coaching');
+                        else if (industryVal === 'School') matchesIndustry = (type === 'School');
+                        else if (industryVal === 'College') matchesIndustry = (type === 'University');
+                        else if (industryVal === 'Independent') matchesIndustry = (type === 'Other');
+                    }
+
+                    // Match Experience Brackets
+                    let matchesExperience = true;
+                    if(experienceVal) {
+                        const years = mentor.experienceYears;
+                        if(experienceVal === '0-2') matchesExperience = (years <= 2);
+                        else if(experienceVal === '3-5') matchesExperience = (years >= 3 && years <= 5);
+                        else if(experienceVal === '6-10') matchesExperience = (years >= 6 && years <= 10);
+                        else if(experienceVal === '10+') matchesExperience = (years >= 10);
+                    }
+
+                    // Match Ratings
+                    const matchesRating = !ratingVal || mentor.rating >= ratingVal;
+
+                    return matchesSearch && matchesCategory && matchesIndustry && matchesExperience && matchesRating;
+                });
+
+                currentPage = 1;
+                renderActiveChips();
+                simulateLoadAndRender();
+            };
+
+            // Render active filter chips below toolbar
+            const renderActiveChips = () => {
+                chipsList.innerHTML = '';
+                let activeCount = 0;
+
+                const checkAndAddChip = (val, label, id) => {
+                    if (val) {
+                        activeCount++;
+                        chipsList.innerHTML += `
+                            <span class="filter-chip">
+                                ${label}: ${val}
+                                <span class="remove-chip" onclick="window.clearSingleFilter('${id}')">✕</span>
+                            </span>
+                        `;
+                    }
+                };
+
+                checkAndAddChip(categorySelect.value, 'Category', 'category');
+                checkAndAddChip(industrySelect.value === 'Coaching' ? 'Coaching Institute' : 
+                                industrySelect.value === 'School' ? 'School' :
+                                industrySelect.value === 'College' ? 'College' :
+                                industrySelect.value === 'Independent' ? 'Independent Mentor' : '', 'Organization', 'industry');
+                checkAndAddChip(experienceSelect.value ? experienceSelect.value + ' Years' : '', 'Experience', 'experience');
+                checkAndAddChip(ratingSelect.value ? ratingSelect.value + '+' : '', 'Rating', 'rating');
+
+                if (activeCount > 0) {
+                    activeChipsRow.style.display = 'flex';
+                } else {
+                    activeChipsRow.style.display = 'none';
+                }
+            };
+
+            // Clear single select box trigger and update custom select triggers
+            window.clearSingleFilter = (id) => {
+                let wrapperId = '';
+                if (id === 'category') wrapperId = 'categorySelectWrapper';
+                else if (id === 'industry') wrapperId = 'industrySelectWrapper';
+                else if (id === 'experience') wrapperId = 'experienceSelectWrapper';
+                else if (id === 'rating') wrapperId = 'ratingSelectWrapper';
+
+                if (wrapperId) {
+                    const wrapper = document.getElementById(wrapperId);
+                    if (wrapper) {
+                        const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+                        hiddenInput.value = '';
+
+                        const label = wrapper.querySelector('.trigger-label');
+                        const defaultOption = wrapper.querySelector('.custom-option-item[data-value=""]');
+                        if (defaultOption) {
+                            label.innerText = defaultOption.innerText.replace('✓', '').trim();
+                            label.classList.remove('has-value');
+                        }
+
+                        const items = wrapper.querySelectorAll('.custom-option-item');
+                        items.forEach(i => {
+                            i.classList.remove('selected');
+                            if (i.innerHTML.includes('✓')) {
+                                i.innerHTML = i.innerHTML.replace('✓', '').trim();
+                            }
+                        });
+                        if (defaultOption) {
+                            defaultOption.classList.add('selected');
+                        }
+                    }
+                }
+
+                filterMentors();
+            };
+
+            // Render Mentor Card Grid (Polished layout)
+            const renderGrid = () => {
+                mentorGrid.innerHTML = '';
+                
+                if(filteredMentors.length === 0) {
+                    emptyState.style.display = 'block';
+                    paginationWrapper.style.display = 'none';
+                    return;
+                }
+
+                emptyState.style.display = 'none';
+                
+                // Pagination bounds
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                const pageItems = filteredMentors.slice(startIndex, endIndex);
+
+                if(filteredMentors.length > itemsPerPage) {
+                    paginationWrapper.style.display = 'flex';
+                    renderPaginationControls();
+                } else {
+                    paginationWrapper.style.display = 'none';
+                }
+
+                pageItems.forEach(mentor => {
+                    const skillsHtml = mentor.skills.slice(0, 2).map(skill => `<span class="tag-pill-skill">${skill}</span>`).join('');
+                    
+                    const statusClass = mentor.availability.includes('Available') ? 'available' : 'offline';
+                    const statusText = mentor.availability.includes('Available') ? '🟢 Available' : '⚪ Offline';
+
+                    const formattedStudents = mentor.studentsMentored >= 1000 
+                        ? (mentor.studentsMentored / 1000).toFixed(1).replace('.0', '') + 'K'
+                        : mentor.studentsMentored;
+
+                    mentorGrid.innerHTML += `
+                        <div class="mentor-card" data-id="${mentor.id}">
+                            
+                            <!-- 1. Profile Image (Aspect ratio cropped rounded rect with padding) -->
+                            <div class="mentor-card-photo-wrap">
+                                <img src="${mentor.photo}" alt="${mentor.name}" class="mentor-avatar">
+                            </div>
+
+                            <!-- 2. Mentor Name & Availability Badge (Flex row layout) -->
+                            <div class="mentor-card-name-row">
+                                <h3>${mentor.name}</h3>
+                                <span class="status-indicator-badge ${statusClass}">${statusText}</span>
+                            </div>
+
+                            <!-- 3. Mentor Specialization -->
+                            <p class="mentor-designation">${mentor.designation}</p>
+
+                            <!-- 4. Institute Row (prefixed by 🏫) -->
+                            <div class="mentor-org-row">
+                                <span class="org-text-name">🏫 ${mentor.organization}</span>
+                            </div>
+
+                            <!-- 5. Statistics in a single compact row -->
+                            <div class="mentor-card-metrics-row">
+                                ⭐ ${mentor.rating} (${mentor.totalReviews}) • 👨&zwj;🎓 ${formattedStudents} Students • 💼 ${mentor.experienceYears} Years
+                            </div>
+
+                            <!-- 6. Short description (max 2 lines clamped) -->
+                            <p class="mentor-card-desc">
+                                "${mentor.bio}"
+                            </p>
+
+                            <!-- 7. Top skills (maximum 3 chips) -->
+                            <div class="mentor-card-skills-row">
+                                ${skillsHtml}
+                                ${mentor.skills.length > 2 ? `<span class="tag-pill-skill overflow">+${mentor.skills.length - 2}</span>` : ''}
+                            </div>
+
+                            <!-- 8. Action buttons (equal width and height, aligned at bottom) -->
+                            <div class="mentor-card-actions">
+                                <button class="btn-profile-outlined" onclick="window.viewMentorProfile(${mentor.id})">View Profile</button>
+                                <button class="btn-session-filled" onclick="window.bookMentorSession(${mentor.id})">Book Session</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            };
+
+            // Render bottom pagination page lists
+            const renderPaginationControls = () => {
+                const totalPages = Math.ceil(filteredMentors.length / itemsPerPage);
+                pagPages.innerHTML = '';
+
+                pagPrev.disabled = (currentPage === 1);
+                pagNext.disabled = (currentPage === totalPages);
+
+                for(let i = 1; i <= totalPages; i++) {
+                    const activeClass = (i === currentPage) ? 'active' : '';
+                    pagPages.innerHTML += `
+                        <button class="btn-pag-number ${activeClass}" data-page="${i}">${i}</button>
+                    `;
+                }
+
+                // Add pagination click actions
+                document.querySelectorAll('.btn-pag-number').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        currentPage = parseInt(e.target.getAttribute('data-page'));
+                        simulateLoadAndRender();
+                        document.getElementById('filtersBar').scrollIntoView({ behavior: 'smooth' });
+                    });
+                });
+            };
+
+            // Reset all search values and custom dropdown labels
+            const clearFilters = () => {
+                heroSearchInput.value = '';
+                filterSearchInput.value = '';
+                
+                // Clear custom selects
+                const wrappers = document.querySelectorAll('.custom-select-wrapper');
+                wrappers.forEach(wrapper => {
+                    const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+                    hiddenInput.value = '';
+                    
+                    const label = wrapper.querySelector('.trigger-label');
+                    const defaultOption = wrapper.querySelector('.custom-option-item[data-value=""]');
+                    if (defaultOption) {
+                        label.innerText = defaultOption.innerText.replace('✓', '').trim();
+                        label.classList.remove('has-value');
+                    }
+
+                    const items = wrapper.querySelectorAll('.custom-option-item');
+                    items.forEach(i => {
+                        i.classList.remove('selected');
+                        if (i.innerHTML.includes('✓')) {
+                            i.innerHTML = i.innerHTML.replace('✓', '').trim();
+                        }
+                    });
+                    if (defaultOption) {
+                        defaultOption.classList.add('selected');
+                    }
+                });
+
+                filterMentors();
+            };
+
+            // Show detailed modal profiles popup
+            window.viewMentorProfile = (id) => {
+                const mentor = mentors.find(m => m.id === id);
+                if(!mentor) return;
+
+                const starsHtml = '★'.repeat(Math.round(mentor.rating)) + '☆'.repeat(5 - Math.round(mentor.rating));
+                const skillsHtml = mentor.skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('');
+                const languagesHtml = mentor.languages.map(lang => `<span class="lang-tag">${lang}</span>`).join('');
+                const certificationsHtml = mentor.certifications.map(cert => `<li>${cert}</li>`).join('');
+
+                modalContent.innerHTML = `
+                    <div class="modal-profile-header">
+                        <div class="modal-avatar-wrapper">
+                            <img src="${mentor.photo}" alt="${mentor.name}" class="modal-avatar">
+                        </div>
+                        <div class="modal-header-info">
+                            <h2>${mentor.name}</h2>
+                            <p class="modal-job-title">${mentor.designation} at <span class="highlight-company">${mentor.organization}</span></p>
+                            <p class="modal-category"><strong>Category:</strong> ${mentor.category}</p>
+                            <div class="mentor-rating-row">
+                                <span class="rating-stars">${starsHtml}</span>
+                                <span class="rating-number">${mentor.rating} (${mentor.totalReviews} Reviews)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-profile-body">
+                        <div class="modal-details-grid">
+                            <!-- Left columns -->
+                            <div class="modal-details-main">
+                                <div class="details-section">
+                                    <h3>Biography</h3>
+                                    <p>${mentor.bio}</p>
+                                </div>
+                                
+                                <div class="details-section">
+                                    <h3>Skills & Expertise</h3>
+                                    <div class="mentor-skills-list full">
+                                        ${skillsHtml}
+                                    </div>
+                                </div>
+
+                                <div class="details-section">
+                                    <h3>Education & Certifications</h3>
+                                    <p><strong>Education:</strong> ${mentor.education}</p>
+                                    ${certificationsHtml ? `<ul class="modal-certs-list">${certificationsHtml}</ul>` : ''}
+                                </div>
+
+                                <div class="details-section">
+                                    <h3>Location & Contact</h3>
+                                    <p>📍 Located in <strong>${mentor.location}</strong></p>
+                                </div>
+                            </div>
+                            
+                            <!-- Right columns metrics -->
+                            <div class="modal-details-sidebar">
+                                <div class="sidebar-kpi-card">
+                                    <div class="kpi-row">
+                                        <div class="kpi-item">
+                                            <span class="kpi-val">${mentor.studentsMentored}+</span>
+                                            <span class="kpi-name">Students Helped</span>
+                                        </div>
+                                        <div class="kpi-item">
+                                            <span class="kpi-val">${mentor.experienceYears} Yrs</span>
+                                            <span class="kpi-name">Experience</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="sidebar-list-card">
+                                    <h4>Languages</h4>
+                                    <div class="lang-list">
+                                        ${languagesHtml}
+                                    </div>
+                                </div>
+
+                                <div class="sidebar-list-card">
+                                    <h4>Availability & Cost</h4>
+                                    <p class="availability-text">📅 ${mentor.availability}</p>
+                                    <p class="availability-text" style="margin-top: 8px;">💳 <strong>Session Price:</strong> ${mentor.sessionPrice}</p>
+                                    <p class="availability-text" style="margin-top: 4px;">⚡ <strong>Response Time:</strong> ${mentor.responseTime}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-profile-footer">
+                        <button class="btn-secondary" onclick="window.closeProfileModal()">Close</button>
+                        <button class="btn-primary" onclick="window.bookMentorSession(${mentor.id})">Book Session</button>
+                    </div>
+                `;
+
+                profileModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeProfileModal = () => {
+                profileModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+
+            // Authentication Modal actions
+            const openAuthModal = (mentor) => {
+                selectedMentor = mentor;
+                authModalMentorPhoto.src = mentor.photo;
+                authModalMentorName.innerText = mentor.name;
+                authModalMentorSpecialty.innerText = mentor.designation;
+
+                authModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeAuthModal = () => {
+                authModal.style.display = 'none';
+                if (bookingModal.style.display !== 'flex' && profileModal.style.display !== 'flex') {
+                    document.body.style.overflow = 'auto';
+                }
+            };
+
+            // Booking Modal actions
+            const openBookingWorkflow = (mentor) => {
+                selectedMentor = mentor;
+                bookingMentorName.innerText = mentor.name;
+                bookingDate.value = '';
+                bookingTime.value = '';
+                bookingStep1NextBtn.disabled = true;
+
+                // Reset step displays
+                document.getElementById('bookingStep1').style.display = 'block';
+                document.getElementById('bookingStep2').style.display = 'none';
+                document.getElementById('bookingStep3').style.display = 'none';
+
+                // Set min date of date picker to tomorrow
+                const tomorrow = new Date();
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                bookingDate.min = tomorrow.toISOString().split('T')[0];
+
+                bookingModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            };
+
+            const closeBookingModal = () => {
+                bookingModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+
+            // Validate date/time selection in step 1
+            const validateBookingStep1 = () => {
+                if (bookingDate.value && bookingTime.value) {
+                    bookingStep1NextBtn.disabled = false;
+                } else {
+                    bookingStep1NextBtn.disabled = true;
+                }
+            };
+
+            bookingDate.addEventListener('change', validateBookingStep1);
+            bookingTime.addEventListener('change', validateBookingStep1);
+
+            // Step 1 -> Step 2
+            bookingStep1NextBtn.addEventListener('click', () => {
+                summaryMentorName.innerText = selectedMentor.name;
+                summarySpecialty.innerText = selectedMentor.designation;
+                summaryDate.innerText = bookingDate.value;
+                summaryTime.innerText = bookingTime.value;
+                summaryFee.innerText = selectedMentor.sessionPrice;
+
+                document.getElementById('bookingStep1').style.display = 'none';
+                document.getElementById('bookingStep2').style.display = 'block';
+            });
+
+            // Step 2 -> Step 1 (Back)
+            bookingStep2BackBtn.addEventListener('click', () => {
+                document.getElementById('bookingStep2').style.display = 'none';
+                document.getElementById('bookingStep1').style.display = 'block';
+            });
+
+            // Confirm Booking Action
+            bookingStep2ConfirmBtn.addEventListener('click', async () => {
+                bookingStep2ConfirmBtn.disabled = true;
+                bookingStep2ConfirmBtn.innerText = 'Confirming...';
+
+                try {
+                    const res = await fetch('/api/sessions', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            topic: selectedMentor.designation,
+                            date: new Date(bookingDate.value + ' ' + bookingTime.value.split(' - ')[0]),
+                            mentor: selectedMentor.id,
+                            notes: 'Mentoring session booked from directory page.'
+                        })
+                    });
+                } catch (err) {
+                    console.error("API Booking session failed, falling back to mock:", err);
+                }
+
+                // Show step 3 success
+                document.getElementById('bookingStep2').style.display = 'none';
+                document.getElementById('bookingStep3').style.display = 'block';
+                bookingStep2ConfirmBtn.disabled = false;
+                bookingStep2ConfirmBtn.innerText = 'Confirm Booking';
+            });
+
+            // Step 3 -> Done
+            bookingStep3DoneBtn.addEventListener('click', () => {
+                closeBookingModal();
+            });
+
+            // Book session handler
+            window.bookMentorSession = (id) => {
+                const mentor = mentors.find(m => m.id === id);
+                if(!mentor) return;
+                
+                // Close profile modal if open
+                closeProfileModal();
+
+                if (!currentUser) {
+                    openAuthModal(mentor);
+                } else {
+                    openBookingWorkflow(mentor);
+                }
+            };
+
+            // Event Listeners
+            clearFiltersBtn.addEventListener('click', clearFilters);
+            applyFiltersBtn.addEventListener('click', filterMentors);
+            clearAllChipsBtn.addEventListener('click', clearFilters);
+            emptyStateClearBtn.addEventListener('click', clearFilters);
+            modalCloseBtn.addEventListener('click', window.closeProfileModal);
+
+            // Auth modal listeners
+            authModalCloseBtn.addEventListener('click', closeAuthModal);
+            authModalCancelBtn.addEventListener('click', closeAuthModal);
+            
+            authModalLoginBtn.addEventListener('click', () => {
+                localStorage.setItem('pending_booking_mentor_id', selectedMentor.id);
+                closeAuthModal();
+                window.location.href = '/login.html';
+            });
+
+            authModalRegisterBtn.addEventListener('click', () => {
+                localStorage.setItem('pending_booking_mentor_id', selectedMentor.id);
+                closeAuthModal();
+                window.location.href = '/register.html';
+            });
+
+            // Booking modal listeners
+            bookingModalCloseBtn.addEventListener('click', closeBookingModal);
+
+            // Close modal on click background
+            profileModal.addEventListener('click', (e) => {
+                if(e.target === profileModal) {
+                    window.closeProfileModal();
+                }
+            });
+            authModal.addEventListener('click', (e) => {
+                if(e.target === authModal) {
+                    closeAuthModal();
+                }
+            });
+            bookingModal.addEventListener('click', (e) => {
+                if(e.target === bookingModal) {
+                    closeBookingModal();
+                }
+            });
+
+            pagPrev.addEventListener('click', () => {
+                if(currentPage > 1) {
+                    currentPage--;
+                    simulateLoadAndRender();
+                    document.getElementById('filtersBar').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            pagNext.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredMentors.length / itemsPerPage);
+                if(currentPage < totalPages) {
+                    currentPage++;
+                    simulateLoadAndRender();
+                    document.getElementById('filtersBar').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            // Initial Database Fetch
+            const init = async () => {
+                renderSkeletons();
+                await checkAuth();
+                initCustomSelects();
+
+                // If authenticated, update navbar login / register buttons automatically
+                if (currentUser) {
+                    const navActions = document.querySelector('.nav-actions');
+                    if (navActions) {
+                        const dashboardUrl = currentUser.role === 'mentor' ? '/mentor-dashboard.html' : '/student-dashboard.html';
+                        navActions.innerHTML = `
+                            <a href="${dashboardUrl}" class="btn-login-outlined">Dashboard</a>
+                            <a href="/logout" class="btn-register-filled">Log Out</a>
+                        `;
+                    }
+                }
+
+                fetch('/mentors.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        mentors = data;
+                        filteredMentors = [...mentors];
+                        renderGrid();
+
+                        // Check if we have a pending booking redirect from authentication!
+                        const pendingId = localStorage.getItem('pending_booking_mentor_id');
+                        if (pendingId && currentUser) {
+                            localStorage.removeItem('pending_booking_mentor_id');
+                            const mentor = mentors.find(m => m.id === parseInt(pendingId));
+                            if (mentor) {
+                                window.bookMentorSession(mentor.id);
+                            }
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Error loading mentors list database: ", err);
+                        mentorGrid.innerHTML = '<p class="error-msg">Failed to load mentors database. Please try reloading the page.</p>';
+                    });
+            };
+
+            init();
+        })();
+    </script>
+</body>
+</html>

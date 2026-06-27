@@ -1,4 +1,4 @@
-﻿require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
+require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
 const express = require("express");
 const cors    = require("cors");
 const session = require("express-session");
@@ -31,6 +31,7 @@ app.use(session({
 
 // ── Serve uploaded files (profile photos etc.) ───────────────
 app.use("/uploads", express.static(path.join(__dirname, "../frontend/public/uploads")));
+app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 // ── API Routes ────────────────────────────────────────────────
 app.use("/",                  require("./routes/auth"));
@@ -40,6 +41,13 @@ app.use("/api/sessions",      require("./routes/sessions"));
 app.use("/api/chats",         require("./routes/chat"));
 app.use("/api/notifications", require("./routes/notifications"));
 app.use("/api/payments",      require("./routes/payments"));
+
+// ── Serve HTML views directly for clean URLs ──────────────────
+app.get("/login",             (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/login.html")));
+app.get("/register",          (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/register.html")));
+app.get("/student-dashboard", (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/student-dashboard.html")));
+app.get("/mentor-dashboard",  (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentor-dashboard.html")));
+app.get("/mentors",           (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentors.html")));
 
 // ── Legacy URL aliases (backward compat with frontend) ───────
 const mentorsRouter  = require("./routes/mentors");
