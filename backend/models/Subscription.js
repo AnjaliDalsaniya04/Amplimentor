@@ -1,34 +1,61 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
 
-const subscriptionSchema = new Schema({
-    student: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    mentor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    plan: { type: String, required: true }, // 'basic', 'premium', 'enterprise'
-    amount: { type: Number, required: true }, // Amount in cents
-    currency: { type: String, default: 'usd' },
-    interval: { type: String, enum: ['monthly', 'quarterly', 'yearly'], default: 'monthly' },
-    status: { 
-        type: String, 
-        enum: ['active', 'cancelled', 'expired', 'past_due'], 
-        default: 'active' 
+module.exports = (sequelize, DataTypes) => {
+  const Subscription = sequelize.define('Subscription', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    stripeSubscriptionId: { type: String },
-    stripeCustomerId: { type: String },
-    currentPeriodStart: { type: Date },
-    currentPeriodEnd: { type: Date },
-    cancelAtPeriodEnd: { type: Boolean, default: false },
-    cancelledAt: { type: Date },
-    sessionsPerMonth: { type: Number, default: 4 },
-    features: [{ type: String }], // Array of features included in this plan
-    metadata: { type: Schema.Types.Mixed }
-}, {
-    timestamps: true
-});
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    mentorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    plan: {
+      type: DataTypes.ENUM('basic', 'premium', 'enterprise'),
+      allowNull: false,
+    },
+    interval: {
+      type: DataTypes.ENUM('monthly', 'quarterly', 'yearly'),
+      defaultValue: 'monthly',
+    },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    currency: {
+      type: DataTypes.STRING(10),
+      defaultValue: 'inr',
+    },
+    status: {
+      type: DataTypes.ENUM('active', 'cancelled', 'past_due', 'expired'),
+      defaultValue: 'active',
+    },
+    sessionsPerMonth: { type: DataTypes.INTEGER, defaultValue: 4 },
+    stripeSubscriptionId:   { type: DataTypes.STRING },
+    stripePriceId:          { type: DataTypes.STRING },
+    stripeCustomerId:       { type: DataTypes.STRING },
+    currentPeriodStart:     { type: DataTypes.DATE },
+    currentPeriodEnd:       { type: DataTypes.DATE },
+    cancelAtPeriodEnd: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+  }, {
+    tableName: 'subscriptions',
+    timestamps: true,
+    indexes: [
+      { fields: ['studentId'] },
+      { fields: ['mentorId'] },
+      { fields: ['status'] },
+    ],
+  });
 
-// Index for efficient queries
-subscriptionSchema.index({ student: 1, mentor: 1 });
-subscriptionSchema.index({ status: 1 });
-subscriptionSchema.index({ currentPeriodEnd: 1 });
-
-module.exports = mongoose.model('Subscription', subscriptionSchema); 
+  return Subscription;
+};

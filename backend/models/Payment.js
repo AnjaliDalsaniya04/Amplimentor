@@ -1,32 +1,54 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
 
-const paymentSchema = new Schema({
-    student: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    mentor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    session: { type: Schema.Types.ObjectId, ref: 'Session' },
-    amount: { type: Number, required: true }, // Amount in cents
-    currency: { type: String, default: 'usd' },
-    status: { 
-        type: String, 
-        enum: ['pending', 'completed', 'failed', 'refunded', 'cancelled'], 
-        default: 'pending' 
+module.exports = (sequelize, DataTypes) => {
+  const Payment = sequelize.define('Payment', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    paymentMethod: { type: String, required: true }, // 'stripe', 'paypal', etc.
-    stripePaymentIntentId: { type: String },
-    stripeCustomerId: { type: String },
-    description: { type: String },
-    metadata: { type: Schema.Types.Mixed },
-    refundedAt: { type: Date },
-    refundAmount: { type: Number },
-    refundReason: { type: String }
-}, {
-    timestamps: true
-});
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    mentorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    sessionId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: { model: 'sessions', key: 'id' },
+    },
+    amount: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    currency: {
+      type: DataTypes.STRING(10),
+      defaultValue: 'inr',
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'completed', 'failed', 'refunded'),
+      defaultValue: 'pending',
+    },
+    paymentMethod: {
+      type: DataTypes.ENUM('card', 'bank_transfer', 'other'),
+      defaultValue: 'card',
+    },
+    description: { type: DataTypes.TEXT },
+    stripePaymentIntentId: { type: DataTypes.STRING },
+  }, {
+    tableName: 'payments',
+    timestamps: true,
+    indexes: [
+      { fields: ['studentId'] },
+      { fields: ['mentorId'] },
+      { fields: ['status'] },
+    ],
+  });
 
-// Index for efficient queries
-paymentSchema.index({ student: 1, mentor: 1 });
-paymentSchema.index({ status: 1 });
-paymentSchema.index({ createdAt: -1 });
-
-module.exports = mongoose.model('Payment', paymentSchema); 
+  return Payment;
+};

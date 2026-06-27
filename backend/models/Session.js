@@ -1,20 +1,45 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
 
-const sessionSchema = new Schema({
-    mentor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    student: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    topic: { type: String, required: true },
-    date: { type: Date, required: true },
-    status: { 
-        type: String, 
-        enum: ['scheduled', 'completed', 'cancelled'], 
-        default: 'scheduled' 
+module.exports = (sequelize, DataTypes) => {
+  const Session = sequelize.define('Session', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    notes: { type: String },
-    meetingLink: { type: String, trim: true }
-}, {
-    timestamps: true
-});
+    mentorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    topic: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    date: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM('scheduled', 'completed', 'cancelled'),
+      defaultValue: 'scheduled',
+    },
+    notes:       { type: DataTypes.TEXT },
+    meetingLink: { type: DataTypes.STRING },
+  }, {
+    tableName: 'sessions',
+    timestamps: true,
+    indexes: [
+      { fields: ['mentorId'] },
+      { fields: ['studentId'] },
+      { fields: ['status'] },
+    ],
+  });
 
-module.exports = mongoose.model('Session', sessionSchema); 
+  return Session;
+};

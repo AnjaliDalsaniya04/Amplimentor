@@ -1,40 +1,39 @@
-const mongoose = require('mongoose');
+'use strict';
 
-const MentorRequestSchema = new mongoose.Schema({
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  mentor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  status: {
-    type: String,
-    enum: ['pending', 'accepted', 'rejected', 'removed'],
-    default: 'pending'
-  },
-  message: {
-    type: String,
-    required: true,
-    maxlength: 500
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now
-  }
-});
+module.exports = (sequelize, DataTypes) => {
+  const MentorRequest = sequelize.define('MentorRequest', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    mentorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    message: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'accepted', 'rejected', 'removed'),
+      defaultValue: 'pending',
+    },
+  }, {
+    tableName: 'mentor_requests',
+    timestamps: true,
+    indexes: [
+      { fields: ['mentorId'] },
+      { fields: ['studentId'] },
+      { fields: ['status'] },
+    ],
+  });
 
-// Update the updatedAt field before saving
-MentorRequestSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
-  next();
-});
-
-module.exports = mongoose.model('MentorRequest', MentorRequestSchema); 
+  return MentorRequest;
+};

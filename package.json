@@ -1,23 +1,33 @@
 {
-  "name": "web2",
+  "name": "amplimentor",
   "version": "1.0.0",
-  "main": "web2/index.js",
+  "description": "Amplimentor - Student Mentoring Platform",
+  "main": "backend/server.js",
   "scripts": {
-    "start": "node web2/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "migrate": "npx sequelize-cli --options-path backend/.sequelizerc db:migrate",
+    "migrate:undo": "npx sequelize-cli --options-path backend/.sequelizerc db:migrate:undo",
+    "test": "echo \"No tests specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": ["mentoring", "express", "postgresql", "sequelize"],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
     "express": "^5.1.0",
     "express-session": "^1.18.1",
-    "mongoose": "^8.16.0",
     "multer": "^2.0.1",
+    "pg": "^8.22.0",
+    "sequelize": "^6.37.8",
+    "sequelize-cli": "^6.6.5",
     "sharp": "^0.34.2",
     "stripe": "^18.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
   }
 }

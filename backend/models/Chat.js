@@ -1,52 +1,34 @@
-const mongoose = require('mongoose');
+'use strict';
 
-const MessageSchema = new mongoose.Schema({
-  sender: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  receiver: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  },
-  content: {
-    type: String,
-    required: true,
-    maxlength: 1000
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now
-  },
-  read: {
-    type: Boolean,
-    default: false
-  },
-  attachment: {
-    type: String
-  }
-});
+module.exports = (sequelize, DataTypes) => {
+  const Chat = sequelize.define('Chat', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    mentorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    lastMessage: { type: DataTypes.TEXT },
+    lastMessageAt: { type: DataTypes.DATE },
+  }, {
+    tableName: 'chats',
+    timestamps: true,
+    indexes: [
+      { fields: ['mentorId'] },
+      { fields: ['studentId'] },
+      // Ensure one chat per mentor-student pair
+      { unique: true, fields: ['mentorId', 'studentId'] },
+    ],
+  });
 
-const ChatSchema = new mongoose.Schema({
-  student: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  mentor: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  messages: [MessageSchema],
-  lastMessage: {
-    type: Date,
-    default: Date.now
-  }
-});
-
-// Index for efficient querying
-ChatSchema.index({ student: 1, mentor: 1 }, { unique: true });
-
-module.exports = mongoose.model('Chat', ChatSchema); 
+  return Chat;
+};

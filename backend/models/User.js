@@ -1,86 +1,86 @@
-const mongoose = require('mongoose');
+'use strict';
+const { DataTypes } = require('sequelize');
 
-const UserSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: { type: String, enum: ['student', 'mentor'], required: true },
-  
-  // Student-specific fields
-  photo: { type: String },
-  studentId: { type: String },
-  standard: { type: String, enum: ['9', '10', '11', '12', null] },
-  university: { type: String }, // For school name
-  subjects: [{ type: String }],
-  gpa: { type: String },
-  
-  // Personal Information
-  dateOfBirth: { type: Date },
-  phoneNumber: { type: String },
-  address: { type: String },
-  bio: { type: String },
-  
-  // Professional Links
-  linkedIn: { type: String },
-  github: { type: String },
-  
-  // Goals & Mentorship Preferences
-  careerGoals: { type: String },
-  skillsToDevelop: [String],
-  areasOfInterest: [String],
-  meetingFrequency: { type: String },
-  communicationPreference: { type: String },
+module.exports = (sequelize) => {
+  const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: { isEmail: true },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('student', 'mentor'),
+      allowNull: false,
+    },
 
-  // Mentor-specific fields
-  company: { type: String },
-  experience: { type: String },
-  location: { type: String },
-  portfolio: { type: String },
-  expertiseAreas: [String],
-  technicalSkills: [String],
-  industry: { type: String },
-  mentoringStyle: { type: String },
-  availability: { type: String },
-  maxStudents: { type: String },
-  education: { type: String },
-  certifications: [String],
+    // Profile
+    photo:   { type: DataTypes.STRING },
+    bio:     { type: DataTypes.TEXT },
+    phoneNumber: { type: DataTypes.STRING },
+    address: { type: DataTypes.STRING },
+    dateOfBirth: { type: DataTypes.DATEONLY },
 
-  // Payment-related fields
-  stripeCustomerId: { type: String },
-  paymentMethods: [{
-    id: { type: String },
-    type: { type: String }, // 'card', 'bank_account'
-    last4: { type: String },
-    brand: { type: String },
-    isDefault: { type: Boolean, default: false }
-  }],
-  billingAddress: {
-    line1: { type: String },
-    line2: { type: String },
-    city: { type: String },
-    state: { type: String },
-    postalCode: { type: String },
-    country: { type: String }
-  },
-  
-  // Mentor pricing
-  hourlyRate: { type: Number, default: 50 }, // in cents
-  sessionRate: { type: Number, default: 2000 }, // in cents
-  subscriptionPlans: [{
-    name: { type: String },
-    price: { type: Number }, // in cents
-    sessions: { type: Number },
-    interval: { type: String, enum: ['monthly', 'quarterly', 'yearly'] }
-  }],
+    // Professional links
+    linkedIn:  { type: DataTypes.STRING },
+    github:    { type: DataTypes.STRING },
+    portfolio: { type: DataTypes.STRING },
 
-  // Obsolete fields - kept for now to avoid breaking old records, can be removed later
-  major: { type: String },
-  yearLevel: { type: String },
-  fieldOfStudy: { type: String },
-  currentYear: { type: String },
-  graduationYear: { type: String },
-  preferredAreas: [String],
+    // Student-specific
+    studentId:  { type: DataTypes.STRING },
+    standard:   { type: DataTypes.ENUM('9', '10', '11', '12') },
+    university: { type: DataTypes.STRING },
+    subjects:   { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    gpa:        { type: DataTypes.STRING },
+    careerGoals: { type: DataTypes.TEXT },
+    skillsToDevelop: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    areasOfInterest: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    meetingFrequency: { type: DataTypes.STRING },
+    communicationPreference: { type: DataTypes.STRING },
 
-});
+    // Mentor-specific
+    company:    { type: DataTypes.STRING },
+    experience: { type: DataTypes.STRING },
+    location:   { type: DataTypes.STRING },
+    expertiseAreas:  { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    technicalSkills: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
+    industry:    { type: DataTypes.STRING },
+    mentoringStyle: { type: DataTypes.STRING },
+    availability:   { type: DataTypes.STRING },
+    maxStudents:    { type: DataTypes.STRING },
+    education:      { type: DataTypes.TEXT },
+    certifications: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: [] },
 
-module.exports = mongoose.model('User', UserSchema); 
+    // Pricing (stored in paise/cents)
+    hourlyRate:  { type: DataTypes.INTEGER, defaultValue: 50000 },
+    sessionRate: { type: DataTypes.INTEGER, defaultValue: 2000 },
+    subscriptionPlans: { type: DataTypes.JSONB, defaultValue: [] },
+
+    // Stripe
+    stripeCustomerId: { type: DataTypes.STRING },
+    paymentMethods:   { type: DataTypes.JSONB, defaultValue: [] },
+    billingAddress:   { type: DataTypes.JSONB },
+  }, {
+    tableName: 'users',
+    timestamps: true,
+    indexes: [
+      { unique: true, fields: ['email'] },
+      { fields: ['role'] },
+    ],
+  });
+
+  return User;
+};

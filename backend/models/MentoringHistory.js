@@ -1,29 +1,47 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+'use strict';
 
-const mentoringHistorySchema = new Schema({
-    mentor: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    student: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    startDate: { type: Date, required: true },
-    endDate: { type: Date },
-    status: { 
-        type: String, 
-        enum: ['active', 'completed', 'terminated'], 
-        default: 'active' 
+module.exports = (sequelize, DataTypes) => {
+  const MentoringHistory = sequelize.define('MentoringHistory', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
-    totalSessions: { type: Number, default: 0 },
-    completedSessions: { type: Number, default: 0 },
-    cancelledSessions: { type: Number, default: 0 },
-    notes: { type: String },
-    reasonForEnding: { type: String },
-    rating: { type: Number, min: 1, max: 5 },
-    feedback: { type: String }
-}, {
-    timestamps: true
-});
+    mentorId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    studentId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: { model: 'users', key: 'id' },
+    },
+    status: {
+      type: DataTypes.ENUM('active', 'completed'),
+      defaultValue: 'active',
+    },
+    startDate: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
+    },
+    endDate:          { type: DataTypes.DATE },
+    totalSessions:    { type: DataTypes.INTEGER, defaultValue: 0 },
+    completedSessions:{ type: DataTypes.INTEGER, defaultValue: 0 },
+    cancelledSessions:{ type: DataTypes.INTEGER, defaultValue: 0 },
+    rating:           { type: DataTypes.INTEGER },
+    feedback:         { type: DataTypes.TEXT },
+    reasonForEnding:  { type: DataTypes.STRING },
+    notes:            { type: DataTypes.TEXT },
+  }, {
+    tableName: 'mentoring_histories',
+    timestamps: true,
+    indexes: [
+      { fields: ['mentorId'] },
+      { fields: ['studentId'] },
+      { fields: ['status'] },
+    ],
+  });
 
-// Index for efficient queries
-mentoringHistorySchema.index({ mentor: 1, student: 1 });
-mentoringHistorySchema.index({ status: 1 });
-
-module.exports = mongoose.model('MentoringHistory', mentoringHistorySchema); 
+  return MentoringHistory;
+};

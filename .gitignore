@@ -11,6 +11,9 @@ yarn-error.log*
 .env.test.local
 .env.production.local
 
+# Sequelize DB config (contains passwords)
+backend/config/config.json
+
 # Logs
 logs
 *.log
@@ -79,6 +82,8 @@ backend/uploads/*
 !backend/uploads/.gitkeep
 public/uploads/*
 !public/uploads/.gitkeep
+frontend/public/uploads/*
+!frontend/public/uploads/.gitkeep
 
 # OS generated files
 .DS_Store
