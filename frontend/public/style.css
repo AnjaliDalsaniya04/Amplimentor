@@ -3552,7 +3552,7 @@ input[type="file"].edit-input:focus {
     box-sizing: border-box;
 }
 
-.stat-card-premium {
+.stat-card-premium, .stat-card {
     background-color: #ffffff;
     border-radius: 16px;
     border: 1px solid #E2E8F0;
@@ -3567,7 +3567,7 @@ input[type="file"].edit-input:focus {
     box-sizing: border-box;
 }
 
-.stat-card-premium:hover {
+.stat-card-premium:hover, .stat-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
     border-color: rgba(79, 110, 247, 0.25);
@@ -3708,7 +3708,7 @@ input[type="file"].edit-input:focus {
     border-color: rgba(79, 110, 247, 0.25);
 }
 
-.my-mentor-premium-layout {
+.my-mentor-premium-layout, .my-mentor-profile {
     display: grid;
     grid-template-columns: 84px 1fr;
     gap: 20px;
@@ -3716,7 +3716,7 @@ input[type="file"].edit-input:focus {
     margin-bottom: 20px;
 }
 
-.my-mentor-avatar-circle {
+.my-mentor-avatar-circle, .my-mentor-photo-wrap {
     width: 84px;
     height: 84px;
     border-radius: 50%;
@@ -3726,34 +3726,34 @@ input[type="file"].edit-input:focus {
     flex-shrink: 0;
 }
 
-.my-mentor-avatar-circle img {
+.my-mentor-avatar-circle img, .my-mentor-photo-wrap img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.my-mentor-details-col {
+.my-mentor-details-col, .my-mentor-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
     min-width: 0;
 }
 
-.my-mentor-details-col h4 {
+.my-mentor-details-col h4, .my-mentor-info h4 {
     font-size: 1.15rem;
     font-weight: 800;
     color: #0F172A;
     margin: 0 0 4px 0;
 }
 
-.my-mentor-specialty-text {
+.my-mentor-specialty-text, .my-mentor-specialty {
     font-size: 0.92rem;
     font-weight: 600;
     color: #4B5563;
     margin-bottom: 4px;
 }
 
-.my-mentor-institute-text {
+.my-mentor-institute-text, .my-mentor-org {
     font-size: 0.85rem;
     color: #6B7280;
 }
@@ -3794,7 +3794,7 @@ input[type="file"].edit-input:focus {
     margin-top: 2px;
 }
 
-.my-mentor-actions-row {
+.my-mentor-actions-row, .my-mentor-actions {
     display: flex;
     gap: 10px;
     margin-top: auto;
@@ -3854,7 +3854,7 @@ input[type="file"].edit-input:focus {
     gap: 12px;
 }
 
-.session-appointment-card {
+.session-appointment-card, .upcoming-session-row {
     border: 1px solid #E2E8F0;
     background-color: #ffffff;
     border-radius: 14px;
@@ -3867,13 +3867,13 @@ input[type="file"].edit-input:focus {
     width: 100%;
 }
 
-.session-appointment-card:hover {
+.session-appointment-card:hover, .upcoming-session-row:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 18px rgba(15, 23, 42, 0.05);
     border-color: #AFC7FF;
 }
 
-.session-date-block {
+.session-date-block, .session-date-time {
     background-color: #F0F4FF;
     border-radius: 10px;
     padding: 8px 14px;
@@ -3882,7 +3882,7 @@ input[type="file"].edit-input:focus {
     flex-shrink: 0;
 }
 
-.session-date-day {
+.session-date-day, .session-date-val {
     font-size: 1.15rem;
     font-weight: 800;
     color: #3B82F6;
@@ -3890,7 +3890,7 @@ input[type="file"].edit-input:focus {
     line-height: 1;
 }
 
-.session-date-month {
+.session-date-month, .session-time-val {
     font-size: 0.72rem;
     font-weight: 700;
     color: #64748B;
@@ -3900,7 +3900,7 @@ input[type="file"].edit-input:focus {
     margin-top: 2px;
 }
 
-.session-details-block {
+.session-details-block, .session-mentor-subject {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -3929,7 +3929,7 @@ input[type="file"].edit-input:focus {
     min-width: 0;
 }
 
-.session-info-name {
+.session-info-name, .session-mentor-name {
     font-size: 0.95rem;
     font-weight: 700;
     color: #1E293B;
@@ -3939,7 +3939,7 @@ input[type="file"].edit-input:focus {
     text-overflow: ellipsis;
 }
 
-.session-info-subject {
+.session-info-subject, .session-subject-name {
     font-size: 0.78rem;
     color: #64748B;
     white-space: nowrap;
@@ -4044,7 +4044,7 @@ input[type="file"].edit-input:focus {
 }
 
 /* Redesigned Large Recommended Mentor Card */
-.rec-mentor-card-large {
+.rec-mentor-card-large, .recommended-mentor-card {
     flex: 0 0 calc(33.333% - 11px);
     background-color: #ffffff;
     border: 1px solid #E2E8F0;
@@ -4059,7 +4059,7 @@ input[type="file"].edit-input:focus {
     text-align: left;
 }
 
-.rec-mentor-card-large:hover {
+.rec-mentor-card-large:hover, .recommended-mentor-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
     border-color: #AFC7FF;
@@ -4180,7 +4180,7 @@ input[type="file"].edit-input:focus {
     gap: 12px;
 }
 
-.goal-item-premium {
+.goal-item-premium, .goal-item {
     border: 1px solid #E2E8F0;
     border-radius: 12px;
     padding: 14px 16px;
@@ -4308,7 +4308,7 @@ input[type="file"].edit-input:focus {
     box-sizing: border-box;
 }
 
-.quick-tile-card {
+.quick-tile-card, .quick-action-btn-card {
     background-color: #ffffff;
     border: 1px solid #E2E8F0;
     border-radius: 16px;
@@ -4324,13 +4324,13 @@ input[type="file"].edit-input:focus {
     width: 100%;
 }
 
-.quick-tile-card:hover {
+.quick-tile-card:hover, .quick-action-btn-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 12px 24px rgba(79, 110, 247, 0.1);
     border-color: #4F6EF7;
 }
 
-.quick-tile-icon-circle {
+.quick-tile-icon-circle, .quick-action-icon {
     width: 52px;
     height: 52px;
     border-radius: 50%;
@@ -4344,7 +4344,7 @@ input[type="file"].edit-input:focus {
     flex-shrink: 0;
 }
 
-.quick-tile-card:hover .quick-tile-icon-circle {
+.quick-tile-card:hover .quick-tile-icon-circle, .quick-action-btn-card:hover .quick-action-icon {
     transform: scale(1.1);
 }
 
@@ -4354,7 +4354,7 @@ input[type="file"].edit-input:focus {
 .quick-tile-icon-circle.orange { background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%); }
 .quick-tile-icon-circle.pink { background: linear-gradient(135deg, #F472B6 0%, #EC4899 100%); }
 
-.quick-tile-label {
+.quick-tile-label, .quick-action-label {
     font-size: 0.9rem;
     font-weight: 700;
     color: #334155;
@@ -4457,7 +4457,7 @@ input[type="file"].edit-input:focus {
     gap: 12px;
 }
 
-.request-card-premium {
+.request-card-premium, .request-item-card {
     border: 1px solid #E2E8F0;
     background-color: #ffffff;
     border-radius: 16px;
@@ -4467,25 +4467,26 @@ input[type="file"].edit-input:focus {
     transition: all 0.2s ease;
 }
 
-.request-card-premium:hover {
+.request-card-premium:hover, .request-item-card:hover {
     border-color: #CBD5E1;
     box-shadow: 0 6px 16px rgba(15,23,42,0.04);
 }
 
-.req-card-top {
+.req-card-top, .req-student-profile {
     display: flex;
     gap: 14px;
     margin-bottom: 14px;
     align-items: center;
 }
 
-.req-card-avatar {
+.req-card-avatar, img.req-student-avatar {
     width: 48px;
     height: 48px;
     border-radius: 50%;
     overflow: hidden;
     border: 1.5px solid #E2E8F0;
     flex-shrink: 0;
+    object-fit: cover;
 }
 
 .req-card-avatar img {
@@ -4494,12 +4495,12 @@ input[type="file"].edit-input:focus {
     object-fit: cover;
 }
 
-.req-card-meta {
+.req-card-meta, .req-student-info {
     text-align: left;
     min-width: 0;
 }
 
-.req-card-name {
+.req-card-name, .req-student-name {
     font-size: 0.95rem;
     font-weight: 700;
     color: #1E293B;
@@ -4548,13 +4549,13 @@ input[type="file"].edit-input:focus {
     font-weight: 600;
 }
 
-.req-card-actions {
+.req-card-actions, .req-actions-btns {
     display: flex;
     gap: 10px;
     width: 100%;
 }
 
-.req-card-actions button {
+.req-card-actions button, .req-actions-btns button {
     flex: 1;
     height: 38px;
     border-radius: 8px;
@@ -4565,24 +4566,24 @@ input[type="file"].edit-input:focus {
     box-sizing: border-box;
 }
 
-.req-card-actions .btn-accept {
+.req-card-actions .btn-accept, .req-actions-btns .btn-action-accept {
     background-color: #DEF7EC !important;
     color: #03543F !important;
     border: none !important;
 }
 
-.req-card-actions .btn-accept:hover {
+.req-card-actions .btn-accept:hover, .req-actions-btns .btn-action-accept:hover {
     background-color: #03543F !important;
     color: #ffffff !important;
 }
 
-.req-card-actions .btn-decline {
+.req-card-actions .btn-decline, .req-actions-btns .btn-action-decline {
     background-color: #ffffff !important;
     color: #64748B !important;
     border: 1px solid #E2E8F0 !important;
 }
 
-.req-card-actions .btn-decline:hover {
+.req-card-actions .btn-decline:hover, .req-actions-btns .btn-action-decline:hover {
     background-color: #F1F5F9 !important;
     color: #1E293B !important;
 }
@@ -4679,7 +4680,7 @@ input[type="file"].edit-input:focus {
     gap: 3px;
 }
 
-.btn-student-view {
+.btn-student-view, .btn-action-view-eye {
     padding: 6px 12px;
     background-color: #EFF6FF;
     color: #3B82F6;
@@ -4688,11 +4689,11 @@ input[type="file"].edit-input:focus {
     font-size: 0.8rem;
     font-weight: 700;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
     text-decoration: none;
 }
 
-.btn-student-view:hover {
+.btn-student-view:hover, .btn-action-view-eye:hover {
     background-color: #3B82F6;
     color: #ffffff;
 }

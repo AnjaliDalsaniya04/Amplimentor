@@ -1,109 +1,36 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - Amplimentor</title>
     <link rel="stylesheet" href="/style.css?v=3.5">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <<<<<<< HEAD <!-- Google Font Inter -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-            rel="stylesheet">
-        =======
-        <style>
-            .mentor-card {
-                background: white;
-                padding: 1rem;
-                border-radius: 8px;
-                text-align: center;
-                border: 1px solid #e1e5e9;
-            }
-
-            .mentor-card img {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                object-fit: cover;
-                margin-bottom: 1rem;
-            }
-
-            /* Smooth scrolling for navigation */
-            html {
-                scroll-behavior: smooth;
-            }
-
-            /* Active navigation link styling */
-            .nav-menu a.active {
-                color: #007bff;
-                font-weight: 500;
-            }
-
-            .loading {
-                text-align: center;
-                padding: 2rem;
-                color: #666;
-                font-style: italic;
-            }
-
-            .notification-item {
-                position: relative;
-                display: flex;
-                align-items: center;
-            }
-
-            .notification-count {
-                position: absolute;
-                top: 0;
-                right: 0;
-                background: red;
-                color: white;
-                border-radius: 50%;
-                padding: 2px 6px;
-                font-size: 0.7rem;
-                font-weight: bold;
-                display: none;
-            }
-
-            .notification-dropdown {
-                display: none;
-                position: absolute;
-                top: 40px;
-                right: 0;
-                width: 300px;
-                background: white;
-                border: 1px solid #e1e5e9;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                z-index: 1000;
-            }
-        </style>
-        <script src="/config.js"></script>
-        >>>>>>> 302cd6568b2d90a421aa4b3866af422bcd65e53a
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="/config.js"></script>
 </head>
-
 <body style="margin: 0; background-color: #F8FAFC;">
     <div class="dashboard-wrapper">
-
+        
         <!-- Sidebar Navigation Drawer -->
         <aside class="dashboard-sidebar">
             <a href="/" class="sidebar-logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)" />
-                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff" />
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
                     <defs>
-                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22"
-                            gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#3B82F6" />
-                            <stop offset="1" stop-color="#4F46E5" />
+                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
                         </linearGradient>
                     </defs>
                 </svg>
                 <span>Amplimentor</span>
             </a>
-
+            
             <nav class="sidebar-nav">
                 <a href="/student-dashboard.html" class="sidebar-link active">
                     <i class="fas fa-th-large"></i> Dashboard
@@ -136,7 +63,7 @@
                     <i class="fas fa-cog"></i> Settings
                 </a>
             </nav>
-
+            
             <div class="sidebar-footer">
                 <a href="/logout" class="sidebar-link logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -150,506 +77,400 @@
             <header class="dashboard-header">
                 <div class="header-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search mentors, subjects..." class="header-search-input"
-                        id="dashboardSearch">
+                    <input type="text" placeholder="Search mentors, subjects..." class="header-search-input" id="dashboardSearch">
                 </div>
-
+                
                 <div class="header-actions">
-                    <button class="header-icon-btn" aria-label="Open messages"
-                        onclick="window.location.href='/chat.html'">
+                    <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
                         <i class="far fa-comment-dots"></i>
                     </button>
                     <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
                         <i class="far fa-bell"></i>
                         <span class="badge" id="notificationCount" style="display: none;"></span>
                     </button>
-                    </section>
-
-                    <section class="features">
-                        <h2>My Mentors</h2>
-                        <div id="myMentors">
-                            <div class="loading">Loading mentors...</div>
-                        </div>
-                    </section>
-        </main>
-        <footer>
-            <p>&copy; 2025 Amplimentor. All rights reserved.</p>
-        </footer>
-    </div>
-
-    <script>
-        // Load user information when page loads
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Page loaded, initializing...');
-            loadUserInfo();
-            loadNotifications();
-
-            // Notification dropdown logic
-            const notificationLink = document.getElementById('notificationLink');
-            notificationLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                const dropdown = document.getElementById('notificationDropdown');
-                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
-
-            document.addEventListener('click', (e) => {
-                const dropdown = document.getElementById('notificationDropdown');
-                const notificationItem = document.querySelector('.notification-item');
-                if (!notificationItem.contains(e.target)) {
-                    dropdown.style.display = 'none';
-                }
-            });
-        });
-
-        let currentUserId = null;
-
-        // Function to load user information
-        async function loadUserInfo() {
-            try {
-                const response = await fetch(API_BASE + '/api/student/profile', {
-                    credentials: 'include'
-                });
-
-                if (response.ok) {
-                    const user = await response.json();
-                    // Update welcome message with user's name
-                    document.getElementById('studentName').textContent = user.name || 'Student';
-                    currentUserId = user.id; // Store user ID for chat functionality
-
+                    
                     <a href="/student/profile" class="header-user-profile">
                         <img src="/default-avatar.svg" alt="Student avatar" class="header-avatar" id="headerAvatar">
-                            <div class="header-user-info">
-                                <h4 class="header-user-name" id="studentName">Rahul</h4>
-                                <p class="header-user-role">Student</p>
-                            </div>
+                        <div class="header-user-info">
+                            <h4 class="header-user-name" id="studentName">Rahul</h4>
+                            <p class="header-user-role">Student</p>
+                        </div>
                     </a>
-                </div >
-            </header >
+                </div>
+            </header>
 
-<<<<<<< HEAD
-                        <!-- Inner Dashboard content scroll frame -->
-                        <div class="dashboard-content">
-=======
-        // Function to load mentor requests
-        async function loadMentorRequests() {
-            try {
-                const response = await fetch(API_BASE + '/api/student/requests', {
-                                credentials: 'include'
-                });
->>>>>>> 302cd6568b2d90a421aa4b3866af422bcd65e53a
+            <!-- Inner Dashboard content scroll frame -->
+            <div class="dashboard-content">
+                
+                <!-- Greet Title block -->
+                <div class="dashboard-title-section">
+                    <h1 id="greetingMsg">Good Evening, Rahul 👋</h1>
+                    <p>Keep learning. Keep growing.</p>
+                </div>
 
-                            <!-- Greet Title block -->
-                            <div class="dashboard-title-section">
-                                <h1 id="greetingMsg">Good Evening, Rahul 👋</h1>
-                                <p>Keep learning. Keep growing.</p>
+                <!-- 4 Metrics row -->
+                <section class="dashboard-stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Active Sessions</span>
+                            <h3 class="stat-value" id="statsActive">2</h3>
+                        </div>
+                        <div class="stat-icon-wrapper blue">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Upcoming Sessions</span>
+                            <h3 class="stat-value" id="statsUpcoming">3</h3>
+                        </div>
+                        <div class="stat-icon-wrapper green">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Saved Mentors</span>
+                            <h3 class="stat-value" id="statsSaved">7</h3>
+                        </div>
+                        <div class="stat-icon-wrapper red">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <span class="stat-label">Learning Progress</span>
+                            <h3 class="stat-value" id="statsProgress">78%</h3>
+                        </div>
+                        <div class="stat-icon-wrapper purple">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2-column layout: My Mentor & Upcoming Sessions -->
+                <div class="dashboard-row-grid">
+                    <!-- My Mentor Card -->
+                    <div class="dashboard-card">
+                        <div class="card-header-row">
+                            <h3>My Mentor</h3>
+                        </div>
+                        
+                        <div class="my-mentor-profile">
+                            <div class="my-mentor-photo-wrap">
+                                <img src="/uploads/priya_avatar_1782563537528.png" id="myMentorPhoto" alt="Mentor portrait" onerror="this.src='/default-avatar.svg'">
+                            </div>
+                            <div class="my-mentor-info">
+                                <div class="my-mentor-name-row">
+                                    <h4 id="myMentorName">Anjali Patel</h4>
+                                    <span class="status-indicator-badge available" id="myMentorStatus">🟢 Available</span>
+                                </div>
+                                <p class="my-mentor-specialty" id="myMentorSpecialty">NEET Biology Mentor</p>
+                                <p class="my-mentor-org" id="myMentorOrg">🏫 Aakash BYJU'S</p>
+                            </div>
+                        </div>
+                        
+                        <div class="my-mentor-next-session">
+                            <div class="next-session-title">Next Session</div>
+                            <div class="next-session-time" id="myMentorNextTime">24 May, 2025 • 10:00 AM</div>
+                        </div>
+                        
+                        <div class="my-mentor-actions">
+                            <a href="/chat.html" class="btn-message">Message</a>
+                            <a href="/mentors.html" class="btn-profile" id="myMentorProfileLink">View Profile</a>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Sessions card list -->
+                    <div class="dashboard-card">
+                        <div class="card-header-row">
+                            <h3>Upcoming Sessions</h3>
+                            <a href="/sessions.html" class="view-all-link">View All</a>
+                        </div>
+                        
+                        <div class="upcoming-sessions-list" id="upcomingSessionsList">
+                            <!-- Populated dynamically / static mockup fallback -->
+                            <div class="upcoming-session-row">
+                                <div class="session-date-time">
+                                    <span class="session-date-val">24 May, 2025</span>
+                                    <span class="session-time-val">10:00 AM</span>
+                                </div>
+                                <div class="session-mentor-subject">
+                                    <span class="session-mentor-name">Anjali Patel</span>
+                                    <span class="session-subject-name">NEET Biology</span>
+                                </div>
+                                <span class="session-status-badge">Upcoming</span>
+                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
+                                    <i class="fas fa-video"></i>
+                                </a>
                             </div>
 
-                            <!-- 4 Metrics row -->
-                            <section class="dashboard-stats-grid">
-                                <div class="stat-card">
-                                    <div class="stat-info">
-                                        <span class="stat-label">Active Sessions</span>
-                                        <h3 class="stat-value" id="statsActive">2</h3>
-                                    </div>
-                                    <div class="stat-icon-wrapper blue">
-                                        <i class="fas fa-calendar-check"></i>
-                                    </div>
+                            <div class="upcoming-session-row">
+                                <div class="session-date-time">
+                                    <span class="session-date-val">26 May, 2025</span>
+                                    <span class="session-time-val">04:00 PM</span>
                                 </div>
-                                <div class="stat-card">
-                                    <div class="stat-info">
-                                        <span class="stat-label">Upcoming Sessions</span>
-                                        <h3 class="stat-value" id="statsUpcoming">3</h3>
-                                    </div>
-                                    <div class="stat-icon-wrapper green">
-                                        <i class="fas fa-calendar-plus"></i>
-                                    </div>
+                                <div class="session-mentor-subject">
+                                    <span class="session-mentor-name">Priya Mehta</span>
+                                    <span class="session-subject-name">CBSE Physics</span>
                                 </div>
-                                <div class="stat-card">
-                                    <div class="stat-info">
-                                        <span class="stat-label">Saved Mentors</span>
-                                        <h3 class="stat-value" id="statsSaved">7</h3>
-                                    </div>
-                                    <div class="stat-icon-wrapper red">
-                                        <i class="fas fa-heart"></i>
-                                    </div>
+                                <span class="session-status-badge">Upcoming</span>
+                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
+                                    <i class="fas fa-video"></i>
+                                </a>
+                            </div>
+
+                            <div class="upcoming-session-row">
+                                <div class="session-date-time">
+                                    <span class="session-date-val">28 May, 2025</span>
+                                    <span class="session-time-val">06:00 PM</span>
                                 </div>
-                                <div class="stat-card">
-                                    <div class="stat-info">
-                                        <span class="stat-label">Learning Progress</span>
-                                        <h3 class="stat-value" id="statsProgress">78%</h3>
-                                    </div>
-                                    <div class="stat-icon-wrapper purple">
-                                        <i class="fas fa-chart-line"></i>
-                                    </div>
+                                <div class="session-mentor-subject">
+                                    <span class="session-mentor-name">Rahul Sharma</span>
+                                    <span class="session-subject-name">JEE Mathematics</span>
                                 </div>
-                            </section>
+                                <span class="session-status-badge">Upcoming</span>
+                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
+                                    <i class="fas fa-video"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <!-- 2-column layout: My Mentor & Upcoming Sessions -->
-                            <div class="dashboard-row-grid">
-                                <!-- My Mentor Card -->
-                                <div class="dashboard-card">
-                                    <div class="card-header-row">
-                                        <h3>My Mentor</h3>
-                                    </div>
+                <!-- Recommended Mentors slider section -->
+                <section class="dashboard-card" style="position: relative;">
+                    <div class="card-header-row">
+                        <h3>Recommended Mentors for You</h3>
+                        <a href="/mentors.html" class="view-all-link">View All</a>
+                    </div>
+                    
+                    <div class="recommended-slider-container">
+                        <button class="slider-arrow-btn left" id="slideLeftBtn" aria-label="Slide Left">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        
+                        <div class="slider-cards-row" id="recommendedMentorsSlider">
+                            <!-- Populates dynamically from mentors database -->
+                        </div>
+                        
+                        <button class="slider-arrow-btn right" id="slideRightBtn" aria-label="Slide Right">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </section>
 
-                                    <div class="my-mentor-profile">
-                                        <div class="my-mentor-photo-wrap">
-                                            <img src="/uploads/priya_avatar_1782563537528.png" id="myMentorPhoto" alt="Mentor portrait" onerror="this.src='/default-avatar.svg'">
-                                        </div>
-                                        <div class="my-mentor-info">
-                                            <div class="my-mentor-name-row">
-                                                <h4 id="myMentorName">Anjali Patel</h4>
-                                                <span class="status-indicator-badge available" id="myMentorStatus">🟢 Available</span>
-                                            </div>
-                                            <p class="my-mentor-specialty" id="myMentorSpecialty">NEET Biology Mentor</p>
-                                            <p class="my-mentor-org" id="myMentorOrg">🏫 Aakash BYJU'S</p>
-                                            `;
-                                            return;
-            }
+                <!-- Row 3 columns: Goals & Activities -->
+                <div class="dashboard-row-grid">
+                    <!-- Learning Goals Progress -->
+                    <div class="dashboard-card" id="goals">
+                        <div class="card-header-row">
+                            <h3>Learning Goals</h3>
+                            <a href="/student-dashboard.html#goals" class="view-all-link">View All</a>
+                        </div>
+                        
+                        <div class="goals-list">
+                            <div class="goal-item">
+                                <div class="goal-header">
+                                    <span>JEE Preparation</span>
+                                    <span>75%</span>
+                                </div>
+                                <div class="goal-progress-track">
+                                    <div class="goal-progress-fill blue" style="width: 75%;"></div>
+                                </div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-header">
+                                    <span>Mathematics</span>
+                                    <span>62%</span>
+                                </div>
+                                <div class="goal-progress-track">
+                                    <div class="goal-progress-fill green" style="width: 62%;"></div>
+                                </div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-header">
+                                    <span>Physics</span>
+                                    <span>90%</span>
+                                </div>
+                                <div class="goal-progress-track">
+                                    <div class="goal-progress-fill purple" style="width: 90%;"></div>
+                                </div>
+                            </div>
+                            <div class="goal-item">
+                                <div class="goal-header">
+                                    <span>Chemistry</span>
+                                    <span>40%</span>
+                                </div>
+                                <div class="goal-progress-track">
+                                    <div class="goal-progress-fill orange" style="width: 40%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-                                            const recentRequests = requests.slice(0, 3); // Show only 3 most recent
-            const requestsHTML = recentRequests.map(request => `
-                                            <div style="background: white; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border: 1px solid #e1e5e9;">
-                                                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                                                    <img src="${request.mentor.photo ? `${API_BASE}/uploads/${request.mentor.photo}` : '/default-avatar.svg'}"
-                                                        alt="${request.mentor.name}"
-                                                        style="width: 40px; height: 40px; border-radius: 50%; margin-right: 1rem;"
-                                                        onerror="this.src='/default-avatar.svg'">
-                                                        <div>
-                                                            <strong>${request.mentor.name}</strong>
-                                                            <div style="font-size: 0.9rem; color: #666;">
-                                                                ${request.mentor.standard ? `Grade ${request.mentor.standard}` : ''}
-                                                                ${request.mentor.subjects && request.mentor.subjects.length > 0 ?
-                                                                    `• ${request.mentor.subjects.slice(0, 2).join(', ')}${request.mentor.subjects.length > 2 ? '...' : ''}` : ''}
-                                                            </div>
-                                                        </div>
+                    <!-- Recent Activity logs -->
+                    <div class="dashboard-card">
+                        <div class="card-header-row">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        
+                        <div class="activities-timeline">
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap blue">
+                                    <i class="fas fa-calendar-check"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4 class="activity-title">Session booked with Anjali Patel</h4>
+                                    <span class="activity-time">Today</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap green">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4 class="activity-title">Completed session with Rahul Sharma</h4>
+                                    <span class="activity-time">Yesterday, 07:00 PM</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap orange">
+                                    <i class="fas fa-arrow-alt-circle-down"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4 class="activity-title">Downloaded NEET Biology Notes</h4>
+                                    <span class="activity-time">22 May, 2025</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap purple">
+                                    <i class="fas fa-user-edit"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <h4 class="activity-title">Profile details updated</h4>
+                                    <span class="activity-time">21 May, 2025</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                                                        <div class="my-mentor-next-session">
-                                                            <div class="next-session-title">Next Session</div>
-                                                            <div class="next-session-time" id="myMentorNextTime">24 May, 2025 • 10:00 AM</div>
-                                                        </div>
+                <!-- Bottom section: Quick Actions -->
+                <section class="dashboard-card" style="background-color: transparent; border: none; padding: 0; box-shadow: none;">
+                    <div class="card-header-row" style="margin-bottom: 16px;">
+                        <h3>Quick Actions</h3>
+                    </div>
+                    
+                    <div class="quick-actions-row">
+                        <a href="/mentors.html" class="quick-action-btn-card">
+                            <div class="quick-action-icon purple">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <span class="quick-action-label">Find Mentor</span>
+                        </a>
+                        <a href="/mentors.html" class="quick-action-btn-card">
+                            <div class="quick-action-icon blue">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <span class="quick-action-label">Book Session</span>
+                        </a>
+                        <a href="/mentors.html" class="quick-action-btn-card">
+                            <div class="quick-action-icon green">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <span class="quick-action-label">Browse Subjects</span>
+                        </a>
+                        <a href="/student/profile" class="quick-action-btn-card">
+                            <div class="quick-action-icon orange">
+                                <i class="fas fa-id-card"></i>
+                            </div>
+                            <span class="quick-action-label">My Profile</span>
+                        </a>
+                    </div>
+                </section>
 
-                                                        <div class="my-mentor-actions">
-                                                            <a href="/chat.html" class="btn-message">Message</a>
-                                                            <a href="/mentors.html" class="btn-profile" id="myMentorProfileLink">View Profile</a>
-                                                        </div>
-                                                </div>
+            </div>
+        </main>
+    </div>
 
-                                                <!-- Upcoming Sessions card list -->
-                                                <div class="dashboard-card">
-                                                    <div class="card-header-row">
-                                                        <h3>Upcoming Sessions</h3>
-                                                        <a href="/sessions.html" class="view-all-link">View All</a>
-                                                    </div>
+    <!-- Notification dropover overlay card -->
+    <div id="notificationDropdown" style="display: none; position: absolute; top: 72px; right: 32px; width: 320px; background-color: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 10px 25px rgba(15,23,42,0.1); z-index: 1000; padding: 16px; box-sizing: border-box;">
+        <div style="font-weight: 700; color: #0F172A; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">Notifications</div>
+        <div id="notificationsContent" style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 0.85rem; color: #64748B; text-align: center; padding: 12px 0;">No new notifications</div>
+        </div>
+    </div>
 
-                                                    <div class="upcoming-sessions-list" id="upcomingSessionsList">
-                                                        <!-- Populated dynamically / static mockup fallback -->
-                                                        <div class="upcoming-session-row">
-                                                            <div class="session-date-time">
-                                                                <span class="session-date-val">24 May, 2025</span>
-                                                                <span class="session-time-val">10:00 AM</span>
-                                                            </div>
-                                                            <div class="session-mentor-subject">
-                                                                <span class="session-mentor-name">Anjali Patel</span>
-                                                                <span class="session-subject-name">NEET Biology</span>
-                                                            </div>
-                                                            <span class="session-status-badge">Upcoming</span>
-                                                            <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                                                <i class="fas fa-video"></i>
-                                                            </a>
-                                                        </div>
-
-                                                        <div class="upcoming-session-row">
-                                                            <div class="session-date-time">
-                                                                <span class="session-date-val">26 May, 2025</span>
-                                                                <span class="session-time-val">04:00 PM</span>
-                                                            </div>
-                                                            <div class="session-mentor-subject">
-                                                                <span class="session-mentor-name">Priya Mehta</span>
-                                                                <span class="session-subject-name">CBSE Physics</span>
-                                                            </div>
-                                                            <span class="session-status-badge">Upcoming</span>
-                                                            <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                                                <i class="fas fa-video"></i>
-                                                            </a>
-                                                        </div>
-
-                                                        <div class="upcoming-session-row">
-                                                            <div class="session-date-time">
-                                                                <span class="session-date-val">28 May, 2025</span>
-                                                                <span class="session-time-val">06:00 PM</span>
-                                                            </div>
-                                                            <div class="session-mentor-subject">
-                                                                <span class="session-mentor-name">Rahul Sharma</span>
-                                                                <span class="session-subject-name">JEE Mathematics</span>
-                                                            </div>
-                                                            <span class="session-status-badge">Upcoming</span>
-                                                            <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                                                <i class="fas fa-video"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Recommended Mentors slider section -->
-                                            <section class="dashboard-card" style="position: relative;">
-                                                <div class="card-header-row">
-                                                    <h3>Recommended Mentors for You</h3>
-                                                    <a href="/mentors.html" class="view-all-link">View All</a>
-                                                </div>
-
-                                                <div class="recommended-slider-container">
-                                                    <button class="slider-arrow-btn left" id="slideLeftBtn" aria-label="Slide Left">
-                                                        <i class="fas fa-chevron-left"></i>
-                                                    </button>
-
-                                                    <div class="slider-cards-row" id="recommendedMentorsSlider">
-                                                        <!-- Populates dynamically from mentors database -->
-                                                    </div>
-
-                                                    <button class="slider-arrow-btn right" id="slideRightBtn" aria-label="Slide Right">
-                                                        <i class="fas fa-chevron-right"></i>
-                                                    </button>
-                                                </div>
-                                            </section>
-
-                                            <!-- Row 3 columns: Goals & Activities -->
-                                            <div class="dashboard-row-grid">
-                                                <!-- Learning Goals Progress -->
-                                                <div class="dashboard-card" id="goals">
-                                                    <div class="card-header-row">
-                                                        <h3>Learning Goals</h3>
-                                                        <a href="/student-dashboard.html#goals" class="view-all-link">View All</a>
-                                                    </div>
-
-                                                    <div class="goals-list">
-                                                        <div class="goal-item">
-                                                            <div class="goal-header">
-                                                                <span>JEE Preparation</span>
-                                                                <span>75%</span>
-                                                            </div>
-                                                            <div class="goal-progress-track">
-                                                                <div class="goal-progress-fill blue" style="width: 75%;"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="goal-item">
-                                                            <div class="goal-header">
-                                                                <span>Mathematics</span>
-                                                                <span>62%</span>
-                                                            </div>
-                                                            <div class="goal-progress-track">
-                                                                <div class="goal-progress-fill green" style="width: 62%;"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="goal-item">
-                                                            <div class="goal-header">
-                                                                <span>Physics</span>
-                                                                <span>90%</span>
-                                                            </div>
-                                                            <div class="goal-progress-track">
-                                                                <div class="goal-progress-fill purple" style="width: 90%;"></div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="goal-item">
-                                                            <div class="goal-header">
-                                                                <span>Chemistry</span>
-                                                                <span>40%</span>
-                                                            </div>
-                                                            <div class="goal-progress-track">
-                                                                <div class="goal-progress-fill orange" style="width: 40%;"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Recent Activity logs -->
-                                                <div class="dashboard-card">
-                                                    <div class="card-header-row">
-                                                        <h3>Recent Activity</h3>
-                                                    </div>
-
-                                                    <div class="activities-timeline">
-                                                        <div class="activity-item">
-                                                            <div class="activity-icon-wrap blue">
-                                                                <i class="fas fa-calendar-check"></i>
-                                                            </div>
-                                                            <div class="activity-details">
-                                                                <h4 class="activity-title">Session booked with Anjali Patel</h4>
-                                                                <span class="activity-time">Today</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="activity-item">
-                                                            <div class="activity-icon-wrap green">
-                                                                <i class="fas fa-check-circle"></i>
-                                                            </div>
-                                                            <div class="activity-details">
-                                                                <h4 class="activity-title">Completed session with Rahul Sharma</h4>
-                                                                <span class="activity-time">Yesterday, 07:00 PM</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="activity-item">
-                                                            <div class="activity-icon-wrap orange">
-                                                                <i class="fas fa-arrow-alt-circle-down"></i>
-                                                            </div>
-                                                            <div class="activity-details">
-                                                                <h4 class="activity-title">Downloaded NEET Biology Notes</h4>
-                                                                <span class="activity-time">22 May, 2025</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="activity-item">
-                                                            <div class="activity-icon-wrap purple">
-                                                                <i class="fas fa-user-edit"></i>
-                                                            </div>
-                                                            <div class="activity-details">
-                                                                <h4 class="activity-title">Profile details updated</h4>
-                                                                <span class="activity-time">21 May, 2025</span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-            container.innerHTML = mentors.map(mentorRequest => `
-                                                <div class="mentor-card">
-                                                    <img src="${mentorRequest.mentor.photo ? `${API_BASE}/uploads/${mentorRequest.mentor.photo}` : '/default-avatar.svg'}" alt="${mentorRequest.mentor.name}" class="mentor-photo" onerror="this.onerror=null;this.src='/default-avatar.svg'">
-                                                        <h4>${mentorRequest.mentor.name}</h4>
-                                                        <p>${mentorRequest.mentor.subjects ? mentorRequest.mentor.subjects.join(', ') : 'No subjects listed'}</p>
-                                                        <button onclick="openChatWithMentor('${mentorRequest.mentor.id}')">Chat</button>
-                                                </div>
-
-                                                <!-- Bottom section: Quick Actions -->
-                                                <section class="dashboard-card" style="background-color: transparent; border: none; padding: 0; box-shadow: none;">
-                                                    <div class="card-header-row" style="margin-bottom: 16px;">
-                                                        <h3>Quick Actions</h3>
-                                                    </div>
-
-                                                    <div class="quick-actions-row">
-                                                        <a href="/mentors.html" class="quick-action-btn-card">
-                                                            <div class="quick-action-icon purple">
-                                                                <i class="fas fa-user-friends"></i>
-                                                            </div>
-                                                            <span class="quick-action-label">Find Mentor</span>
-                                                        </a>
-                                                        <a href="/mentors.html" class="quick-action-btn-card">
-                                                            <div class="quick-action-icon blue">
-                                                                <i class="fas fa-plus-circle"></i>
-                                                            </div>
-                                                            <span class="quick-action-label">Book Session</span>
-                                                        </a>
-                                                        <a href="/mentors.html" class="quick-action-btn-card">
-                                                            <div class="quick-action-icon green">
-                                                                <i class="fas fa-book-open"></i>
-                                                            </div>
-                                                            <span class="quick-action-label">Browse Subjects</span>
-                                                        </a>
-                                                        <a href="/student/profile" class="quick-action-btn-card">
-                                                            <div class="quick-action-icon orange">
-                                                                <i class="fas fa-id-card"></i>
-                                                            </div>
-                                                            <span class="quick-action-label">My Profile</span>
-                                                        </a>
-                                                    </div>
-                                                </section>
-
-                                            </div>
-                                        </main>
-                                    </div>
-
-                                    <!-- Notification dropover overlay card -->
-                                    <div id="notificationDropdown" style="display: none; position: absolute; top: 72px; right: 32px; width: 320px; background-color: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 10px 25px rgba(15,23,42,0.1); z-index: 1000; padding: 16px; box-sizing: border-box;">
-                                        <div style="font-weight: 700; color: #0F172A; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">Notifications</div>
-                                        <div id="notificationsContent" style="display: flex; flex-direction: column; gap: 10px;">
-                                            <div style="font-size: 0.85rem; color: #64748B; text-align: center; padding: 12px 0;">No new notifications</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Page Controller Javascript -->
-                                    <script>
+    <!-- Page Controller Javascript -->
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const studentName = document.getElementById('studentName');
-                                        const greetingMsg = document.getElementById('greetingMsg');
-                                        const headerAvatar = document.getElementById('headerAvatar');
-                                        const notificationCount = document.getElementById('notificationCount');
-                                        const notificationLink = document.getElementById('notificationLink');
-                                        const notificationDropdown = document.getElementById('notificationDropdown');
-                                        const notificationsContent = document.getElementById('notificationsContent');
-
-                                        const recSlider = document.getElementById('recommendedMentorsSlider');
-                                        const slideLeftBtn = document.getElementById('slideLeftBtn');
-                                        const slideRightBtn = document.getElementById('slideRightBtn');
+            const greetingMsg = document.getElementById('greetingMsg');
+            const headerAvatar = document.getElementById('headerAvatar');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationLink = document.getElementById('notificationLink');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationsContent = document.getElementById('notificationsContent');
+            
+            const recSlider = document.getElementById('recommendedMentorsSlider');
+            const slideLeftBtn = document.getElementById('slideLeftBtn');
+            const slideRightBtn = document.getElementById('slideRightBtn');
 
             // Toggle Notification Dropdown
             notificationLink.addEventListener('click', (e) => {
-                                            e.stopPropagation();
-                                        notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
             });
             
             document.addEventListener('click', () => {
-                                            notificationDropdown.style.display = 'none';
-                                        // Call logout API
-                                        fetch(API_BASE + '/logout', {
-                                            method: 'POST',
-                                        credentials: 'include'
-            })
-            .then(() => {
-                                            // Redirect to login page
-                                            window.location.href = '/login';
-            })
-            .catch(error => {
-                                            console.error('Logout error:', error);
-                                        // Still redirect to login page
-                                        window.location.href = '/login';
+                notificationDropdown.style.display = 'none';
             });
 
             notificationDropdown.addEventListener('click', (e) => {
-                                            e.stopPropagation();
+                e.stopPropagation();
             });
 
             // Initialize sliding recommended list
             slideLeftBtn.addEventListener('click', () => {
-                                            recSlider.scrollBy({ left: -300, behavior: 'smooth' });
+                recSlider.scrollBy({ left: -300, behavior: 'smooth' });
             });
             
             slideRightBtn.addEventListener('click', () => {
-                                            recSlider.scrollBy({ left: 300, behavior: 'smooth' });
+                recSlider.scrollBy({ left: 300, behavior: 'smooth' });
             });
 
             // Fetch active login data
             const loadUserInfo = async () => {
                 try {
-                    const res = await fetch('/api/student/profile');
-                                        if (res.ok) {
+                    const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/student/profile');
+                    if (res.ok) {
                         const user = await res.json();
-                                        studentName.textContent = user.name || 'Rahul';
-                                        greetingMsg.textContent = `Good Evening, ${user.name || 'Rahul'} 👋`;
-                                        if (user.photo) {
-                                            headerAvatar.src = `/uploads/${user.photo}`;
+                        studentName.textContent = user.name || 'Rahul';
+                        greetingMsg.textContent = `Good Evening, ${user.name || 'Rahul'} 👋`;
+                        if (user.photo) {
+                            headerAvatar.src = (typeof API_BASE !== 'undefined' ? API_BASE : '') + `/uploads/${user.photo}`;
                         }
                     }
                 } catch (e) {
-                                            console.error("Profile API load error, using fallback mockup:", e);
-                                        async function loadNotifications() {
-            try {
-                const response = await fetch(API_BASE + '/api/notifications', {credentials: 'include' });
-                                        if (response.ok) {
-                    const notifications = await response.json();
-                                        updateNotificationUI(notifications);
+                    console.error("Profile API load error, using fallback mockup:", e);
                 }
             };
 
             // Fetch and render notification counters
             const loadNotifications = async () => {
                 try {
-                    const res = await fetch('/api/notifications');
-                                        if (res.ok) {
+                    const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/notifications');
+                    if (res.ok) {
                         const data = await res.json();
-                                        const count = data.count || 0;
+                        const count = data.count || 0;
                         if (count > 0) {
-                                            notificationCount.textContent = count;
-                                        notificationCount.style.display = 'inline-flex';
+                            notificationCount.textContent = count;
+                            notificationCount.style.display = 'inline-flex';
                         }
                         
                         if (data.notifications && data.notifications.length > 0) {
-                                            notificationsContent.innerHTML = data.notifications.map(n => `
+                            notificationsContent.innerHTML = data.notifications.map(n => `
                                 <div style="font-size: 0.85rem; color: #475569; padding: 8px 10px; background-color: #F8FAFC; border-radius: 8px; border: 1px solid #F1F5F9;">
                                     ${n.text || n.message}
                                 </div>
@@ -657,27 +478,27 @@
                         }
                     }
                 } catch (e) {
-                                            console.error("Notifications API load error:", e);
+                    console.error("Notifications API load error:", e);
                 }
             };
 
             // Load mentors database and slice recommended row
             const loadRecommendedMentors = () => {
-                                            fetch('/mentors.json')
-                                                .then(res => res.json())
-                                                .then(mentors => {
-                                                    recSlider.innerHTML = '';
-                                                    const sliceItems = mentors.slice(0, 6);
+                fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/mentors.json')
+                    .then(res => res.json())
+                    .then(mentors => {
+                        recSlider.innerHTML = '';
+                        const sliceItems = mentors.slice(0, 6);
+                        
+                        sliceItems.forEach(mentor => {
+                            const formattedStudents = mentor.studentsMentored >= 1000 
+                                ? (mentor.studentsMentored / 1000).toFixed(1).replace('.0', '') + 'K'
+                                : mentor.studentsMentored;
 
-                                                    sliceItems.forEach(mentor => {
-                                                        const formattedStudents = mentor.studentsMentored >= 1000
-                                                            ? (mentor.studentsMentored / 1000).toFixed(1).replace('.0', '') + 'K'
-                                                            : mentor.studentsMentored;
-
-                                                        recSlider.innerHTML += `
+                            recSlider.innerHTML += `
                                 <div class="recommended-mentor-card">
                                     <div class="rec-photo-wrap">
-                                        <img src="${mentor.photo}" alt="${mentor.name}" onerror="this.src='/default-avatar.svg'">
+                                        <img src="${mentor.photo.startsWith('http') ? mentor.photo : (typeof API_BASE !== 'undefined' ? API_BASE : '') + mentor.photo}" alt="${mentor.name}" onerror="this.src='/default-avatar.svg'">
                                     </div>
                                     <div class="rec-info">
                                         <h4 class="rec-name">${mentor.name}</h4>
@@ -690,30 +511,29 @@
                                     <button class="rec-btn-view" onclick="window.location.href='/mentors.html'">View</button>
                                 </div>
                             `;
-                                                    });
-                                                })
-                                                .catch(err => {
-                                                    console.error("Failed to load recommended mentors slider database: ", err);
-                                                    recSlider.innerHTML = '<p style="color: #64748B; font-size: 0.9rem;">Unable to load recommendations.</p>';
-                                                });
+                        });
+                    })
+                    .catch(err => {
+                        console.error("Failed to load recommended mentors slider database: ", err);
+                        recSlider.innerHTML = '<p style="color: #64748B; font-size: 0.9rem;">Unable to load recommendations.</p>';
+                    });
             };
 
             // Logout submit handler
             document.querySelectorAll('.logout-btn').forEach(btn => {
-                                            btn.addEventListener('click', (e) => {
-                                                e.preventDefault();
-                                                fetch('/logout', { method: 'POST' })
-                                                    .then(() => { window.location.href = '/login.html'; })
-                                                    .catch(() => { window.location.href = '/login.html'; });
-                                            });
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/logout', { method: 'POST' })
+                        .then(() => { window.location.href = '/login.html'; })
+                        .catch(() => { window.location.href = '/login.html'; });
+                });
             });
 
-                                        // Initialize triggers
-                                        loadUserInfo();
-                                        loadNotifications();
-                                        loadRecommendedMentors();
+            // Initialize triggers
+            loadUserInfo();
+            loadNotifications();
+            loadRecommendedMentors();
         });
     </script>
 </body>
-
 </html>

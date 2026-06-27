@@ -1,6 +1,5 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,271 +9,27 @@
     <!-- Google Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <style>
-        .requests-section {
-            margin-top: 2rem;
-        }
-
-        .request-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e1e5e9;
-        }
-
-        .request-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .student-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-right: 1rem;
-            border: 2px solid #007bff;
-            image-rendering: -webkit-optimize-contrast;
-        }
-
-        .student-info h4 {
-            margin: 0 0 0.25rem 0;
-            color: #333;
-        }
-
-        .student-details {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 0;
-        }
-
-        .request-status {
-            margin-left: auto;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-accepted {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-rejected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        .status-removed {
-            background: #6c757d;
-            color: white;
-        }
-
-        .request-message {
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            background: #f8f9fa;
-            border-radius: 6px;
-        }
-
-        .request-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-accept {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .btn-accept:hover {
-            background: #218838;
-        }
-
-        .btn-reject {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .btn-reject:hover {
-            background: #c82333;
-        }
-
-        .btn-remove {
-            background: #6c757d;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .btn-remove:hover {
-            background: #5a6268;
-        }
-
-        .btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .no-requests {
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 8px;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 0.9rem;
-        }
-
-        .my-students-section {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-radius: 12px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .my-students-section h2 {
-            color: #28a745;
-            margin-bottom: 1.5rem;
-        }
-
-        .student-actions {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .btn-view-profile {
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .btn-view-profile:hover {
-            background: #138496;
-        }
-
-        .btn-schedule {
-            background: #ffc107;
-            color: #212529;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-        .btn-schedule:hover {
-            background: #e0a800;
-        }
-
-        .notification-item {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .notification-count {
-            position: absolute;
-            top: -5px;
-            right: -10px;
-            background: red;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            display: none;
-        }
-
-        .notification-dropdown {
-            display: none;
-            position: absolute;
-            top: 40px;
-            right: 0;
-            width: 300px;
-            background: white;
-            border: 1px solid #e1e5e9;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            z-index: 1000;
-        }
-    </style>
-    <script src="/config.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body style="margin: 0; background-color: #F8FAFC;">
     <div class="dashboard-wrapper">
-
+        
         <!-- Sidebar Navigation Drawer -->
         <aside class="dashboard-sidebar">
             <a href="/" class="sidebar-logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)" />
-                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff" />
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
                     <defs>
-                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22"
-                            gradientUnits="userSpaceOnUse">
-                            <stop stop-color="#3B82F6" />
-                            <stop offset="1" stop-color="#4F46E5" />
+                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
                         </linearGradient>
                     </defs>
                 </svg>
                 <span>Amplimentor</span>
             </a>
-
+            
             <nav class="sidebar-nav">
                 <a href="/mentor-dashboard.html" class="sidebar-link active">
                     <i class="fas fa-th-large"></i> Dashboard
@@ -304,76 +59,7 @@
                     <i class="fas fa-cog"></i> Settings
                 </a>
             </nav>
-            // Add event listeners for remove buttons
-            document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('btn-remove')) {
-            const studentId = e.target.getAttribute('data-student-id');
-            if (studentId) {
-            removeStudent(studentId);
-            }
-            }
-            });
-
-            // Add smooth scrolling to nav links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-            });
-            });
-            });
-
-            // Notification dropdown logic
-            const notificationLink = document.getElementById('notificationLink');
-            notificationLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            const dropdown = document.getElementById('notificationDropdown');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-            });
-
-            document.addEventListener('click', (e) => {
-            const dropdown = document.getElementById('notificationDropdown');
-            const notificationItem = document.querySelector('.notification-item');
-            if (!notificationItem.contains(e.target)) {
-            dropdown.style.display = 'none';
-            }
-            });
-            });
-
-            // Load mentor information
-            async function loadMentorInfo() {
-            try {
-            const response = await fetch(API_BASE + '/api/mentor/profile', { credentials: 'include' });
-            if (response.ok) {
-            const mentor = await response.json();
-            document.getElementById('mentorName').textContent = mentor.name;
-            }
-            } catch (error) {
-            console.error('Error loading mentor info:', error);
-            }
-            }
-
-            // Load mentor requests
-            async function loadMentorRequests() {
-            try {
-            const response = await fetch(API_BASE + '/api/mentor/requests', { credentials: 'include' });
-            if (response.ok) {
-            const requests = await response.json();
-            displayRequests(requests);
-            updateStats(requests);
-            }
-            } catch (error) {
-            console.error('Error loading requests:', error);
-            document.getElementById('requestsContainer').innerHTML = '<div class="error">Error loading requests</div>';
-            }
-            }
-
-            // Display requests
-            function displayRequests(requests) {
-            const container = document.getElementById('requestsContainer');
-
+            
             <div class="sidebar-footer">
                 <a href="/logout" class="sidebar-link logout-btn">
                     <i class="fas fa-sign-out-alt"></i> Logout
@@ -387,70 +73,31 @@
             <header class="dashboard-header">
                 <div class="header-search">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search students, sessions..." class="header-search-input"
-                        id="dashboardSearch">
-                    container.innerHTML = visibleRequests.map(request => {
-                    const student = request.student;
-                    const studentDetails = [
-                    student.standard ? `Grade ${student.standard}` : '',
-                    (student.subjects && student.subjects.length) ? student.subjects.join(', ') : ''
-                    ].filter(Boolean).join(' • ');
-
-                    return `
-                    <div class="request-card" id="request-${request.id}">
-                        <div class="request-header">
-                            <img src="${student.photo ? `${API_BASE}/uploads/${student.photo}` : '/default-avatar.svg'}"
-                                alt="${student.name}'s photo" class="student-photo"
-                                onerror="this.onerror=null;this.src='/default-avatar.svg'">
-                            <div class="student-info">
-                                <h4>${student.name}</h4>
-                                <p class="student-details">${studentDetails || 'No details provided'}</p>
-                            </div>
-                            <div class="request-status status-${request.status}">
-                                ${request.status.charAt(0).toUpperCase() + request.status.slice(1)}</div>
+                    <input type="text" placeholder="Search students, sessions..." class="header-search-input" id="dashboardSearch">
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
+                        <i class="far fa-comment-dots"></i>
+                    </button>
+                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
+                        <i class="far fa-bell"></i>
+                        <span class="badge" id="notificationCount" style="display: none;">3</span>
+                    </button>
+                    
+                    <a href="/mentor/profile" class="header-user-profile">
+                        <img src="/default-avatar.svg" alt="Mentor avatar" class="header-avatar" id="headerAvatar">
+                        <div class="header-user-info">
+                            <h4 class="header-user-name" id="mentorName">Anjali</h4>
+                            <p class="header-user-role">Mentor</p>
                         </div>
-                        <div class="request-message">
-                            <strong>Message:</strong> ${request.message || 'No message provided.'}
-                        </div>
-                        ${request.status === 'pending' ? `
-                        <div class="request-actions">
-                            <button class="btn-accept"
-                                onclick="handleRequest('${request.id}', 'accepted')">Accept</button>
-                            <button class="btn-reject"
-                                onclick="handleRequest('${request.id}', 'rejected')">Reject</button>
-                        </div>
-                        ` : ''}
-                        ${request.status === 'accepted' ? `
-                        <div class="request-actions">
-                            <button class="btn-remove" data-student-id="${student.id}"
-                                data-request-id="${request.id}">Remove Student</button>
-                        </div>
-                        ` : ''}
-                    </div>
-
-                    <div class="header-actions">
-                        <button class="header-icon-btn" aria-label="Open messages"
-                            onclick="window.location.href='/chat.html'">
-                            <i class="far fa-comment-dots"></i>
-                        </button>
-                        <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
-                            <i class="far fa-bell"></i>
-                            <span class="badge" id="notificationCount" style="display: none;">3</span>
-                        </button>
-
-                        <a href="/mentor/profile" class="header-user-profile">
-                            <img src="/default-avatar.svg" alt="Mentor avatar" class="header-avatar" id="headerAvatar">
-                            <div class="header-user-info">
-                                <h4 class="header-user-name" id="mentorName">Anjali</h4>
-                                <p class="header-user-role">Mentor</p>
-                            </div>
-                        </a>
-                    </div>
+                    </a>
+                </div>
             </header>
 
             <!-- Inner Dashboard content scroll frame -->
             <div class="dashboard-content">
-
+                
                 <!-- Greet Title block -->
                 <div class="dashboard-title-section">
                     <h1 id="greetingMsg">Welcome back, Anjali 👋</h1>
@@ -505,7 +152,7 @@
                             <h3>Today's Schedule</h3>
                             <a href="/sessions.html" class="view-all-link">View All</a>
                         </div>
-
+                        
                         <div class="upcoming-sessions-list" id="todayScheduleList">
                             <div class="upcoming-session-row">
                                 <div class="session-date-time">
@@ -575,7 +222,7 @@
                             <h3>Student Requests</h3>
                             <a href="/mentor-dashboard.html#requests" class="view-all-link">View All</a>
                         </div>
-
+                        
                         <div class="requests-list" id="requestsContainer">
                             <div class="request-item-card">
                                 <div class="req-student-profile">
@@ -630,7 +277,7 @@
                             <h3>My Students</h3>
                             <a href="/my-students.html" class="view-all-link">View All</a>
                         </div>
-
+                        
                         <div class="dashboard-table-wrapper">
                             <table class="dashboard-table">
                                 <thead>
@@ -646,8 +293,7 @@
                                     <tr>
                                         <td>
                                             <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar"
-                                                    alt="Avatar">
+                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
                                                 <span class="table-student-name">Rahul Verma</span>
                                             </div>
                                         </td>
@@ -671,8 +317,7 @@
                                     <tr>
                                         <td>
                                             <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar"
-                                                    alt="Avatar">
+                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
                                                 <span class="table-student-name">Priya Singh</span>
                                             </div>
                                         </td>
@@ -696,8 +341,7 @@
                                     <tr>
                                         <td>
                                             <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar"
-                                                    alt="Avatar">
+                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
                                                 <span class="table-student-name">Aman Kumar</span>
                                             </div>
                                         </td>
@@ -721,8 +365,7 @@
                                     <tr>
                                         <td>
                                             <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar"
-                                                    alt="Avatar">
+                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
                                                 <span class="table-student-name">Neha Patel</span>
                                             </div>
                                         </td>
@@ -752,9 +395,8 @@
                         <div class="card-header-row">
                             <h3>Availability</h3>
                         </div>
-                        <p style="font-size: 0.88rem; color: #64748B; margin: 0 0 16px 0;">Set your current availability
-                            status:</p>
-
+                        <p style="font-size: 0.88rem; color: #64748B; margin: 0 0 16px 0;">Set your current availability status:</p>
+                        
                         <div class="availability-radio-group">
                             <div class="availability-radio-card active" data-status="available">
                                 <div class="avail-status-indicator">
@@ -791,7 +433,7 @@
                             <h3>Latest Reviews</h3>
                             <a href="/mentor-dashboard.html#reviews" class="view-all-link">View All</a>
                         </div>
-
+                        
                         <div class="reviews-list">
                             <div class="review-item-card">
                                 <div class="review-avatar-wrap">
@@ -799,8 +441,7 @@
                                 </div>
                                 <div class="review-main-content">
                                     <div class="review-stars">★★★★★</div>
-                                    <p class="review-text">"Excellent teaching! Concepts are very clear and easy to
-                                        understand."</p>
+                                    <p class="review-text">"Excellent teaching! Concepts are very clear and easy to understand."</p>
                                     <span class="review-meta">Rahul Verma • 2 days ago</span>
                                 </div>
                             </div>
@@ -811,8 +452,7 @@
                                 </div>
                                 <div class="review-main-content">
                                     <div class="review-stars">★★★★★</div>
-                                    <p class="review-text">"Madam is very supportive and explains every doubt
-                                        patiently."</p>
+                                    <p class="review-text">"Madam is very supportive and explains every doubt patiently."</p>
                                     <span class="review-meta">Priya Singh • 5 days ago</span>
                                 </div>
                             </div>
@@ -823,13 +463,12 @@
                     <div class="dashboard-card" id="earnings">
                         <div class="card-header-row">
                             <h3>Performance Overview</h3>
-                            <select
-                                style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; font-weight: 600; color: #475569; outline: none; cursor: pointer;">
+                            <select style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; font-weight: 600; color: #475569; outline: none; cursor: pointer;">
                                 <option>This Month</option>
                                 <option>Last Month</option>
                             </select>
                         </div>
-
+                        
                         <div class="performance-cards-row">
                             <!-- Conducted -->
                             <div class="performance-mini-card">
@@ -842,7 +481,7 @@
                                     <path class="sparkline-path blue" d="M0,25 Q15,22 30,12 T60,20 T90,5 T100,8" />
                                 </svg>
                             </div>
-
+                            
                             <!-- Helped -->
                             <div class="performance-mini-card">
                                 <div class="perf-label">Students</div>
@@ -871,12 +510,11 @@
                 </div>
 
                 <!-- Bottom section: Quick Actions -->
-                <section class="dashboard-card"
-                    style="background-color: transparent; border: none; padding: 0; box-shadow: none;">
+                <section class="dashboard-card" style="background-color: transparent; border: none; padding: 0; box-shadow: none;">
                     <div class="card-header-row" style="margin-bottom: 16px;">
                         <h3>Quick Actions</h3>
                     </div>
-
+                    
                     <div class="quick-actions-row">
                         <a href="/mentor-dashboard.html#availability" class="quick-action-btn-card">
                             <div class="quick-action-icon green">
@@ -910,14 +548,10 @@
     </div>
 
     <!-- Notification dropover overlay card -->
-    <div id="notificationDropdown"
-        style="display: none; position: absolute; top: 72px; right: 32px; width: 320px; background-color: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 10px 25px rgba(15,23,42,0.1); z-index: 1000; padding: 16px; box-sizing: border-box;">
-        <div
-            style="font-weight: 700; color: #0F172A; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">
-            Notifications</div>
+    <div id="notificationDropdown" style="display: none; position: absolute; top: 72px; right: 32px; width: 320px; background-color: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 10px 25px rgba(15,23,42,0.1); z-index: 1000; padding: 16px; box-sizing: border-box;">
+        <div style="font-weight: 700; color: #0F172A; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">Notifications</div>
         <div id="notificationsContent" style="display: flex; flex-direction: column; gap: 10px;">
-            <div style="font-size: 0.85rem; color: #64748B; text-align: center; padding: 12px 0;">No new notifications
-            </div>
+            <div style="font-size: 0.85rem; color: #64748B; text-align: center; padding: 12px 0;">No new notifications</div>
         </div>
     </div>
 
@@ -931,7 +565,7 @@
             const notificationLink = document.getElementById('notificationLink');
             const notificationDropdown = document.getElementById('notificationDropdown');
             const notificationsContent = document.getElementById('notificationsContent');
-
+            
             const availCards = document.querySelectorAll('.availability-radio-card');
 
             // Toggle Notification Dropdown
@@ -939,7 +573,7 @@
                 e.stopPropagation();
                 notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
             });
-
+            
             document.addEventListener('click', () => {
                 notificationDropdown.style.display = 'none';
             });
@@ -954,7 +588,7 @@
                     availCards.forEach(c => c.classList.remove('active'));
                     card.classList.add('active');
                     const status = card.getAttribute('data-status');
-
+                    
                     // Simulate setting state in DB
                     console.log(`Setting availability status: ${status}`);
                 });
@@ -963,13 +597,13 @@
             // Fetch active login data
             const loadUserInfo = async () => {
                 try {
-                    const res = await fetch('/api/mentor/profile');
+                    const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/mentor/profile');
                     if (res.ok) {
                         const user = await res.json();
                         mentorName.textContent = user.name || 'Anjali';
                         greetingMsg.textContent = `Welcome back, ${user.name || 'Anjali'} 👋`;
                         if (user.photo) {
-                            headerAvatar.src = `/uploads/${user.photo}`;
+                            headerAvatar.src = (typeof API_BASE !== 'undefined' ? API_BASE : '') + `/uploads/${user.photo}`;
                         }
                     }
                 } catch (e) {
@@ -977,11 +611,10 @@
                 }
             };
 
-<<<<<<< HEAD
             // Fetch and render notification counters
             const loadNotifications = async () => {
                 try {
-                    const res = await fetch('/api/notifications');
+                    const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/notifications');
                     if (res.ok) {
                         const data = await res.json();
                         const count = data.count || 0;
@@ -989,7 +622,7 @@
                             notificationCount.textContent = count;
                             notificationCount.style.display = 'inline-flex';
                         }
-
+                        
                         if (data.notifications && data.notifications.length > 0) {
                             notificationsContent.innerHTML = data.notifications.map(n => `
                                 <div style="font-size: 0.85rem; color: #475569; padding: 8px 10px; background-color: #F8FAFC; border-radius: 8px; border: 1px solid #F1F5F9;">
@@ -1000,29 +633,6 @@
                     }
                 } catch (e) {
                     console.error("Notifications API load error:", e);
-=======
-        // Remove student
-        function removeStudent(requestId) {
-            if (confirm('Are you sure you want to remove this student? This action cannot be undone.')) {
-                handleRequest(requestId, 'removed');
-            }
-        }
-
-        async function loadNotifications() {
-            try {
-                const response = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
-                if (!response.ok) return;
-
-                const data = await response.json();
-                const countSpan = document.getElementById('notificationCount');
-                const dropdown = document.getElementById('notificationDropdown');
-
-                if (data.count > 0) {
-                    countSpan.textContent = data.count;
-                    countSpan.style.display = 'block';
-                } else {
-                    countSpan.style.display = 'none';
->>>>>>> 302cd6568b2d90a421aa4b3866af422bcd65e53a
                 }
             };
 
@@ -1030,7 +640,7 @@
             document.querySelectorAll('.logout-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.preventDefault();
-                    fetch('/logout', { method: 'POST' })
+                    fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/logout', { method: 'POST' })
                         .then(() => { window.location.href = '/login.html'; })
                         .catch(() => { window.location.href = '/login.html'; });
                 });
@@ -1042,5 +652,4 @@
         });
     </script>
 </body>
-
 </html>
