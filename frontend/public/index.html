@@ -3,89 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amplimentor - Student Mentoring System</title>
-    <link rel="stylesheet" href="/style.css?v=1.2">
+    <title>Amplimentor - Empowering Students. Building Futures.</title>
+    <link rel="stylesheet" href="/style.css?v=2.7">
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar">
+<body class="landing-page">
+    <!-- Header Sticky Navbar -->
+    <header class="site-header">
         <div class="nav-container">
-            <a href="/" class="nav-brand">Amplimentor</a>
-            <ul class="nav-menu">
-                <li><a href="/">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#features">Features</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
-            </ul>
+            <a href="/" class="nav-brand">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#logoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                    <defs>
+                        <linearGradient id="logoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Amplimentor</span>
+            </a>
+            
+            <div class="nav-actions">
+                <a href="/login" class="btn-link">Log In</a>
+                <a href="/register" class="btn-primary-small">Register</a>
+            </div>
         </div>
-    </nav>
+    </header>
 
-    <div class="container">
-        <section class="hero">
-            <h1>Welcome to <span class="brand">Amplimentor</span></h1>
-            <p class="hero-sub">Empowering students through mentorship, growth, and community.</p>
-            <a href="/register" class="cta-btn">Get Started</a>
+    <!-- Main Landing Container -->
+    <main class="landing-main">
+        <!-- Hero Section -->
+        <section class="hero-section" id="home">
+            <div class="section-container hero-grid">
+                <!-- Left Side Content -->
+                <div class="hero-content">
+                    <div class="hero-badge">About Amplimentor</div>
+                    <h1>Empowering Students.<br><span class="highlight-blue">Building Futures.</span></h1>
+                    <p>Amplimentor connects students with experienced mentors to accelerate learning, career growth, and personal development through one collaborative platform.</p>
+                    <div class="hero-buttons">
+                        <a href="/register" class="btn-primary">Get Started</a>
+                        <a href="/mentors.html" class="btn-secondary">Meet Our Mentors</a>
+                    </div>
+                </div>
+                <!-- Right Side Graphic Container -->
+                <div class="hero-graphic-wrapper">
+                    <div class="hero-graphic-card">
+                        <img src="/about_hero.png" alt="Students Learning Together" class="hero-illustration">
+                    </div>
+                </div>
+            </div>
         </section>
-        <main>
-            <section class="intro" id="about">
-                <h2>About Amplimentor</h2>
-                <p>Amplimentor is a comprehensive student mentoring system designed to connect students with experienced mentors, foster personal and academic growth, and build a supportive learning community.</p>
-                <ul>
-                    <li>Connect with mentors and peers</li>
-                    <li>Track your progress and achievements</li>
-                    <li>Access resources and guidance</li>
-                </ul>
-            </section>
-            <section class="features" id="features">
-                <h2>Features</h2>
+
+        <!-- About Us Section Card -->
+        <section class="about-section" id="about">
+            <div class="section-container">
+                <div class="about-premium-card">
+                    <!-- Left Side Details -->
+                    <div class="about-card-left">
+                        <h2>About Amplimentor</h2>
+                        <p>Amplimentor is a comprehensive mentoring platform designed to connect students with experienced mentors, encourage continuous learning, build confidence, and prepare students for successful careers.</p>
+                        <ul class="about-check-list">
+                            <li>
+                                <span class="check-icon">✔</span>
+                                <span>Connect with expert mentors</span>
+                            </li>
+                            <li>
+                                <span class="check-icon">✔</span>
+                                <span>Personalized career guidance</span>
+                            </li>
+                            <li>
+                                <span class="check-icon">✔</span>
+                                <span>Track learning progress</span>
+                            </li>
+                            <li>
+                                <span class="check-icon">✔</span>
+                                <span>Resource library</span>
+                            </li>
+                            <li>
+                                <span class="check-icon">✔</span>
+                                <span>Community support</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Right Side Graphic -->
+                    <div class="about-card-right">
+                        <div class="about-graphic-frame">
+                            <img src="/about_books_cap.png" alt="Learning Concept Illustration" class="about-illustration">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid Section -->
+        <section class="features-section" id="features">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>Everything You Need to Grow</h2>
+                    <p>Everything needed to learn, connect and succeed.</p>
+                </div>
+                
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">🎓</div>
                         <h3>Expert Mentors</h3>
-                        <p>Get guidance from experienced mentors in your field of interest.</p>
+                        <p>Receive guidance from experienced mentors.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">📈</div>
                         <h3>Progress Tracking</h3>
-                        <p>Monitor your academic and personal growth with our intuitive dashboard.</p>
+                        <p>Monitor your learning journey.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">🤝</div>
                         <h3>Community Support</h3>
-                        <p>Engage with a vibrant community of learners and mentors.</p>
+                        <p>Collaborate with students and mentors.</p>
                     </div>
                     <div class="feature-card">
                         <div class="feature-icon">📚</div>
                         <h3>Resource Library</h3>
-                        <p>Access curated resources to help you succeed in your journey.</p>
+                        <p>Access notes, courses and learning material.</p>
                     </div>
                 </div>
-            </section>
-            <section class="testimonials" id="testimonials">
-                <h2>What Our Users Say</h2>
+            </div>
+        </section>
+
+        <!-- How It Works Timeline Section -->
+        <section class="how-it-works-section">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>How It Works</h2>
+                    <p>Simple steps to accelerate your learning and growth.</p>
+                </div>
+
+                <div class="timeline-wrapper">
+                    <div class="timeline-line"></div>
+                    <div class="timeline-steps">
+                        <!-- Step 1 -->
+                        <div class="timeline-step">
+                            <div class="step-badge">1</div>
+                            <h3>Register</h3>
+                            <p>Create your account.</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="timeline-step">
+                            <div class="step-badge">2</div>
+                            <h3>Connect</h3>
+                            <p>Find the perfect mentor.</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="timeline-step">
+                            <div class="step-badge">3</div>
+                            <h3>Grow</h3>
+                            <p>Achieve your academic and career goals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section" id="testimonials">
+            <div class="section-container">
+                <div class="section-header">
+                    <h2>What Our Users Say</h2>
+                    <p>Real feedback from mentors and students who grow with Amplimentor.</p>
+                </div>
+
+                <!-- Testimonials Grid Side-by-Side -->
                 <div class="testimonials-grid">
+                    <!-- Testimonial 1 -->
                     <div class="testimonial-card">
-                        <p>"Amplimentor connected me with a mentor who truly cared about my growth. I feel more confident in my studies!"</p>
-                        <span>- Priya, Student</span>
+                        <div class="testimonial-rating">★★★★★</div>
+                        <div class="quote-icon">“</div>
+                        <p class="testimonial-quote">"Amplimentor helped me find the right mentor and completely changed my confidence."</p>
+                        <div class="testimonial-author">
+                            <img src="/priya_avatar.png" alt="Heli Patel" class="author-avatar">
+                            <div class="author-info">
+                                <span class="author-name">Heli Patel</span>
+                                <span class="author-role">Student</span>
+                            </div>
+                        </div>
                     </div>
+                    
+                    <!-- Testimonial 2 -->
                     <div class="testimonial-card">
-                        <p>"Being a mentor on Amplimentor has been a rewarding experience. I love helping students achieve their goals."</p>
-                        <span>- Mr. Sharma, Mentor</span>
+                        <div class="testimonial-rating">★★★★★</div>
+                        <div class="quote-icon">“</div>
+                        <p class="testimonial-quote">"Mentoring students here has been an incredibly rewarding experience."</p>
+                        <div class="testimonial-author">
+                            <img src="/default-avatar.svg" alt="Anjali Dalsaniya" class="author-avatar">
+                            <div class="author-info">
+                                <span class="author-name">Anjali Dalsaniya</span>
+                                <span class="author-role">Mentor</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </section>
-            <section class="newsletter" id="newsletter">
-                <h2>Stay Updated</h2>
-                <p>Subscribe to our newsletter for the latest updates and mentoring tips!</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Enter your email" required>
-                    <button type="submit">Subscribe</button>
-                </form>
-            </section>
-        </main>
-        <footer>
-            <p>&copy; 2025 Amplimentor. All rights reserved.</p>
-        </footer>
-    </div>
+            </div>
+        </section>
+
+        <!-- Newsletter CTA Card Section -->
+        <section class="newsletter-section" id="newsletter">
+            <div class="section-container">
+                <div class="newsletter-card">
+                    <div class="newsletter-content">
+                        <h2>Stay Updated</h2>
+                        <p>Get mentoring tips, platform updates and learning resources directly in your inbox.</p>
+                        <form class="newsletter-cta-form">
+                            <div class="cta-input-group">
+                                <input type="email" placeholder="Enter your email" required class="cta-email-input">
+                                <button type="submit" class="btn-cta-submit">Subscribe</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Multi-Column Site Footer -->
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-columns">
+                <!-- Column 1 Brand -->
+                <div class="footer-col brand-col">
+                    <a href="/" class="footer-logo">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#footerLogoGrad)"/>
+                            <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                            <defs>
+                                <linearGradient id="footerLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                                    <stop stop-color="#3B82F6"/>
+                                    <stop offset="1" stop-color="#4F46E5"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                        <span>Amplimentor</span>
+                    </a>
+                    <p class="footer-tagline">Learn. Connect. Grow.</p>
+                    <p class="footer-desc">Connecting students with experienced mentors to accelerate learning and career growth.</p>
+                </div>
+                
+                <!-- Column 2 Links -->
+                <div class="footer-col links-col">
+                    <h4>Quick Links</h4>
+                    <nav class="footer-nav">
+                        <a href="#about">About</a>
+                        <a href="#features">Features</a>
+                        <a href="/mentors.html">Mentors</a>
+                        <a href="#contact">Contact</a>
+                    </nav>
+                </div>
+                
+                <!-- Column 3 Legal -->
+                <div class="footer-col links-col">
+                    <h4>Legal & Support</h4>
+                    <nav class="footer-nav">
+                        <a href="/privacy">Privacy Policy</a>
+                        <a href="/terms">Terms of Service</a>
+                        <a href="/support">Help Center / Support</a>
+                    </nav>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">&copy; 2026 Amplimentor. All Rights Reserved.</p>
+                <div class="footer-bottom-links">
+                    <a href="/privacy">Privacy Policy</a>
+                    <span class="divider-bar">|</span>
+                    <a href="/terms">Terms</a>
+                    <span class="divider-bar">|</span>
+                    <a href="/support">Support</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
