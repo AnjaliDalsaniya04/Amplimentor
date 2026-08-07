@@ -1,7 +1,6 @@
 require("dotenv").config({ path: require("path").join(__dirname, "../.env") });
 const express = require("express");
 const cors    = require("cors");
-const session = require("express-session");
 const path    = require("path");
 const { connectDB } = require("./config/database");
 
@@ -16,25 +15,21 @@ app.use(cors({
 }));
 
 // ── Middleware ────────────────────────────────────────────────
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(session({
-  secret: process.env.SESSION_SECRET || "change_this_secret",
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: false,             // set true when using HTTPS in production
-    httpOnly: true,
-    sameSite: "lax",
+app.use(express.json({
+  verify: (req, res, buf) => {
+    if (req.originalUrl === '/api/payments/webhook' && buf && buf.length) {
+      req.rawBody = buf.toString();
+    }
   },
 }));
+app.use(express.urlencoded({ extended: true }));
 
 // ── Serve uploaded files (profile photos etc.) ───────────────
 app.use("/uploads", express.static(path.join(__dirname, "../frontend/public/uploads")));
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 
 // ── API Routes ────────────────────────────────────────────────
-app.use("/",                  require("./routes/auth"));
+app.use("/api/auth",          require("./routes/auth"));
 app.use("/api",               require("./routes/users"));
 app.use("/api/mentors",       require("./routes/mentors"));
 app.use("/api/sessions",      require("./routes/sessions"));
@@ -67,8 +62,11 @@ app.put( "/api/mentoring-history/:id/end",  (req, res, next) => { req.url = `/hi
 app.get( "/api/payment/config",       (req, res, next) => { req.url = "/config";                        paymentsRouter(req, res, next); });
 app.get( "/api/payment/history",      (req, res, next) => { req.url = "/history";                       paymentsRouter(req, res, next); });
 
-// ── 404 ───────────────────────────────────────────────────────
-app.use((req, res) => res.status(404).json({ message: "Route not found." }));
+const { notFound, errorHandler } = require('./middleware/errorHandler');
+
+// ── 404 / error handling ───────────────────────────────────────
+app.use(notFound);
+app.use(errorHandler);
 
 // ── Start ─────────────────────────────────────────────────────
 (async () => {
