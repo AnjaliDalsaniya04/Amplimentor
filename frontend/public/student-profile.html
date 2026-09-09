@@ -1,232 +1,785 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Profile - Amplimentor</title>
-    <link rel="stylesheet" href="/style.css?v=1.3">
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Dashboard & Profile Stylesheets -->
+    <link rel="stylesheet" href="/student-dashboard.css">
+    <link rel="stylesheet" href="/student-profile.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="/config.js"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/student-dashboard.html" class="nav-brand">Amplimentor</a>
-            <ul class="nav-menu">
-                <li><a href="/student/profile">Profile</a></li>
-                <li><a href="/student/mentors">Find Mentors</a></li>
-                <li><a href="/chat.html">Chat</a></li>
-                <li><a href="/chat-history.html">Chat History</a></li>
-                <li><a href="/sessions.html">Sessions</a></li>
-                <li><a href="/payment-history">Payment History</a></li>
-                <li class="notification-item">
-                    <a href="#" id="notificationLink"><i class="fas fa-bell"></i><span class="notification-count" id="notificationCount"></span></a>
-                    <div class="notification-dropdown" id="notificationDropdown"></div>
-                </li>
-                <li><a href="/logout" class="logout-btn">Logout</a></li>
-            </ul>
-        </div>
-    </nav>
-    <div class="container">
-        <main>
-            <section class="hero">
-                <h1>My Student Profile</h1>
-                <p class="hero-sub">Manage your personal information and academic details</p>
-            </section>
+    <div class="dashboard-wrapper">
+        
+        <!-- Sidebar Navigation Drawer -->
+        <aside class="dashboard-sidebar">
+            <a href="/" class="sidebar-logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                    <defs>
+                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Amplimentor</span>
+            </a>
             
-            <section class="profile" id="student-profile-section">
-                <div id="profile-view">
-                    <div class="profile-info">
-                        <div style="text-align: center;">
-                            <img id="studentPhoto" src="/default-avatar.svg" style="border-radius: 50%; width: 120px; height: 120px; object-fit: cover; border: 4px solid #0077c2;" onerror="this.onerror=null;this.src='/default-avatar.svg'">
-                            <h2 id="studentName">Student Name</h2>
-                            <p><strong id="university"></strong></p>
-                        </div>
-                        <div>
-                            <p><strong>Email:</strong> <span id="studentEmail"></span></p>
-                            <p><strong>Standard:</strong> <span id="standard"></span></p>
-                            <p><strong>Subjects:</strong> <span id="subjects"></span></p>
-                            <p><strong>Date of Birth:</strong> <span id="dateOfBirth"></span></p>
-                            <p><strong>Phone:</strong> <span id="phoneNumber"></span></p>
-                        </div>
-                    </div>
-                    <div class="profile-section">
-                        <h3>About Me</h3>
-                        <p id="bio"></p>
-                    </div>
-                    <div class="profile-section">
-                        <h3>Links</h3>
-                        <p><strong>LinkedIn:</strong> <a id="linkedIn" href="#" target="_blank"></a></p>
-                        <p><strong>GitHub:</strong> <a id="github" href="#" target="_blank"></a></p>
-                    </div>
-                    <div class="profile-section">
-                        <h3>Goals & Preferences</h3>
-                        <p><strong>Career Goals:</strong> <span id="careerGoals"></span></p>
-                        <p><strong>Skills to Develop:</strong> <span id="skillsToDevelop"></span></p>
-                        <p><strong>Meeting Frequency:</strong> <span id="meetingFrequency"></span></p>
-                        <p><strong>Communication:</strong> <span id="communicationPreference"></span></p>
-                    </div>
-                    <div class="profile-actions">
-                        <button id="editProfileBtn" class="cta-btn">Edit Profile</button>
-                    </div>
+            <nav class="sidebar-nav">
+                <!-- Group 1: Dashboard -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Dashboard</span>
+                    <a href="/student-dashboard.html" class="sidebar-link">
+                        <i data-lucide="layout-dashboard"></i> Dashboard
+                    </a>
                 </div>
 
-                <div id="profile-edit" style="display: none;">
-                    <h3>Edit Your Profile</h3>
-                    <div class="info-grid">
-                        <div class="info-item">
-                            <label for="edit-name">Full Name</label>
-                            <input type="text" id="edit-name" class="edit-input">
+                <!-- Group 2: Learning -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Learning</span>
+                    <a href="/mentors.html" class="sidebar-link">
+                        <i data-lucide="search"></i> Find Mentor
+                    </a>
+                    <a href="/sessions.html" class="sidebar-link">
+                        <i data-lucide="video"></i> My Sessions
+                    </a>
+                    <a href="/student-dashboard.html#bookings" class="sidebar-link">
+                        <i data-lucide="calendar"></i> Bookings
+                    </a>
+                </div>
+
+                <!-- Group 3: Progress -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Progress</span>
+                    <a href="/student-dashboard.html#goals" class="sidebar-link">
+                        <i data-lucide="award"></i> Study Goals
+                    </a>
+                    <a href="/student-dashboard.html#saved" class="sidebar-link">
+                        <i data-lucide="heart"></i> Saved Mentors
+                    </a>
+                </div>
+
+                <!-- Group 4: Finance -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Payments</span>
+                    <a href="/student-dashboard.html#payments" class="sidebar-link">
+                        <i data-lucide="credit-card"></i> Payments
+                    </a>
+                </div>
+
+                <!-- Group 5: Account -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Account</span>
+                    <a href="/student-profile.html" class="sidebar-link active">
+                        <i data-lucide="user"></i> Profile
+                    </a>
+                    <a href="/student-dashboard.html#settings" class="sidebar-link">
+                        <i data-lucide="settings"></i> Settings
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="/logout" class="sidebar-link logout-btn">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard content frame -->
+        <main class="dashboard-main">
+            <!-- Header bar -->
+            <header class="dashboard-header">
+                <div class="header-search">
+                    <i data-lucide="search" class="header-search-icon"></i>
+                    <input type="text" placeholder="Search mentors, subjects, sessions..." class="header-search-input" id="dashboardSearch">
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
+                        <i data-lucide="message-square"></i>
+                    </button>
+                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
+                        <i data-lucide="bell"></i>
+                        <span class="badge" id="notificationCount" style="display: none;"></span>
+                    </button>
+                    
+                    <a href="/student-profile.html" class="header-user-profile">
+                        <img src="/default-avatar.svg" alt="Student avatar" class="header-avatar" id="headerAvatar">
+                        <div class="header-user-info">
+                            <h4 class="header-user-name" id="studentName">Rahul</h4>
+                            <p class="header-user-role">Student</p>
                         </div>
-                        <div class="info-item">
-                            <label for="edit-university">School / University</label>
-                            <input type="text" id="edit-university" class="edit-input">
+                    </a>
+                </div>
+            </header>
+
+            <!-- Inner Dashboard content scroll frame -->
+            <div class="dashboard-content">
+                
+                <!-- 1. Profile Header / Hero Card -->
+                <section class="premium-card student-hero-card animated-section">
+                    <div class="student-hero-left">
+                        <div class="student-hero-avatar-wrap">
+                            <img src="/default-avatar.svg" alt="Student photo" class="student-hero-avatar" id="studentPhoto">
+                            <label class="btn-change-photo-trigger" for="edit-photo" aria-label="Change photo">
+                                <i data-lucide="camera" style="width: 14px; height: 14px;"></i>
+                            </label>
+                            <input type="file" id="edit-photo" accept="image/*" style="display: none;">
                         </div>
-                        <div class="info-item">
-                            <label for="edit-standard">Standard</label>
-                            <select id="edit-standard" class="edit-input">
-                                <option value="">Select...</option>
-                                <option value="9">9</option>
-                                <option value="10">10</option>
-                                <option value="11">11</option>
-                                <option value="12">12</option>
-                            </select>
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-subjects">Subjects (comma-separated)</label>
-                            <textarea id="edit-subjects" class="edit-input"></textarea>
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-dob">Date of Birth</label>
-                            <input type="date" id="edit-dob" class="edit-input">
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-phone">Phone Number</label>
-                            <input type="tel" id="edit-phone" class="edit-input">
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-bio">About Me</label>
-                            <textarea id="edit-bio" class="edit-input" placeholder="Tell us a little about yourself..."></textarea>
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-linkedin">LinkedIn Profile URL</label>
-                            <input type="url" id="edit-linkedin" class="edit-input" placeholder="https://linkedin.com/in/your-profile">
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-github">GitHub Profile URL</label>
-                            <input type="url" id="edit-github" class="edit-input" placeholder="https://github.com/your-username">
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-careerGoals">Career Goals</label>
-                            <textarea id="edit-careerGoals" class="edit-input"></textarea>
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-skillsToDevelop">Skills to Develop (comma-separated)</label>
-                            <textarea id="edit-skillsToDevelop" class="edit-input"></textarea>
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-meetingFrequency">Preferred Meeting Frequency</label>
-                            <select id="edit-meetingFrequency" class="edit-input">
-                                <option value="">Select...</option>
-                                <option value="Weekly">Weekly</option>
-                                <option value="Bi-weekly">Bi-weekly</option>
-                                <option value="Monthly">Monthly</option>
-                            </select>
-                        </div>
-                        <div class="info-item">
-                            <label for="edit-communicationPreference">Preferred Communication</label>
-                            <select id="edit-communicationPreference" class="edit-input">
-                                <option value="">Select...</option>
-                                <option value="Video Call">Video Call</option>
-                                <option value="Chat">Chat</option>
-                                <option value="Email">Email</option>
-                            </select>
-                        </div>
-                         <div class="info-item">
-                            <label for="edit-photo">Change Profile Photo</label>
-                            <div class="photo-upload-container">
-                                <input type="file" id="edit-photo" class="edit-input" accept="image/*">
-                                <div class="photo-preview" id="photo-preview" style="display: none;">
-                                    <img id="preview-image" src="" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 50%; margin-top: 10px;">
-                                    <button type="button" id="remove-photo" class="remove-photo-btn" style="margin-top: 10px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Remove Photo</button>
-                                </div>
-                                <div class="upload-loading" id="upload-loading" style="display: none; text-align: center; margin-top: 10px;">
-                                    <div class="spinner" style="display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #0077c2; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                                    <span style="margin-left: 10px; color: #0077c2;">Uploading photo...</span>
-                                </div>
-                                <div class="upload-info" style="font-size: 0.9rem; color: #666; margin-top: 5px;">
-                                    Supported formats: JPG, PNG, GIF (max 5MB)
-                                </div>
+                        
+                        <div class="student-hero-meta">
+                            <h2 class="student-hero-name" id="studentNameHero">Heli Patel</h2>
+                            <span class="student-hero-subtitle" id="studentSubHero">Class 12 Science • Target: JEE Main</span>
+                            <span class="student-hero-location" id="studentLocHero">
+                                <i data-lucide="map-pin" style="width: 12px; height: 12px;"></i> Ahmedabad, India
+                            </span>
+                            <div class="upload-loading" id="upload-loading" style="display: none; font-size: 12px; color: var(--primary); margin-top: 8px;">
+                                <i data-lucide="loader-2" style="width: 14px; height: 14px; animation: spin 1s linear infinite;"></i> Uploading photo...
                             </div>
                         </div>
                     </div>
-                    <div class="profile-actions">
-                        <button id="saveProfileBtn" class="cta-btn">Save Changes</button>
-                        <button id="cancelEditBtn" class="cta-btn" style="background: #6c757d;">Cancel</button>
+                    
+                    <div class="student-hero-right">
+                        <div class="completion-ring-wrap">
+                            <svg class="progress-ring" width="64" height="64">
+                                <circle class="progress-ring-circle-bg" cx="32" cy="32" r="28" />
+                                <circle class="progress-ring-circle-fill" id="progressRingCircle" cx="32" cy="32" r="28" stroke-dasharray="175.9" stroke-dashoffset="26.3" />
+                            </svg>
+                            <span class="completion-text-val" id="profileCompletionPct">85%</span>
+                        </div>
+                        <div class="completion-label-details">
+                            <span class="completion-lbl">Profile Completion</span>
+                            <span class="completion-desc">Almost there! Keep going.</span>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="two-column-split animated-section delay-1">
+                    <!-- Left Column Cards -->
+                    <div class="column-flex">
+                        
+                        <!-- 2. Personal Information Card -->
+                        <div class="premium-card profile-card" id="personalInfoCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="user"></i> Personal Information</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('personalInfoCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <div class="detail-grid">
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Full Name</span>
+                                        <span class="detail-val" id="studentNameText">Heli Patel</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Email Address</span>
+                                        <span class="detail-val" id="studentEmail">heli@gmail.com</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Mobile Number</span>
+                                        <span class="detail-val" id="phoneNumber">9876543210</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Date of Birth</span>
+                                        <span class="detail-val" id="dateOfBirth">2008-05-14</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="edit-form-grid">
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-name">Full Name</label>
+                                        <input type="text" id="edit-name" class="form-input">
+                                    </div>
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-phone">Phone Number</label>
+                                        <input type="tel" id="edit-phone" class="form-input">
+                                    </div>
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-dob">Date of Birth</label>
+                                        <input type="date" id="edit-dob" class="form-input">
+                                    </div>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('personalInfoCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="savePersonalInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Academic Information Card -->
+                        <div class="premium-card profile-card" id="academicCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="graduation-cap"></i> Academic Information</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('academicCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <div class="detail-grid">
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">School / University</span>
+                                        <span class="detail-val" id="university">Delhi Public School</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Current Class / Standard</span>
+                                        <span class="detail-val" id="standard">12</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Target Exam</span>
+                                        <span class="detail-val" id="targetExam">JEE Main</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Academic Year</span>
+                                        <span class="detail-val">2026</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="edit-form-grid">
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-university">School / University</label>
+                                        <input type="text" id="edit-university" class="form-input">
+                                    </div>
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-standard">Current Class / Standard</label>
+                                        <select id="edit-standard" class="form-input">
+                                            <option value="">Select...</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('academicCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="saveAcademicInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 4. Learning Goals Card -->
+                        <div class="premium-card profile-card" id="goalsCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="target"></i> Learning Goals</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('goalsCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <div class="detail-grid" style="grid-template-columns: 1fr;">
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Goal Description / Career Path</span>
+                                        <p class="detail-val" id="careerGoals" style="line-height: 1.6; font-weight: 500;"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="edit-form-grid" style="grid-template-columns: 1fr;">
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-careerGoals">Career Goals & Aspirations</label>
+                                        <textarea id="edit-careerGoals" class="form-input" placeholder="e.g. Crack JEE Main and seek admission in IIT Delhi..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('goalsCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="saveGoalsInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 5. Learning Preferences Card -->
+                        <div class="premium-card profile-card" id="preferencesCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="sliders"></i> Learning Preferences</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('preferencesCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <div class="detail-grid">
+                                    <div class="detail-item" style="grid-column: span 2;">
+                                        <span class="detail-lbl">Preferred Subjects</span>
+                                        <div class="chips-flex-wrap" id="subjectsList">
+                                            <!-- Subject Badges slot -->
+                                        </div>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Meeting Frequency</span>
+                                        <span class="detail-val" id="meetingFrequency">Weekly</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-lbl">Preferred Communication</span>
+                                        <span class="detail-val" id="communicationPreference">Video Call</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="edit-form-grid">
+                                    <div class="form-item full-width">
+                                        <label class="form-label" for="edit-subjects">Subjects (comma-separated)</label>
+                                        <textarea id="edit-subjects" class="form-input" placeholder="Mathematics, Physics, Chemistry"></textarea>
+                                    </div>
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-meetingFrequency">Preferred Meeting Frequency</label>
+                                        <select id="edit-meetingFrequency" class="form-input">
+                                            <option value="">Select...</option>
+                                            <option value="Weekly">Weekly</option>
+                                            <option value="Bi-weekly">Bi-weekly</option>
+                                            <option value="Monthly">Monthly</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-communicationPreference">Preferred Communication</label>
+                                        <select id="edit-communicationPreference" class="form-input">
+                                            <option value="">Select...</option>
+                                            <option value="Video Call">Video Call</option>
+                                            <option value="Chat">Chat</option>
+                                            <option value="Email">Email</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('preferencesCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="savePreferencesInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Column Cards -->
+                    <div class="column-flex">
+                        
+                        <!-- 6. Skills & Interests -->
+                        <div class="premium-card profile-card" id="skillsCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="brain"></i> Skills & Interests</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('skillsCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <div class="chips-flex-wrap" id="skillsList">
+                                    <!-- Dynamic Skills badges slot -->
+                                </div>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="edit-form-grid" style="grid-template-columns: 1fr;">
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-skillsToDevelop">Skills to Develop (comma-separated)</label>
+                                        <textarea id="edit-skillsToDevelop" class="form-input" placeholder="Problem Solving, Python, AI, Robotics"></textarea>
+                                    </div>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('skillsCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="saveSkillsInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 7. Social Links Card -->
+                        <div class="premium-card profile-card" id="socialLinksCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="share-2"></i> Social Links</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('socialLinksCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <div class="social-links-list">
+                                    <a id="linkedIn" class="social-link-item" href="#" target="_blank">
+                                        <i data-lucide="linkedin" class="social-input-icon" style="position:static; pointer-events:auto;"></i> <span>LinkedIn Profile</span>
+                                    </a>
+                                    <a id="github" class="social-link-item" href="#" target="_blank">
+                                        <i data-lucide="github" class="social-input-icon" style="position:static; pointer-events:auto;"></i> <span>GitHub Profile</span>
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="edit-form-grid" style="grid-template-columns: 1fr;">
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-linkedin">LinkedIn URL</label>
+                                        <div class="social-input-wrapper">
+                                            <i data-lucide="linkedin" class="social-input-icon"></i>
+                                            <input type="url" id="edit-linkedin" class="form-input" placeholder="https://linkedin.com/in/username">
+                                        </div>
+                                    </div>
+                                    <div class="form-item">
+                                        <label class="form-label" for="edit-github">GitHub URL</label>
+                                        <div class="social-input-wrapper">
+                                            <i data-lucide="github" class="social-input-icon"></i>
+                                            <input type="url" id="edit-github" class="form-input" placeholder="https://github.com/username">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('socialLinksCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="saveSocialLinksInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 8. Notification Preferences Card -->
+                        <div class="premium-card">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="bell"></i> Notification Preferences</h3>
+                            </div>
+                            
+                            <div class="notification-switch-row">
+                                <div class="switch-label-details">
+                                    <span class="switch-title">Email Notifications</span>
+                                    <span class="switch-desc">Receive updates about booked sessions</span>
+                                </div>
+                                <label class="custom-toggle-switch">
+                                    <input type="checkbox" checked>
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="notification-switch-row">
+                                <div class="switch-label-details">
+                                    <span class="switch-title">SMS Notifications</span>
+                                    <span class="switch-desc">Text updates about immediate requests</span>
+                                </div>
+                                <label class="custom-toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="notification-switch-row">
+                                <div class="switch-label-details">
+                                    <span class="switch-title">Marketing Updates</span>
+                                    <span class="switch-desc">Promotion messages and recommendations</span>
+                                </div>
+                                <label class="custom-toggle-switch">
+                                    <input type="checkbox">
+                                    <span class="switch-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 9. Security Card -->
+                        <div class="premium-card">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="shield-check"></i> Security</h3>
+                            </div>
+                            
+                            <div class="security-list">
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <span class="security-title">Change Password</span>
+                                        <span class="security-desc">Update your login security credentials</span>
+                                    </div>
+                                    <button class="btn-security-action">Update</button>
+                                </div>
+
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <span class="security-title">Two-Factor Authentication</span>
+                                        <span class="security-desc">Add an extra layer of login protection</span>
+                                    </div>
+                                    <button class="btn-security-action">Configure</button>
+                                </div>
+
+                                <div class="security-item">
+                                    <div class="security-info">
+                                        <span class="security-title">Active Devices</span>
+                                        <span class="security-desc">Show devices linked to your account</span>
+                                    </div>
+                                    <button class="btn-security-action danger">Logout Other Sessions</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- About Me / Biography card -->
+                        <div class="premium-card profile-card" id="bioCard">
+                            <div class="profile-card-header">
+                                <h3 class="profile-card-title"><i data-lucide="book-open"></i> About Me</h3>
+                                <button class="btn-card-edit view-state" onclick="enterEditMode('bioCard')"><i data-lucide="edit-3"></i> Edit</button>
+                            </div>
+                            
+                            <!-- View mode -->
+                            <div class="view-state">
+                                <p class="detail-val" id="bio" style="line-height: 1.6; font-weight: 500; font-style: normal; color: var(--text-secondary);"></p>
+                            </div>
+                            
+                            <!-- Edit mode -->
+                            <div class="edit-state">
+                                <div class="form-item">
+                                    <label class="form-label" for="edit-bio">Biography / Description</label>
+                                    <textarea id="edit-bio" class="form-input" placeholder="Tell us about yourself..."></textarea>
+                                </div>
+                                <div class="edit-actions-row">
+                                    <button class="btn-card-cancel" onclick="cancelEditMode('bioCard')">Cancel</button>
+                                    <button class="btn-card-save" onclick="saveBioInfo()">Save</button>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </section>
+
+            </div>
         </main>
-        <footer>
-            <p>&copy; 2025 Amplimentor. All rights reserved.</p>
-        </footer>
     </div>
+
+    <!-- Notification dropover overlay card -->
+    <div id="notificationDropdown" style="display: none; position: absolute; top: 72px; right: 32px; width: 320px; background-color: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 10px 25px rgba(15,23,42,0.1); z-index: 1000; padding: 16px; box-sizing: border-box;">
+        <div style="font-weight: 700; color: #0F172A; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">Notifications</div>
+        <div id="notificationsContent" style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 0.85rem; color: #64748B; text-align: center; padding: 12px 0;">No new notifications</div>
+        </div>
+    </div>
+
+    <!-- Page Controller Javascript -->
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const viewMode = document.getElementById('profile-view');
-        const editMode = document.getElementById('profile-edit');
-        
+        let currentStudent = {};
+
+        function enterEditMode(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                card.classList.add('editing');
+            }
+        }
+
+        function cancelEditMode(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) {
+                card.classList.remove('editing');
+                // Reset this section's inputs back to active data values
+                resetCardInputs(cardId);
+            }
+        }
+
+        function resetCardInputs(cardId) {
+            if (cardId === 'personalInfoCard') {
+                document.getElementById('edit-name').value = currentStudent.name || '';
+                document.getElementById('edit-phone').value = currentStudent.phoneNumber || '';
+                document.getElementById('edit-dob').value = currentStudent.dateOfBirth ? new Date(currentStudent.dateOfBirth).toISOString().split('T')[0] : '';
+            } else if (cardId === 'academicCard') {
+                document.getElementById('edit-university').value = currentStudent.university || '';
+                document.getElementById('edit-standard').value = currentStudent.standard || '';
+            } else if (cardId === 'goalsCard') {
+                document.getElementById('edit-careerGoals').value = currentStudent.careerGoals || '';
+            } else if (cardId === 'preferencesCard') {
+                document.getElementById('edit-subjects').value = (currentStudent.subjects && currentStudent.subjects.length) ? currentStudent.subjects.join(', ') : '';
+                document.getElementById('edit-meetingFrequency').value = currentStudent.meetingFrequency || '';
+                document.getElementById('edit-communicationPreference').value = currentStudent.communicationPreference || '';
+            } else if (cardId === 'skillsCard') {
+                document.getElementById('edit-skillsToDevelop').value = (currentStudent.skillsToDevelop && currentStudent.skillsToDevelop.length) ? currentStudent.skillsToDevelop.join(', ') : '';
+            } else if (cardId === 'socialLinksCard') {
+                document.getElementById('edit-linkedin').value = currentStudent.linkedIn || '';
+                document.getElementById('edit-github').value = currentStudent.github || '';
+            } else if (cardId === 'bioCard') {
+                document.getElementById('edit-bio').value = currentStudent.bio || '';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationLink = document.getElementById('notificationLink');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationsContent = document.getElementById('notificationsContent');
+
+            // Render initial Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Toggle Notification Dropdown
+            notificationLink.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            document.addEventListener('click', () => {
+                notificationDropdown.style.display = 'none';
+            });
+
+            notificationDropdown.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+
+            // Initialize photo upload listener
+            document.getElementById('edit-photo').addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size too large. Maximum size is 5MB.');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+
+                // Show indicator
+                document.getElementById('upload-loading').style.display = 'block';
+
+                const formData = new FormData();
+                formData.append('photo', file);
+
+                try {
+                    const res = await fetch(API_BASE + '/api/student/upload-photo', {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: formData,
+                    });
+                    if (res.ok) {
+                        fetchStudentProfile(); // Refresh profile photos
+                    } else {
+                        const err = await res.json();
+                        alert('Photo upload failed: ' + (err.message || 'Error'));
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert('Failed to upload photo.');
+                } finally {
+                    document.getElementById('upload-loading').style.display = 'none';
+                }
+            });
+
+            // Logout click handler
+            document.querySelectorAll('.logout-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/logout', { method: 'POST' })
+                        .then(() => { window.location.href = '/login.html'; })
+                        .catch(() => { window.location.href = '/login.html'; });
+                });
+            });
+
+            fetchStudentProfile();
+            loadNotifications();
+        });
+
         function populateProfileData(student) {
-            // Helper function to set text content
-            const setText = (id, text) => document.getElementById(id).textContent = text || 'N/A';
-            // Helper function to set href
-            const setLink = (id, url) => {
+            currentStudent = student;
+
+            // Header Hero text updates
+            document.getElementById('studentNameHero').textContent = student.name || 'Student Name';
+            document.getElementById('studentSubHero').textContent = `Class ${student.standard || 'N/A'} Science • Target: ${student.careerGoals ? student.careerGoals.substring(0, 15) + '...' : 'JEE Main'}`;
+            document.getElementById('studentLocHero').innerHTML = `<i data-lucide="map-pin" style="width: 12px; height: 12px;"></i> ${student.address || 'Ahmedabad, India'}`;
+
+            // Image updates
+            const photoUrl = student.photo ? (API_BASE + '/uploads/' + student.photo) : '/default-avatar.svg';
+            document.getElementById('studentPhoto').src = photoUrl;
+            document.getElementById('headerAvatar').src = photoUrl;
+
+            // Details View updates
+            const setVal = (id, val, isChip = false) => {
                 const el = document.getElementById(id);
-                if (url) {
-                    el.href = url;
-                    el.textContent = url;
-                    el.style.display = 'inline';
-                } else {
-                    el.style.display = 'none';
-                    el.textContent = '';
+                if (el) {
+                    if (val) {
+                        el.textContent = val;
+                        el.classList.remove('empty');
+                    } else {
+                        el.textContent = 'N/A';
+                        el.classList.add('empty');
+                    }
                 }
             };
 
-            setText('studentName', student.name);
-            setText('university', student.university);
-            setText('studentEmail', student.email);
-            setText('standard', student.standard);
-            setText('subjects', (student.subjects && student.subjects.length) ? student.subjects.join(', ') : '');
-            setText('dateOfBirth', student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : '');
-            setText('phoneNumber', student.phoneNumber);
-            setText('bio', student.bio);
-            setLink('linkedIn', student.linkedIn);
-            setLink('github', student.github);
-            setText('careerGoals', student.careerGoals);
-            setText('skillsToDevelop', (student.skillsToDevelop && student.skillsToDevelop.length) ? student.skillsToDevelop.join(', ') : '');
-            setText('meetingFrequency', student.meetingFrequency);
-            setText('communicationPreference', student.communicationPreference);
-            
-            const studentPhoto = document.getElementById('studentPhoto');
-            if (student.photo) {
-                studentPhoto.src = API_BASE + '/uploads/' + student.photo;
+            setVal('studentNameText', student.name);
+            setVal('studentEmail', student.email);
+            setVal('phoneNumber', student.phoneNumber);
+            setVal('dateOfBirth', student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : '');
+
+            setVal('university', student.university);
+            setVal('standard', student.standard);
+            setVal('targetExam', student.careerGoals ? student.careerGoals.substring(0, 30) : 'JEE Main');
+
+            setVal('careerGoals', student.careerGoals);
+            setVal('bio', student.bio);
+
+            // Render subjects list badges
+            const subjectsList = document.getElementById('subjectsList');
+            subjectsList.innerHTML = '';
+            if (student.subjects && student.subjects.length > 0) {
+                student.subjects.forEach(sub => {
+                    subjectsList.innerHTML += `<span class="tag-chip-pill">${sub}</span>`;
+                });
             } else {
-                studentPhoto.src = '/default-avatar.svg';
+                subjectsList.innerHTML = '<span class="detail-val empty">No subjects selected</span>';
             }
 
-            // Populate edit form
+            // Render meeting styles
+            setVal('meetingFrequency', student.meetingFrequency);
+            setVal('communicationPreference', student.communicationPreference);
+
+            // Render skills list
+            const skillsList = document.getElementById('skillsList');
+            skillsList.innerHTML = '';
+            if (student.skillsToDevelop && student.skillsToDevelop.length > 0) {
+                student.skillsToDevelop.forEach(skill => {
+                    skillsList.innerHTML += `<span class="tag-chip-pill purple">${skill}</span>`;
+                });
+            } else {
+                skillsList.innerHTML = '<span class="detail-val empty">No skills selected</span>';
+            }
+
+            // Social links setup
+            const setupLink = (id, url) => {
+                const link = document.getElementById(id);
+                if (link) {
+                    if (url) {
+                        link.href = url;
+                        link.style.display = 'inline-flex';
+                    } else {
+                        link.style.display = 'none';
+                    }
+                }
+            };
+            setupLink('linkedIn', student.linkedIn);
+            setupLink('github', student.github);
+
+            // Re-populate edit form field values
             document.getElementById('edit-name').value = student.name || '';
+            document.getElementById('edit-phone').value = student.phoneNumber || '';
+            document.getElementById('edit-dob').value = student.dateOfBirth ? new Date(student.dateOfBirth).toISOString().split('T')[0] : '';
+
             document.getElementById('edit-university').value = student.university || '';
             document.getElementById('edit-standard').value = student.standard || '';
-            document.getElementById('edit-subjects').value = (student.subjects && student.subjects.length) ? student.subjects.join(', ') : '';
-            document.getElementById('edit-dob').value = student.dateOfBirth ? new Date(student.dateOfBirth).toISOString().split('T')[0] : '';
-            document.getElementById('edit-phone').value = student.phoneNumber || '';
-            document.getElementById('edit-bio').value = student.bio || '';
-            document.getElementById('edit-linkedin').value = student.linkedIn || '';
-            document.getElementById('edit-github').value = student.github || '';
             document.getElementById('edit-careerGoals').value = student.careerGoals || '';
-            document.getElementById('edit-skillsToDevelop').value = (student.skillsToDevelop && student.skillsToDevelop.length) ? student.skillsToDevelop.join(', ') : '';
+            document.getElementById('edit-bio').value = student.bio || '';
+
+            document.getElementById('edit-subjects').value = (student.subjects && student.subjects.length) ? student.subjects.join(', ') : '';
             document.getElementById('edit-meetingFrequency').value = student.meetingFrequency || '';
             document.getElementById('edit-communicationPreference').value = student.communicationPreference || '';
+            document.getElementById('edit-skillsToDevelop').value = (student.skillsToDevelop && student.skillsToDevelop.length) ? student.skillsToDevelop.join(', ') : '';
+            document.getElementById('edit-linkedin').value = student.linkedIn || '';
+            document.getElementById('edit-github').value = student.github || '';
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
         }
 
         function fetchStudentProfile() {
@@ -236,151 +789,105 @@
                 .catch(console.error);
         }
 
-        document.getElementById('editProfileBtn').addEventListener('click', () => {
-            viewMode.style.display = 'none';
-            editMode.style.display = 'block';
-        });
+        // Save card fields helper
+        function saveProfileFieldSection(payload, cardId) {
+            fetch(API_BASE + '/api/student/profile', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(payload),
+            })
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to save profile data'))
+            .then(data => {
+                cancelEditMode(cardId);
+                fetchStudentProfile();
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Failed to save details. Please try again.');
+            });
+        }
 
-        document.getElementById('cancelEditBtn').addEventListener('click', () => {
-            editMode.style.display = 'none';
-            viewMode.style.display = 'block';
-        });
-
-        document.getElementById('saveProfileBtn').addEventListener('click', () => {
-            const updatedData = {
+        function savePersonalInfo() {
+            const payload = {
                 name: document.getElementById('edit-name').value,
+                phoneNumber: document.getElementById('edit-phone').value,
+                dateOfBirth: document.getElementById('edit-dob').value,
+            };
+            saveProfileFieldSection(payload, 'personalInfoCard');
+        }
+
+        function saveAcademicInfo() {
+            const payload = {
                 university: document.getElementById('edit-university').value,
                 standard: document.getElementById('edit-standard').value,
-                subjects: document.getElementById('edit-subjects').value.split(',').map(s => s.trim()).filter(Boolean),
-                dateOfBirth: document.getElementById('edit-dob').value,
-                phoneNumber: document.getElementById('edit-phone').value,
-                bio: document.getElementById('edit-bio').value,
-                linkedIn: document.getElementById('edit-linkedin').value,
-                github: document.getElementById('edit-github').value,
+            };
+            saveProfileFieldSection(payload, 'academicCard');
+        }
+
+        function saveGoalsInfo() {
+            const payload = {
                 careerGoals: document.getElementById('edit-careerGoals').value,
-                skillsToDevelop: document.getElementById('edit-skillsToDevelop').value.split(',').map(s => s.trim()).filter(Boolean),
+            };
+            saveProfileFieldSection(payload, 'goalsCard');
+        }
+
+        function savePreferencesInfo() {
+            const payload = {
+                subjects: document.getElementById('edit-subjects').value.split(',').map(s => s.trim()).filter(Boolean),
                 meetingFrequency: document.getElementById('edit-meetingFrequency').value,
                 communicationPreference: document.getElementById('edit-communicationPreference').value,
             };
+            saveProfileFieldSection(payload, 'preferencesCard');
+        }
 
-            const photoFile = document.getElementById('edit-photo').files[0];
-
-            const saveProfileData = () => {
-                fetch(API_BASE + '/api/student/profile', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    credentials: 'include',
-                    body: JSON.stringify(updatedData),
-                })
-                .then(res => res.ok ? res.json() : Promise.reject('Failed to save profile data'))
-                .then(() => {
-                    editMode.style.display = 'none';
-                    viewMode.style.display = 'block';
-                    fetchStudentProfile(); // Refresh data
-                    // Clear photo preview
-                    document.getElementById('photo-preview').style.display = 'none';
-                    document.getElementById('edit-photo').value = '';
-                })
-                .catch(error => {
-                    console.error('Error saving profile:', error);
-                    alert('Failed to save profile. Please try again.');
-                });
+        function saveSkillsInfo() {
+            const payload = {
+                skillsToDevelop: document.getElementById('edit-skillsToDevelop').value.split(',').map(s => s.trim()).filter(Boolean),
             };
+            saveProfileFieldSection(payload, 'skillsCard');
+        }
 
-            if (photoFile) {
-                // Validate file size
-                if (photoFile.size > 5 * 1024 * 1024) {
-                    alert('File size too large. Maximum size is 5MB.');
-                    return;
-                }
+        function saveSocialLinksInfo() {
+            const payload = {
+                linkedIn: document.getElementById('edit-linkedin').value,
+                github: document.getElementById('edit-github').value,
+            };
+            saveProfileFieldSection(payload, 'socialLinksCard');
+        }
 
-                // Validate file type
-                if (!photoFile.type.startsWith('image/')) {
-                    alert('Please select an image file.');
-                    return;
-                }
+        function saveBioInfo() {
+            const payload = {
+                bio: document.getElementById('edit-bio').value,
+            };
+            saveProfileFieldSection(payload, 'bioCard');
+        }
 
-                // Show loading indicator
-                document.getElementById('upload-loading').style.display = 'block';
-                document.getElementById('saveProfileBtn').disabled = true;
-                document.getElementById('saveProfileBtn').textContent = 'Uploading...';
-
-                const formData = new FormData();
-                formData.append('photo', photoFile);
-                fetch(API_BASE + '/api/student/upload-photo', {
-                    method: 'POST',
-                    credentials: 'include',
-                    body: formData,
-                })
-                .then(res => {
-                    if (!res.ok) {
-                        return res.json().then(err => Promise.reject(err.message || 'Photo upload failed'));
+        // Fetch notifications count
+        const loadNotifications = async () => {
+            try {
+                const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/notifications');
+                if (res.ok) {
+                    const data = await res.json();
+                    const count = data.count || 0;
+                    if (count > 0) {
+                        notificationCount.textContent = count;
+                        notificationCount.style.display = 'inline-flex';
                     }
-                    return res.json();
-                })
-                .then(data => {
-                    console.log('Photo uploaded successfully:', data);
-                    // Hide loading indicator
-                    document.getElementById('upload-loading').style.display = 'none';
-                    document.getElementById('saveProfileBtn').disabled = false;
-                    document.getElementById('saveProfileBtn').textContent = 'Save Changes';
-                    saveProfileData();
-                })
-                .catch(error => {
-                    console.error('Photo upload error:', error);
-                    // Hide loading indicator
-                    document.getElementById('upload-loading').style.display = 'none';
-                    document.getElementById('saveProfileBtn').disabled = false;
-                    document.getElementById('saveProfileBtn').textContent = 'Save Changes';
-                    alert('Failed to upload photo: ' + error);
-                });
-            } else {
-                saveProfileData();
-            }
-        });
-
-        // Photo preview functionality
-        document.getElementById('edit-photo').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('photo-preview');
-            const previewImage = document.getElementById('preview-image');
-            
-            if (file) {
-                // Validate file size
-                if (file.size > 5 * 1024 * 1024) {
-                    alert('File size too large. Maximum size is 5MB.');
-                    this.value = '';
-                    preview.style.display = 'none';
-                    return;
+                    
+                    if (data.notifications && data.notifications.length > 0) {
+                        notificationsContent.innerHTML = data.notifications.map(n => `
+                            <div style="font-size: 0.85rem; color: #475569; padding: 8px 10px; background-color: #F8FAFC; border-radius: 8px; border: 1px solid #F1F5F9;">
+                                ${n.text || n.message}
+                            </div>
+                        `).join('');
+                    }
                 }
-
-                // Validate file type
-                if (!file.type.startsWith('image/')) {
-                    alert('Please select an image file.');
-                    this.value = '';
-                    preview.style.display = 'none';
-                    return;
-                }
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            } else {
-                preview.style.display = 'none';
+            } catch (e) {
+                console.error("Notifications API load error:", e);
             }
-        });
-
-        // Remove photo functionality
-        document.getElementById('remove-photo').addEventListener('click', function() {
-            document.getElementById('edit-photo').value = '';
-            document.getElementById('photo-preview').style.display = 'none';
-        });
-
-        fetchStudentProfile();
-    });
+        };
     </script>
+    <script src="/navigation-loader.js"></script>
 </body>
 </html>

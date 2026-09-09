@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews & Feedback - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.3">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nav dropdown overrides */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        .more-dropdown {
+            position: relative;
+        }
+        .more-dropdown-trigger {
+            cursor: pointer;
+        }
+        .more-dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            z-index: 1000;
+            min-width: 190px;
+            margin-top: 6px;
+            padding: 6px 0;
+        }
+        .more-dropdown-menu a {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px !important;
+            color: var(--text-light) !important;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            text-decoration: none;
+            border-bottom: none !important;
+            border-radius: 0 !important;
+        }
+        .more-dropdown-menu a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary) !important;
+        }
+        .more-dropdown.open .more-dropdown-menu {
+            display: block;
+        }
+
+        .rev-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Metric card */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .m-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .m-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+        }
+        .m-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .m-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .rev-split-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .rev-section-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            margin-bottom: 24px;
+        }
+
+        /* Review Card nodes */
+        .review-node-item {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        .review-node-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 10px;
+        }
+        .student-rev-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .avatar-let {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #EFF6FF;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 12.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stars-box {
+            color: #F59E0B;
+            font-size: 13px;
+        }
+
+        .reply-box-nested {
+            background-color: #F8FAFC;
+            border-left: 3.5px solid var(--primary);
+            padding: 12px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 12.5px;
+        }
+
+        /* Rating input stars selector */
+        .star-select-row {
+            display: flex;
+            gap: 8px;
+            font-size: 24px;
+            color: #E2E8F0;
+            cursor: pointer;
+            margin-bottom: 12px;
+        }
+        .star-select-row i.selected {
+            color: #F59E0B;
+        }
+
+        .btn-rev-act {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Keyword clouds */
+        .cloud-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .cloud-badge {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 600;
+            border: 1px solid #BFDBFE;
+        }
+
+        /* Drawer overlay popup for replies */
+        .drawer-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15,23,42,0.6);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .drawer-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 500px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .empty-illustration-box {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        @media (max-width: 992px) {
+            .rev-split-grid { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/quiz">Quizzes</a></li>
+                <li><a href="/study-resources">Resources</a></li>
+                <li class="more-dropdown" id="moreDropdownWrapper">
+                    <a href="#" class="more-dropdown-trigger" onclick="toggleMoreDropdown(event)">More Tools <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></a>
+                    <div class="more-dropdown-menu">
+                        <a href="/attendance.html"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+                        <a href="/session-notes.html"><i class="fa-solid fa-file-signature"></i> Session Notes</a>
+                        <a href="/recordings.html"><i class="fa-solid fa-video"></i> Video Recordings</a>
+                        <a href="/learning-goals"><i class="fa-solid fa-bullseye"></i> Learning Goals</a>
+                        <a href="/learning-progress"><i class="fa-solid fa-chart-line"></i> Progress Analytics</a>
+                        <a href="/reviews.html" class="active"><i class="fa-solid fa-star"></i> Reviews & Feedback</a>
+                        <a href="/certificates.html"><i class="fa-solid fa-certificate"></i> Certificates</a>
+                        <a href="/gamification.html"><i class="fa-solid fa-gamepad"></i> Achievements & XP</a>
+                    </div>
+                </li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Review Container -->
+    <div class="rev-container">
+        
+        <!-- Header -->
+        <header style="margin-bottom:32px;">
+            <h1 style="font-size:26px; font-weight:800; margin:0;" id="revPageHeadingTitle">Reviews & Feedback</h1>
+            <p style="color:#64748B; font-size:14.5px; margin-top:4px;" id="revPageHeadingDesc">Submit class ratings, private feedback suggestions, and reply to reviews.</p>
+        </header>
+
+        <!-- Stats ribbon -->
+        <div class="metrics-grid" id="revMetricsGridContainer">
+            <!-- Loaded dynamically -->
+        </div>
+
+        <!-- Split Layout Grid -->
+        <div class="rev-split-grid">
+            
+            <!-- Left Panel: Feed of Reviews -->
+            <section class="rev-section-card" id="leftReviewsPanel">
+                <!-- Loaded dynamically -->
+            </section>
+
+            <!-- Right Panel: Submit Form (Student) / Distribution & Keywords (Mentor) -->
+            <section class="rev-section-card" id="rightActionPanel">
+                <!-- Loaded dynamically -->
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Reply Dialog Modal -->
+    <div class="drawer-overlay" id="replyDrawerModal">
+        <div class="drawer-content">
+            <h3 style="font-size:15px; font-weight:800; margin:0 0 16px 0;">Reply to Review</h3>
+            <div style="background:#F8FAFC; border-radius:8px; padding:12px; font-size:12.5px; border:1px solid var(--border); margin-bottom:16px;">
+                <strong style="color:var(--primary);" id="replyStudentName">Rahul Verma</strong>
+                <p style="margin:4px 0 0 0; color:#475569; font-style:italic;" id="replyStudentComment">"Great explanation of genetics."</p>
+            </div>
+            
+            <label class="form-label">Your Reply Response</label>
+            <textarea class="form-input" style="height:100px; resize:none;" placeholder="Thanks Rahul! Glad it helped. Let me know if you need help with dihybrid crosses..." id="mentorReplyText"></textarea>
+
+            <div style="margin-top:20px; display:flex; gap:12px;">
+                <button class="btn-goal-primary" style="width:auto; padding:8px 16px;" onclick="submitMentorReply()">Publish Reply</button>
+                <button class="btn-export" style="background:#F1F5F9; border:1px solid #CBD5E1; cursor:pointer;" onclick="closeReplyDrawer()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Role Simulator Switcher -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: #FFFFFF; border: 1.5px solid var(--primary); padding: 12px 18px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 99999; display: flex; align-items: center; gap: 12px; font-family: sans-serif; font-size: 13px;">
+        <strong style="color:var(--primary);"><i class="fa-solid fa-user-gear"></i> Role Simulator:</strong>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="student" id="btnSimStudent" onclick="simRoleToggle('student')"> Student</label>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="mentor" id="btnSimMentor" onclick="simRoleToggle('mentor')"> Mentor</label>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let activeRatingSelect = 5;
+        let replyingReviewId = null;
+
+        // Mock Reviews database
+        let reviewsDatabase = [
+            { id: 'v-1', student: 'Rahul Verma', mentor: 'Anjali Patel', rating: 5, date: 'July 5, 2026', comment: 'Anjali explained Punnett square calculations step-by-step. Concepts are clear!', reply: 'Thank you Rahul! Looking forward to our next class on dihybrid ratios.', privateFeedback: 'Needs more calculus mechanics assignments.' },
+            { id: 'v-2', student: 'Aman Kumar', mentor: 'Priya Shah', rating: 4, date: 'July 2, 2026', comment: 'Derivations equations were drawn nicely. Slightly fast rate of explanations.', reply: '', privateFeedback: 'Could speak a bit slower.' },
+            { id: 'v-3', student: 'Priya Singh', mentor: 'Neha Joshi', rating: 5, date: 'June 28, 2026', comment: 'Excellent chemistry notes shared. Radical reactions are easy now!', reply: '', privateFeedback: '' }
+        ];
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        function toggleMoreDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('moreDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('profileDropdownWrapper');
+            if (dropdown) dropdown.classList.remove('open');
+            const more = document.getElementById('moreDropdownWrapper');
+            if (more) more.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    
+                    const saved = localStorage.getItem('simulatedRole');
+                    currentRole = saved ? saved : profile.role;
+                    document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent').checked = true;
+
+                    const brand = document.getElementById('brandLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    renderDashboard();
+                } else {
+                    const saved = localStorage.getItem('simulatedRole') || 'student';
+                    currentRole = saved;
+                    const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                    if (radio) radio.checked = true;
+                    renderDashboard();
+                }
+            } catch (err) {
+                console.error(err);
+                const saved = localStorage.getItem('simulatedRole') || 'student';
+                currentRole = saved;
+                const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                if (radio) radio.checked = true;
+                renderDashboard();
+            }
+        });
+
+        function renderDashboard() {
+            if (currentRole === 'mentor') {
+                document.getElementById('revPageHeadingTitle').textContent = "Educator Reviews Dashboard";
+                document.getElementById('revPageHeadingDesc').textContent = "Monitor overall rating distributions, read student feedbacks, and post reply responses.";
+                
+                renderMentorMetrics();
+                renderMentorList();
+                renderMentorSidebar();
+            } else {
+                document.getElementById('revPageHeadingTitle').textContent = "My Reviews & Feedback";
+                document.getElementById('revPageHeadingDesc').textContent = "Rate your mentoring sessions, check reply records, and manage rating history.";
+
+                renderStudentMetrics();
+                renderStudentList();
+                renderStudentSidebar();
+            }
+        }
+
+        // --- MENTOR METRICS ---
+        function renderMentorMetrics() {
+            const row = document.getElementById('revMetricsGridContainer');
+            row.innerHTML = `
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Average Rating</span>
+                        <div class="m-val">4.8 Stars</div>
+                    </div>
+                    <div class="m-icon" style="background:#FEF3C7; color:#D97706;"><i class="fa-solid fa-star"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Total Reviews</span>
+                        <div class="m-val">${reviewsDatabase.length} Reviews</div>
+                    </div>
+                    <div class="m-icon" style="background:#EEF2FF; color:#4F46E5;"><i class="fa-solid fa-comments"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Unreplied Reviews</span>
+                        <div class="m-val">${reviewsDatabase.filter(r => r.reply === '').length} pending</div>
+                    </div>
+                    <div class="m-icon" style="background:#FEE2E2; color:#EF4444;"><i class="fa-solid fa-reply-all"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Satisfaction Rate</span>
+                        <div class="m-val">96%</div>
+                    </div>
+                    <div class="m-icon" style="background:#D1FAE5; color:#10B981;"><i class="fa-solid fa-gauge"></i></div>
+                </div>
+            `;
+        }
+
+        // --- STUDENT METRICS ---
+        function renderStudentMetrics() {
+            const row = document.getElementById('revMetricsGridContainer');
+            const studentReviews = reviewsDatabase.filter(r => r.student === 'Rahul Verma');
+            row.innerHTML = `
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">My Submitted Ratings</span>
+                        <div class="m-val">${studentReviews.length} Reviews</div>
+                    </div>
+                    <div class="m-icon" style="background:#EEF2FF; color:#4F46E5;"><i class="fa-solid fa-clipboard-check"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Averages Given</span>
+                        <div class="m-val">5.0 Stars</div>
+                    </div>
+                    <div class="m-icon" style="background:#FEF3C7; color:#D97706;"><i class="fa-solid fa-star"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Replied Reviews</span>
+                        <div class="m-val">${studentReviews.filter(r => r.reply !== '').length} Replies</div>
+                    </div>
+                    <div class="m-icon" style="background:#D1FAE5; color:#10B981;"><i class="fa-solid fa-reply"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Pending Sessions Review</span>
+                        <div class="m-val">1 Pending</div>
+                    </div>
+                    <div class="m-icon" style="background:#FFFBEB; color:#F59E0B;"><i class="fa-solid fa-circle-question"></i></div>
+                </div>
+            `;
+        }
+
+        // --- MENTOR LEFT PANEL (Reviews list) ---
+        function renderMentorList() {
+            const card = document.getElementById('leftReviewsPanel');
+            
+            if (reviewsDatabase.length === 0) {
+                card.innerHTML = `
+                    <div class="empty-illustration-box">
+                        <i class="fa-solid fa-comments-slash" style="font-size:48px; color:#94A3B8; margin-bottom:16px;"></i>
+                        <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:0 0 4px 0;">No reviews yet</h3>
+                        <p style="color:#64748B; font-size:13px; margin:0 0 20px 0;">Rating logs submitted by students will appear here automatically.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            card.innerHTML = `
+                <div class="app-filter-bar">
+                    <h3 class="card-title" style="margin:0;"><i class="fa-solid fa-list" style="color:var(--primary);"></i> Student Feedbacks Feed</h3>
+                    <div class="filter-bar-group">
+                        <select class="app-select" id="ratingFilter" onchange="filterReviewsList()" style="min-width:130px;">
+                            <option value="all">All Ratings</option>
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars & below</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="display:flex; flex-direction:column;">
+                    ${reviewsDatabase.map(rev => `
+                        <div class="review-node-item">
+                            <div class="review-node-header">
+                                <div class="student-rev-info">
+                                    <div class="avatar-let">${rev.student.split(' ').map(n => n[0]).join('')}</div>
+                                    <div>
+                                        <strong style="font-size:13.5px; color:#0F172A;">${rev.student}</strong>
+                                        <div style="font-size:11px; color:#64748B; margin-top:2px;">Session: ${rev.mentor} • ${rev.date}</div>
+                                    </div>
+                                </div>
+                                <div class="stars-box">
+                                    ${'★'.repeat(rev.rating)}${'☆'.repeat(5 - rev.rating)}
+                                </div>
+                            </div>
+                            <p style="font-size:13px; color:#475569; line-height:1.5; margin:8px 0;">"${rev.comment}"</p>
+                            
+                            ${rev.privateFeedback ? `
+                                <div style="font-size:11.5px; color:#4F46E5; margin-bottom:10px; background:#EEF2FF; padding:8px; border-radius:6px;">
+                                    <strong>Private Feedback:</strong> "${rev.privateFeedback}"
+                                </div>
+                            ` : ''}
+
+                            ${rev.reply ? `
+                                <div class="reply-box-nested">
+                                    <strong>Your Response:</strong> ${rev.reply}
+                                </div>
+                            ` : `
+                                <button class="btn-rev-act" style="background:var(--primary); color:white; margin-top:10px;" onclick="openReplyDrawer('${rev.id}')"><i class="fa-solid fa-reply"></i> Reply</button>
+                            `}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // --- STUDENT LEFT PANEL (My Reviews list) ---
+        function renderStudentList() {
+            const card = document.getElementById('leftReviewsPanel');
+            const studentReviews = reviewsDatabase.filter(r => r.student === 'Rahul Verma');
+
+            card.innerHTML = `
+                <h3 class="card-title" style="margin-bottom:20px;"><i class="fa-solid fa-star" style="color:var(--primary);"></i> My Review Logs</h3>
+                <div style="display:flex; flex-direction:column;">
+                    ${studentReviews.map(rev => `
+                        <div class="review-node-item">
+                            <div class="review-node-header">
+                                <div class="student-rev-info">
+                                    <div class="avatar-let">AP</div>
+                                    <div>
+                                        <strong style="font-size:13.5px; color:#0F172A;">Mentor: ${rev.mentor}</strong>
+                                        <div style="font-size:11px; color:#64748B; margin-top:2px;">Submitted: ${rev.date}</div>
+                                    </div>
+                                </div>
+                                <div class="stars-box">${'★'.repeat(rev.rating)}${'☆'.repeat(5 - rev.rating)}</div>
+                            </div>
+                            <p style="font-size:13px; color:#475569; line-height:1.5; margin:8px 0;">"${rev.comment}"</p>
+
+                            ${rev.reply ? `
+                                <div class="reply-box-nested">
+                                    <strong>Mentor Response:</strong> "${rev.reply}"
+                                </div>
+                            ` : ''}
+
+                            <div style="display:flex; gap:8px; margin-top:12px;">
+                                <button class="btn-rev-act" style="background:#F1F5F9; border:1px solid #CBD5E1; color:#475569;" onclick="editReviewSim('${rev.id}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                                <button class="btn-rev-act" style="background:#FEE2E2; color:#991B1B;" onclick="deleteReviewSim('${rev.id}')"><i class="fa-solid fa-trash-can"></i> Delete</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // --- MENTOR RIGHT PANEL (Keywords, trends & rating distributions) ---
+        function renderMentorSidebar() {
+            const card = document.getElementById('rightActionPanel');
+            card.innerHTML = `
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-chart-pie" style="color:var(--primary);"></i> Rating Distribution</h3>
+                <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:24px;">
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:11.5px; margin-bottom:2px;">
+                            <span>5 Stars</span>
+                            <strong>80%</strong>
+                        </div>
+                        <div style="width:100%; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                            <div style="width:80%; height:100%; background:#F59E0B;"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display:flex; justify-content:space-between; font-size:11.5px; margin-bottom:2px;">
+                            <span>4 Stars</span>
+                            <strong>20%</strong>
+                        </div>
+                        <div style="width:100%; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                            <div style="width:20%; height:100%; background:#F59E0B;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="border-top:1px solid var(--border); padding-top:16px;">
+                    <h3 class="card-title"><i class="fa-solid fa-wand-magic-sparkles" style="color:var(--primary);"></i> Feedback Keywords</h3>
+                    <div class="cloud-flex">
+                        <span class="cloud-badge">Concept building (5)</span>
+                        <span class="cloud-badge">Very clear (3)</span>
+                        <span class="cloud-badge">Helpful homeworks (2)</span>
+                        <span class="cloud-badge">Genetics expert (2)</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- STUDENT RIGHT PANEL (Submit new rating form) ---
+        function renderStudentSidebar() {
+            const card = document.getElementById('rightActionPanel');
+            card.innerHTML = `
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-circle-plus" style="color:var(--primary);"></i> Submit Mentor Review</h3>
+                
+                <label class="form-label">Select Active Session Mentor</label>
+                <select class="settings-input" id="newRevMentor">
+                    <option value="Anjali Patel">Anjali Patel (Biology)</option>
+                    <option value="Priya Shah">Priya Shah (Physics)</option>
+                    <option value="Neha Joshi">Neha Joshi (Chemistry)</option>
+                </select>
+
+                <label class="form-label" style="margin-top:12px; display:block;">Select Rating</label>
+                <div class="star-select-row" id="starSelectorRow">
+                    <i class="fa-solid fa-star selected" onclick="setSelectRating(1)"></i>
+                    <i class="fa-solid fa-star selected" onclick="setSelectRating(2)"></i>
+                    <i class="fa-solid fa-star selected" onclick="setSelectRating(3)"></i>
+                    <i class="fa-solid fa-star selected" onclick="setSelectRating(4)"></i>
+                    <i class="fa-solid fa-star selected" onclick="setSelectRating(5)"></i>
+                </div>
+
+                <label class="form-label">Public written review comment</label>
+                <textarea class="form-input" style="height:80px; resize:none;" placeholder="Visual diagrams were great..." id="newRevComment"></textarea>
+
+                <label class="form-label" style="margin-top:12px; display:block;">Private instructor feedback comments</label>
+                <textarea class="form-input" style="height:60px; resize:none;" placeholder="Suggestion notes private details..." id="newRevPrivate"></textarea>
+
+                <button class="btn-goal-primary" style="margin-top:16px;" onclick="submitNewReview()">Publish Session Review</button>
+            `;
+        }
+
+        // Stars controls
+        function setSelectRating(val) {
+            activeRatingSelect = val;
+            const stars = document.getElementById('starSelectorRow').querySelectorAll('i');
+            stars.forEach((star, idx) => {
+                if (idx < val) {
+                    star.className = 'fa-solid fa-star selected';
+                } else {
+                    star.className = 'fa-solid fa-star';
+                }
+            });
+        }
+
+        function submitNewReview() {
+            const mentor = document.getElementById('newRevMentor').value;
+            const comment = document.getElementById('newRevComment').value;
+            const privateText = document.getElementById('newRevPrivate').value;
+
+            if (comment.trim() === '') {
+                window.toast.warning("Written review missing", "Please write a comment.");
+                return;
+            }
+
+            const newRev = {
+                id: `v-${Date.now()}`,
+                student: 'Rahul Verma',
+                mentor,
+                rating: activeRatingSelect,
+                date: 'Just now',
+                comment,
+                reply: '',
+                privateFeedback: privateText
+            };
+
+            reviewsDatabase.unshift(newRev);
+            document.getElementById('newRevComment').value = '';
+            document.getElementById('newRevPrivate').value = '';
+            setSelectRating(5);
+
+            window.toast.success("Review Submitted", "Thank you for sharing your feedback!");
+            renderDashboard();
+        }
+
+        // Mentor replies actions
+        function openReplyDrawer(id) {
+            replyingReviewId = id;
+            const rev = reviewsDatabase.find(r => r.id === id);
+            if (rev) {
+                document.getElementById('replyStudentName').textContent = rev.student;
+                document.getElementById('replyStudentComment').textContent = `"${rev.comment}"`;
+                document.getElementById('replyDrawerModal').style.display = 'flex';
+            }
+        }
+
+        function closeReplyDrawer() {
+            document.getElementById('replyDrawerModal').style.display = 'none';
+        }
+
+        function submitMentorReply() {
+            const reply = document.getElementById('mentorReplyText').value;
+            if (reply.trim() === '') return;
+
+            const rev = reviewsDatabase.find(r => r.id === replyingReviewId);
+            if (rev) {
+                rev.reply = reply;
+                document.getElementById('mentorReplyText').value = '';
+                closeReplyDrawer();
+                window.toast.success("Reply Posted", "Response shared with student.");
+                renderDashboard();
+            }
+        }
+
+        // Student edit & delete
+        function editReviewSim(id) {
+            const rev = reviewsDatabase.find(r => r.id === id);
+            if (rev) {
+                document.getElementById('newRevMentor').value = rev.mentor;
+                document.getElementById('newRevComment').value = rev.comment;
+                document.getElementById('newRevPrivate').value = rev.privateFeedback || '';
+                setSelectRating(rev.rating);
+                
+                // remove item first and edit
+                reviewsDatabase = reviewsDatabase.filter(r => r.id !== id);
+                renderDashboard();
+                window.toast.info("Editing mode", "Modify fields and hit publish to save changes.");
+            }
+        }
+
+        function deleteReviewSim(id) {
+            reviewsDatabase = reviewsDatabase.filter(r => r.id !== id);
+            window.toast.success("Review Deleted");
+            renderDashboard();
+        }
+
+        function simRoleToggle(role) {
+            localStorage.setItem('simulatedRole', role);
+            window.location.reload();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

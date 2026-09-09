@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meet Our Mentors - Amplimentor</title>
     <link rel="stylesheet" href="/style.css?v=3.5">
+    <link rel="stylesheet" href="/mentor-modal.css">
     <!-- Google Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body class="landing-page mentors-directory-page">
     <!-- Header Sticky Navbar -->
@@ -915,100 +917,451 @@
                 const mentor = mentors.find(m => m.id === id);
                 if(!mentor) return;
 
-                const starsHtml = '★'.repeat(Math.round(mentor.rating)) + '☆'.repeat(5 - Math.round(mentor.rating));
-                const skillsHtml = mentor.skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('');
-                const languagesHtml = mentor.languages.map(lang => `<span class="lang-tag">${lang}</span>`).join('');
-                const certificationsHtml = mentor.certifications.map(cert => `<li>${cert}</li>`).join('');
+                const escapeHtmlAttr = (str) => str ? str.replace(/"/g, '&quot;') : '';
 
-                modalContent.innerHTML = `
-                    <div class="modal-profile-header">
-                        <div class="modal-avatar-wrapper">
-                            <img src="${mentor.photo}" alt="${mentor.name}" class="modal-avatar">
-                        </div>
-                        <div class="modal-header-info">
-                            <h2>${mentor.name}</h2>
-                            <p class="modal-job-title">${mentor.designation} at <span class="highlight-company">${mentor.organization}</span></p>
-                            <p class="modal-category"><strong>Category:</strong> ${mentor.category}</p>
-                            <div class="mentor-rating-row">
-                                <span class="rating-stars">${starsHtml}</span>
-                                <span class="rating-number">${mentor.rating} (${mentor.totalReviews} Reviews)</span>
+                const starsHtml = '★'.repeat(Math.round(mentor.rating)) + '☆'.repeat(5 - Math.round(mentor.rating));
+                
+                // Subjects and Teaching Skills group chips
+                const subjectChips = [mentor.subject, mentor.specialization, ...mentor.skills.slice(0, 2)].filter(Boolean).map(item => `
+                    <span class="custom-badge-pill">${item}</span>
+                `).join('');
+                const teachingSkills = ["Concept Building", "Revision Strategy", "Exam Planning", "Doubt Solving"];
+                const skillChips = teachingSkills.map(item => `
+                    <span class="custom-badge-pill green">${item}</span>
+                `).join('');
+
+                const languagesHtml = mentor.languages.map(lang => `<span class="lang-tag">${lang}</span>`).join('');
+                
+                // Separated Education & Certifications
+                const certificationsHtml = mentor.certifications && mentor.certifications.length > 0
+                    ? mentor.certifications.map(cert => `
+                        <div class="cert-item-row">
+                            <div class="icon-box-round green">
+                                <i data-lucide="award" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <div class="row-text-details">
+                                <span class="row-text-title">${cert}</span>
+                                <span class="row-text-desc">Verified Credential</span>
                             </div>
                         </div>
+                      `).join('')
+                    : `
+                        <div class="cert-item-row">
+                            <div class="icon-box-round green">
+                                <i data-lucide="award" style="width: 16px; height: 16px;"></i>
+                            </div>
+                            <div class="row-text-details">
+                                <span class="row-text-title">Verified Amplimentor Faculty</span>
+                                <span class="row-text-desc">Standard Educator</span>
+                            </div>
+                        </div>
+                      `;
+
+                // Shorten Bio for read more trigger
+                const isBioLong = mentor.bio.length > 200;
+                const shortBio = isBioLong ? mentor.bio.substring(0, 200) + '...' : mentor.bio;
+
+                // Load similar mentors
+                const similar = mentors.filter(m => m.id !== mentor.id && (m.subject === mentor.subject || m.category === mentor.category)).slice(0, 3);
+                if (similar.length < 3) {
+                    const extra = mentors.filter(m => m.id !== mentor.id && !similar.find(s => s.id === m.id)).slice(0, 3 - similar.length);
+                    similar.push(...extra);
+                }
+                const similarHtml = similar.map(m => `
+                    <div class="similar-mentor-card-item">
+                        <img src="${m.photo}" alt="${m.name}" class="similar-mentor-photo">
+                        <h4 class="similar-mentor-name">${m.name}</h4>
+                        <span class="similar-mentor-sub">${m.designation}</span>
+                        <span class="similar-mentor-rating"><i data-lucide="star" style="width:12px; height:12px; fill:currentColor; color:#F59E0B;"></i> ${m.rating}</span>
+                        <button class="btn-similar-mentor-view" onclick="window.viewMentorProfile(${m.id})">View Profile</button>
                     </div>
+                `).join('');
 
-                    <div class="modal-profile-body">
-                        <div class="modal-details-grid">
-                            <!-- Left columns -->
-                            <div class="modal-details-main">
-                                <div class="details-section">
-                                    <h3>Biography</h3>
-                                    <p>${mentor.bio}</p>
+                modalContent.innerHTML = `
+                    <!-- Hero header banner -->
+                    <div class="modal-hero-banner">
+                        <div class="modal-hero-flex">
+                            <div class="modal-hero-left">
+                                <div class="modal-hero-avatar-box">
+                                    <img src="${mentor.photo}" alt="${mentor.name}">
                                 </div>
-                                
-                                <div class="details-section">
-                                    <h3>Skills & Expertise</h3>
-                                    <div class="mentor-skills-list full">
-                                        ${skillsHtml}
+                                <div class="modal-hero-meta">
+                                    <span class="modal-hero-badge-verified">
+                                        <i data-lucide="check-circle-2" style="width: 12px; height: 12px; fill: currentColor; color: #FFF;"></i> Verified Mentor
+                                    </span>
+                                    <h2 class="modal-hero-name">${mentor.name}</h2>
+                                    <div class="modal-hero-title-row">
+                                        ${mentor.designation} • <span>${mentor.organization}</span>
                                     </div>
-                                </div>
-
-                                <div class="details-section">
-                                    <h3>Education & Certifications</h3>
-                                    <p><strong>Education:</strong> ${mentor.education}</p>
-                                    ${certificationsHtml ? `<ul class="modal-certs-list">${certificationsHtml}</ul>` : ''}
-                                </div>
-
-                                <div class="details-section">
-                                    <h3>Location & Contact</h3>
-                                    <p>📍 Located in <strong>${mentor.location}</strong></p>
+                                    <div class="modal-hero-rating-row">
+                                        <span class="modal-hero-stars">${starsHtml}</span>
+                                        <span class="modal-hero-rating-text">${mentor.rating} (${mentor.totalReviews} Reviews)</span>
+                                    </div>
+                                    <p class="modal-hero-tagline">"Helping students score their potential through conceptual learning and custom strategies."</p>
                                 </div>
                             </div>
                             
-                            <!-- Right columns metrics -->
-                            <div class="modal-details-sidebar">
-                                <div class="sidebar-kpi-card">
-                                    <div class="kpi-row">
-                                        <div class="kpi-item">
-                                            <span class="kpi-val">${mentor.studentsMentored}+</span>
-                                            <span class="kpi-name">Students Helped</span>
-                                        </div>
-                                        <div class="kpi-item">
-                                            <span class="kpi-val">${mentor.experienceYears} Yrs</span>
-                                            <span class="kpi-name">Experience</span>
-                                        </div>
+                            <div class="modal-hero-right-stats">
+                                <div class="modal-hero-stat-card">
+                                    <div class="modal-hero-stat-icon-box">
+                                        <i data-lucide="users"></i>
+                                    </div>
+                                    <div class="modal-hero-stat-details">
+                                        <span class="modal-hero-stat-val">${mentor.studentsMentored}+</span>
+                                        <span class="modal-hero-stat-lbl">Students</span>
                                     </div>
                                 </div>
-
-                                <div class="sidebar-list-card">
-                                    <h4>Languages</h4>
-                                    <div class="lang-list">
-                                        ${languagesHtml}
+                                
+                                <div class="modal-hero-stat-card">
+                                    <div class="modal-hero-stat-icon-box">
+                                        <i data-lucide="clock"></i>
+                                    </div>
+                                    <div class="modal-hero-stat-details">
+                                        <span class="modal-hero-stat-val">${mentor.experienceYears} Yrs</span>
+                                        <span class="modal-hero-stat-lbl">Experience</span>
                                     </div>
                                 </div>
-
-                                <div class="sidebar-list-card">
-                                    <h4>Availability & Cost</h4>
-                                    <p class="availability-text">📅 ${mentor.availability}</p>
-                                    <p class="availability-text" style="margin-top: 8px;">💳 <strong>Session Price:</strong> ${mentor.sessionPrice}</p>
-                                    <p class="availability-text" style="margin-top: 4px;">⚡ <strong>Response Time:</strong> ${mentor.responseTime}</p>
+                                
+                                <div class="modal-hero-stat-card">
+                                    <div class="modal-hero-stat-icon-box">
+                                        <i data-lucide="check-square"></i>
+                                    </div>
+                                    <div class="modal-hero-stat-details">
+                                        <span class="modal-hero-stat-val">${Math.round(mentor.studentsMentored * 1.5)}+</span>
+                                        <span class="modal-hero-stat-lbl">Sessions</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="modal-hero-stat-card">
+                                    <div class="modal-hero-stat-icon-box">
+                                        <i data-lucide="trending-up"></i>
+                                    </div>
+                                    <div class="modal-hero-stat-details">
+                                        <span class="modal-hero-stat-val">95%</span>
+                                        <span class="modal-hero-stat-lbl">Success Rate</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="modal-profile-footer">
-                        <button class="btn-secondary" onclick="window.closeProfileModal()">Close</button>
-                        <button class="btn-primary" onclick="window.bookMentorSession(${mentor.id})">Book Session</button>
+                    <!-- Main Section & Sidebar Layout Grid -->
+                    <div class="modal-content-layout">
+                        
+                        <div class="modal-main-sections">
+                            
+                            <!-- About -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="user"></i> About Mentor</h3>
+                                <p class="biography-text" data-short-text="${escapeHtmlAttr(shortBio)}" data-full-text="${escapeHtmlAttr(mentor.bio)}">${shortBio}</p>
+                                ${isBioLong ? `<button class="btn-biography-toggle" onclick="window.toggleBiographyText(this)">Read More <i data-lucide="chevron-down" style="width:14px; height:14px;"></i></button>` : ''}
+                            </div>
+
+                            <!-- Grouped Expertise -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="brain"></i> Expertise & Skills</h3>
+                                <div class="expertise-grid-split">
+                                    <div class="expertise-item-card">
+                                        <h4 class="expertise-card-title">Subjects Covered</h4>
+                                        <div class="chip-group-wrap">
+                                            ${subjectChips}
+                                        </div>
+                                    </div>
+                                    <div class="expertise-item-card">
+                                        <h4 class="expertise-card-title">Teaching Methodologies</h4>
+                                        <div class="chip-group-wrap">
+                                            ${skillChips}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Timeline experience -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="briefcase"></i> Professional Timeline</h3>
+                                <div class="experience-vertical-timeline">
+                                    <div class="timeline-card-node">
+                                        <span class="timeline-card-dot"></span>
+                                        <div class="timeline-card-details">
+                                            <span class="timeline-card-year">2024 - Present</span>
+                                            <span class="timeline-card-role">Senior Instructor Faculty</span>
+                                            <span class="timeline-card-institution">${mentor.organization}</span>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-card-node">
+                                        <span class="timeline-card-dot"></span>
+                                        <div class="timeline-card-details">
+                                            <span class="timeline-card-year">2021 - 2024</span>
+                                            <span class="timeline-card-role">Associate Science & Math Lead</span>
+                                            <span class="timeline-card-institution">National Prep School</span>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-card-node">
+                                        <span class="timeline-card-dot"></span>
+                                        <div class="timeline-card-details">
+                                            <span class="timeline-card-year">2018 - 2021</span>
+                                            <span class="timeline-card-role">Junior Biology Instructor</span>
+                                            <span class="timeline-card-institution">Private Coaching Center</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Education & Certifications separated -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="graduation-cap"></i> Education & Credentials</h3>
+                                <div class="edu-certs-split">
+                                    <div class="edu-list">
+                                        <h4 class="expertise-card-title" style="margin-bottom: 12px;">Education</h4>
+                                        <div class="edu-item-row">
+                                            <div class="icon-box-round">
+                                                <i data-lucide="school" style="width: 16px; height: 16px;"></i>
+                                            </div>
+                                            <div class="row-text-details">
+                                                <span class="row-text-title">${mentor.education}</span>
+                                                <span class="row-text-desc">Graduated Degree</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="certs-list">
+                                        <h4 class="expertise-card-title" style="margin-bottom: 12px;">Certifications</h4>
+                                        ${certificationsHtml}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Availability Grid section -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="calendar"></i> Available Slots</h3>
+                                <div class="slots-day-container">
+                                    <span class="slots-day-lbl">Today</span>
+                                    <div class="slots-badges-row">
+                                        <button class="slot-time-badge" onclick="window.bookMentorSession(${mentor.id})">10:00 AM</button>
+                                        <button class="slot-time-badge" onclick="window.bookMentorSession(${mentor.id})">03:00 PM</button>
+                                        <button class="slot-time-badge" onclick="window.bookMentorSession(${mentor.id})">06:30 PM</button>
+                                    </div>
+                                </div>
+                                <div class="slots-day-container">
+                                    <span class="slots-day-lbl">Tomorrow</span>
+                                    <div class="slots-badges-row">
+                                        <button class="slot-time-badge" onclick="window.bookMentorSession(${mentor.id})">11:00 AM</button>
+                                        <button class="slot-time-badge" onclick="window.bookMentorSession(${mentor.id})">02:00 PM</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Achievement section -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="trophy"></i> Recognitions & Badges</h3>
+                                <div class="achievements-badges-flex">
+                                    <span class="achievement-badge-card"><i data-lucide="award" style="width: 14px; height: 14px;"></i> Top Rated Mentor</span>
+                                    <span class="achievement-badge-card orange"><i data-lucide="star" style="width: 14px; height: 14px; fill: currentColor;"></i> 4.8+ Student Rating</span>
+                                    <span class="achievement-badge-card blue"><i data-lucide="thumbs-up" style="width: 14px; height: 14px;"></i> 95% Satisfaction</span>
+                                    <span class="achievement-badge-card"><i data-lucide="users" style="width: 14px; height: 14px;"></i> NEET & JEE Expert</span>
+                                </div>
+                            </div>
+
+                            <!-- Review Section -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="message-square"></i> Student Reviews</h3>
+                                <div class="reviews-grid-row">
+                                    <div class="review-item-card">
+                                        <div class="review-card-header">
+                                            <div class="review-student-info">
+                                                <div class="review-avatar-letters">RV</div>
+                                                <div class="review-student-name-col">
+                                                    <span class="review-student-name">Rahul Verma</span>
+                                                    <span class="review-student-subject">${mentor.specialization} Student</span>
+                                                </div>
+                                            </div>
+                                            <div class="review-meta-right">
+                                                <span class="review-stars">★★★★★</span>
+                                                <span class="review-date-badge">2 days ago</span>
+                                            </div>
+                                        </div>
+                                        <p class="review-body-text">"Excellent teacher! Concepts are explained step-by-step and doubts are resolved very patiently."</p>
+                                    </div>
+
+                                    <div class="review-item-card">
+                                        <div class="review-card-header">
+                                            <div class="review-student-info">
+                                                <div class="review-avatar-letters">PS</div>
+                                                <div class="review-student-name-col">
+                                                    <span class="review-student-name">Priya Singh</span>
+                                                    <span class="review-student-subject">Competitive Prep Student</span>
+                                                </div>
+                                            </div>
+                                            <div class="review-meta-right">
+                                                <span class="review-stars">★★★★★</span>
+                                                <span class="review-date-badge">5 days ago</span>
+                                            </div>
+                                        </div>
+                                        <p class="review-body-text">"The revision methodologies are super easy to recall. My test marks rose significantly after a few sessions."</p>
+                                    </div>
+                                </div>
+                                <button class="btn-review-view-all">View All Reviews</button>
+                            </div>
+
+                            <!-- FAQs -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="help-circle"></i> Frequently Asked Questions</h3>
+                                <div class="faq-accordion-group">
+                                    <div class="faq-accordion-item">
+                                        <button class="faq-accordion-trigger" onclick="window.toggleAccordion(this)">
+                                            <span>How are mentoring sessions conducted?</span>
+                                            <i data-lucide="chevron-down" class="faq-accordion-icon"></i>
+                                        </button>
+                                        <div class="faq-accordion-content">
+                                            <div class="faq-content-inner">
+                                                Live video sessions are conducted 1-on-1 on our secure video chat workspace. You can join directly from your dashboard's Sessions page when it is scheduled.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-accordion-item">
+                                        <button class="faq-accordion-trigger" onclick="window.toggleAccordion(this)">
+                                            <span>Can parents join the session call?</span>
+                                            <i data-lucide="chevron-down" class="faq-accordion-icon"></i>
+                                        </button>
+                                        <div class="faq-accordion-content">
+                                            <div class="faq-content-inner">
+                                                Yes! Parents are free to join for the initial or final 10 minutes to sync up with the mentor and review academic planning notes.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="faq-accordion-item">
+                                        <button class="faq-accordion-trigger" onclick="window.toggleAccordion(this)">
+                                            <span>Do you provide homework materials?</span>
+                                            <i data-lucide="chevron-down" class="faq-accordion-icon"></i>
+                                        </button>
+                                        <div class="faq-accordion-content">
+                                            <div class="faq-content-inner">
+                                                Yes, study resources, session notes, and customized assignments are uploaded and shared on your portal directly after each scheduled class ends.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Similar Mentors -->
+                            <div class="modal-section-card">
+                                <h3 class="modal-section-title"><i data-lucide="users-round"></i> Similar Mentors</h3>
+                                <div class="similar-mentors-carousel-row">
+                                    ${similarHtml}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Sidebar column containing booking details (Sticky) -->
+                        <div class="modal-sidebar-card-wrap">
+                            <div class="modal-booking-sticky-card">
+                                <div class="booking-card-header">
+                                    <span class="booking-status-indicator">
+                                        <span class="booking-status-dot"></span> Available Now
+                                    </span>
+                                </div>
+                                
+                                <div class="booking-pricing-row">
+                                    <span class="booking-currency">₹</span>
+                                    <span class="booking-price-val">${mentor.sessionPrice.replace(/[^0-9]/g, '') || '399'}</span>
+                                    <span class="booking-price-period">/session</span>
+                                </div>
+
+                                <div class="booking-details-list">
+                                    <div class="booking-detail-item">
+                                        <span class="booking-detail-lbl"><i data-lucide="hourglass"></i> Duration</span>
+                                        <span class="booking-detail-val">60 Min</span>
+                                    </div>
+                                    <div class="booking-detail-item">
+                                        <span class="booking-detail-lbl"><i data-lucide="video"></i> Mode</span>
+                                        <span class="booking-detail-val">Online 1:1</span>
+                                    </div>
+                                    <div class="booking-detail-item">
+                                        <span class="booking-detail-lbl"><i data-lucide="zap"></i> Response Time</span>
+                                        <span class="booking-detail-val">${mentor.responseTime}</span>
+                                    </div>
+                                    <div class="booking-detail-item">
+                                        <span class="booking-detail-lbl"><i data-lucide="languages"></i> Languages</span>
+                                        <span class="booking-detail-val">${mentor.languages.join(', ')}</span>
+                                    </div>
+                                </div>
+
+                                <div class="booking-next-slot-banner">
+                                    <span class="next-slot-title">🟢 Next Available Slot</span>
+                                    <span class="next-slot-val"><i data-lucide="calendar"></i> Today • 3:00 PM</span>
+                                </div>
+
+                                <button class="btn-booking-primary" onclick="window.bookMentorSession(${mentor.id})">Book Live Session</button>
+                                <button class="btn-booking-secondary" onclick="window.location.href='/chat.html'">Message Mentor</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Bottom Action Bar (Fixed on Mobile Viewports) -->
+                    <div class="mobile-fixed-action-bar">
+                        <div class="mobile-action-flex">
+                            <button class="btn-mobile-icon-close" onclick="window.closeProfileModal()" aria-label="Close profile">
+                                <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                            </button>
+                            <button class="btn-mobile-secondary" onclick="window.location.href='/chat.html'">Message</button>
+                            <button class="btn-mobile-primary" onclick="window.bookMentorSession(${mentor.id})">Book Session</button>
+                        </div>
                     </div>
                 `;
 
                 profileModal.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
+                
+                // Initialize Lucide icons inside the modal content
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
             };
 
             window.closeProfileModal = () => {
                 profileModal.style.display = 'none';
                 document.body.style.overflow = 'auto';
+            };
+
+            // Accordion toggle helper
+            window.toggleAccordion = (button) => {
+                const item = button.closest('.faq-accordion-item');
+                const content = item.querySelector('.faq-accordion-content');
+                const isActive = item.classList.contains('active');
+                
+                // Close all other items in this group
+                const group = button.closest('.faq-accordion-group');
+                group.querySelectorAll('.faq-accordion-item').forEach(i => {
+                    i.classList.remove('active');
+                    i.querySelector('.faq-accordion-content').style.maxHeight = null;
+                });
+                
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            };
+
+            // Biography read more/less toggle helper
+            window.toggleBiographyText = (button) => {
+                const p = button.previousElementSibling;
+                const isExpanded = p.classList.contains('expanded');
+                if (isExpanded) {
+                    p.classList.remove('expanded');
+                    p.textContent = p.getAttribute('data-short-text');
+                    button.innerHTML = `Read More <i data-lucide="chevron-down" style="width:14px; height:14px;"></i>`;
+                } else {
+                    p.classList.add('expanded');
+                    p.textContent = p.getAttribute('data-full-text');
+                    button.innerHTML = `Read Less <i data-lucide="chevron-up" style="width:14px; height:14px;"></i>`;
+                }
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
             };
 
             // Authentication Modal actions
@@ -1237,5 +1590,6 @@
             init();
         })();
     </script>
+    <script src="/navigation-loader.js"></script>
 </body>
 </html>

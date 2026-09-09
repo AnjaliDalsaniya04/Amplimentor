@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Mentoring Session - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Stepper UI Progress Header */
+        .stepper-header-panel {
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border);
+            padding: 24px 0;
+        }
+        .stepper-header-container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            padding: 0 20px;
+        }
+        .stepper-line-backdrop {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            right: 40px;
+            height: 3px;
+            background-color: #E2E8F0;
+            z-index: 1;
+        }
+        .stepper-line-active {
+            position: absolute;
+            top: 20px;
+            left: 40px;
+            width: 0%;
+            height: 3px;
+            background-color: var(--primary);
+            z-index: 2;
+            transition: width 0.3s;
+        }
+        .step-node {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 3;
+            width: 80px;
+        }
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #FFFFFF;
+            border: 3px solid #E2E8F0;
+            color: #64748B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        .step-node.active .step-circle {
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 0 4px #EFF6FF;
+        }
+        .step-node.completed .step-circle {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: #FFFFFF;
+        }
+        .step-lbl {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            text-align: center;
+        }
+        .step-node.active .step-lbl {
+            color: var(--primary);
+        }
+
+        /* Booking Container Content */
+        .booking-content-container {
+            max-width: 760px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .booking-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.02);
+            animation: formFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes formFadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .booking-section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0 0 8px 0;
+            letter-spacing: -0.02em;
+        }
+        .booking-section-desc {
+            font-size: 13.5px;
+            color: #64748B;
+            margin: 0 0 24px 0;
+        }
+
+        /* Choice Cards grids */
+        .option-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        .option-choice-card {
+            border: 2.5px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .option-choice-card:hover {
+            border-color: #94A3B8;
+            background-color: #F8FAFC;
+        }
+        .option-choice-card.selected {
+            border-color: var(--primary);
+            background-color: #EFF6FF;
+        }
+        .choice-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #E2E8F0;
+        }
+        .choice-details {
+            flex-grow: 1;
+        }
+        .choice-title {
+            font-weight: 800;
+            font-size: 14.5px;
+            color: #1E293B;
+        }
+        .choice-subtitle {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 2px;
+        }
+
+        .package-badge-price {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        /* Slot layout grid */
+        .slots-flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        .time-slot-pill {
+            background-color: #FFFFFF;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .time-slot-pill:hover {
+            border-color: #94A3B8;
+        }
+        .time-slot-pill.selected {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Summary receipt layout */
+        .receipt-summary-card {
+            background-color: #F8FAFC;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13.5px;
+        }
+
+        /* Navigation controls footer */
+        .stepper-nav-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 32px;
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        .btn-stepper-nav {
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-stepper-nav.next {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        .btn-stepper-nav.back {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Learning Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu">
+                        <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                        <a href="/student-settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Stepper indicator header -->
+    <header class="stepper-header-panel">
+        <div class="stepper-header-container" style="max-width: 900px;">
+            <div class="stepper-line-backdrop"></div>
+            <div class="stepper-line-active" id="stepperLineActive"></div>
+            
+            <div class="step-node active" id="node-1">
+                <div class="step-circle">1</div>
+                <span class="step-lbl">Mentor</span>
+            </div>
+            <div class="step-node" id="node-2">
+                <div class="step-circle">2</div>
+                <span class="step-lbl">Subject</span>
+            </div>
+            <div class="step-node" id="node-3">
+                <div class="step-circle">3</div>
+                <span class="step-lbl">Package</span>
+            </div>
+            <div class="step-node" id="node-4">
+                <div class="step-circle">4</div>
+                <span class="step-lbl">Date</span>
+            </div>
+            <div class="step-node" id="node-5">
+                <div class="step-circle">5</div>
+                <span class="step-lbl">Slot</span>
+            </div>
+            <div class="step-node" id="node-6">
+                <div class="step-circle">6</div>
+                <span class="step-lbl">Summary</span>
+            </div>
+            <div class="step-node" id="node-7">
+                <div class="step-circle">7</div>
+                <span class="step-lbl">Payment</span>
+            </div>
+            <div class="step-node" id="node-8">
+                <div class="step-circle">8</div>
+                <span class="step-lbl">Success</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Wizard Core Content Container -->
+    <div class="booking-content-container">
+        
+        <!-- Multi-step step cards -->
+        <main class="booking-card" id="stepCardFrame">
+            <!-- Step layouts loaded dynamically by JS -->
+        </main>
+
+        <!-- Stepper Navigation Footer -->
+        <footer class="stepper-nav-footer" id="wizardNavFooter">
+            <button class="btn-stepper-nav back" id="btnBack" onclick="wizardStepBack()" style="visibility: hidden;">Back</button>
+            <button class="btn-stepper-nav next" id="btnNext" onclick="wizardStepNext()">Next Step</button>
+        </footer>
+    </div>
+
+    <script>
+        let currentStep = 1;
+        
+        // Selections state
+        let selectedMentor = null;
+        let selectedSubject = null;
+        let selectedPackage = null;
+        let selectedDate = null;
+        let selectedSlot = null;
+
+        const mentorsList = [
+            { id: 'm-1', name: 'Anjali Patel', subject: 'NEET Biology expert', rating: '4.9 (18 reviews)', avatar: '/avatar_female_mentor.png' },
+            { id: 'm-2', name: 'Priya Shah', subject: 'Physics formula master', rating: '4.8 (14 reviews)', avatar: '/avatar_generic_mentor.png' },
+            { id: 'm-3', name: 'Neha Joshi', subject: 'Organic Chemistry specialist', rating: '4.7 (12 reviews)', avatar: '/avatar_generic_mentor.png' }
+        ];
+
+        const subjectsList = ['Biology Genetics', 'Physics Derivations', 'Organic Chemistry mechanisms', 'Olympiad Mathematics'];
+
+        const packagesList = [
+            { id: 'p-1', name: 'Trial Mentoring Class', detail: '1-on-1 trial slot (60 mins)', price: '₹499' },
+            { id: 'p-2', name: 'Starter Pack Bundle', detail: '5-sessions study package', price: '₹2,199' },
+            { id: 'p-3', name: 'Premium Full Term', detail: '10-sessions target course pack', price: '₹3,999' }
+        ];
+
+        const timeSlotsList = ['10:00 AM', '12:00 PM', '3:30 PM', '5:00 PM', '6:30 PM'];
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    document.getElementById('navName').textContent = profile.name;
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+
+            renderStep();
+        });
+
+        function renderStep() {
+            updateStepHeader();
+            const frame = document.getElementById('stepCardFrame');
+            const btnBack = document.getElementById('btnBack');
+            const btnNext = document.getElementById('btnNext');
+
+            // Toggle back button visibility
+            if (currentStep === 1 || currentStep === 8) {
+                btnBack.style.visibility = 'hidden';
+            } else {
+                btnBack.style.visibility = 'visible';
+            }
+
+            if (currentStep === 7) {
+                btnNext.textContent = 'Pay & Confirm Booking';
+            } else if (currentStep === 8) {
+                btnNext.style.display = 'none';
+                document.getElementById('wizardNavFooter').style.display = 'none';
+            } else {
+                btnNext.textContent = 'Next Step';
+            }
+
+            if (currentStep === 1) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Select Your Mentor</h2>
+                    <p class="booking-section-desc">Choose from our verified syllabus specialists to start learning.</p>
+                    <div class="option-cards-grid">
+                        ${mentorsList.map(m => {
+                            const isSel = selectedMentor && selectedMentor.id === m.id ? 'selected' : '';
+                            return `
+                                <div class="option-choice-card ${isSel}" onclick="selectMentorNode('${m.id}')">
+                                    <img src="${m.avatar}" class="choice-avatar" onerror="this.src='/default-avatar.png'">
+                                    <div class="choice-details">
+                                        <div class="choice-title">${m.name}</div>
+                                        <div class="choice-subtitle">${m.subject}</div>
+                                        <div style="font-size:11px; color:#F59E0B; margin-top:4px;"><i class="fa-solid fa-star"></i> ${m.rating}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else if (currentStep === 2) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Select Subject Course</h2>
+                    <p class="booking-section-desc">Select the focus topic subject you would like guidance in.</p>
+                    <div class="option-cards-grid" style="grid-template-columns: 1fr;">
+                        ${subjectsList.map(sub => {
+                            const isSel = selectedSubject === sub ? 'selected' : '';
+                            return `
+                                <div class="option-choice-card ${isSel}" onclick="selectSubjectNode('${sub}')">
+                                    <i class="fa-solid fa-book" style="font-size:20px; color:var(--primary); margin-right:12px;"></i>
+                                    <div class="choice-details">
+                                        <div class="choice-title">${sub}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else if (currentStep === 3) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Select Learning Package</h2>
+                    <p class="booking-section-desc">Choose a session package bundle that fits your preparation schedules.</p>
+                    <div class="option-cards-grid" style="grid-template-columns: 1fr;">
+                        ${packagesList.map(p => {
+                            const isSel = selectedPackage && selectedPackage.id === p.id ? 'selected' : '';
+                            return `
+                                <div class="option-choice-card ${isSel}" onclick="selectPackageNode('${p.id}')">
+                                    <i class="fa-solid fa-box-open" style="font-size:24px; color:var(--primary);"></i>
+                                    <div class="choice-details">
+                                        <div class="choice-title">${p.name}</div>
+                                        <div class="choice-subtitle">${p.detail}</div>
+                                    </div>
+                                    <span class="package-badge-price">${p.price}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else if (currentStep === 4) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Choose Date</h2>
+                    <p class="booking-section-desc">Pick a date from available scheduling calendars.</p>
+                    <label class="settings-label">Select Date</label>
+                    <input type="date" class="settings-input" style="max-width:280px;" id="datePicker" onchange="selectedDate = this.value" value="${selectedDate || ''}">
+                `;
+            } else if (currentStep === 5) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Choose Time Slot</h2>
+                    <p class="booking-section-desc">Select an available timing hourly slot on ${selectedDate}.</p>
+                    <div class="slots-flex-row">
+                        ${timeSlotsList.map(s => {
+                            const isSel = selectedSlot === s ? 'selected' : '';
+                            return `
+                                <span class="time-slot-pill ${isSel}" onclick="selectSlotNode('${s}')">${s}</span>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            } else if (currentStep === 6) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Booking Summary</h2>
+                    <p class="booking-section-desc">Review your scheduled class selections details before checkout.</p>
+                    <div class="receipt-summary-card">
+                        <div class="receipt-row">
+                            <strong>Mentor</strong>
+                            <span>${selectedMentor ? selectedMentor.name : 'Not selected'}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <strong>Subject</strong>
+                            <span>${selectedSubject || 'Not selected'}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <strong>Package</strong>
+                            <span>${selectedPackage ? selectedPackage.name : 'Not selected'}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <strong>Scheduled Date</strong>
+                            <span>${selectedDate || 'Not selected'}</span>
+                        </div>
+                        <div class="receipt-row">
+                            <strong>Time Slot</strong>
+                            <span>${selectedSlot || 'Not selected'}</span>
+                        </div>
+                        <div style="border-top:1px dashed var(--border); margin:8px 0;"></div>
+                        <div class="receipt-row" style="font-size:15px; font-weight:800; color:var(--primary);">
+                            <span>Total Payout</span>
+                            <span>${selectedPackage ? selectedPackage.price : '₹0'}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 7) {
+                frame.innerHTML = `
+                    <h2 class="booking-section-title">Payment Checkout</h2>
+                    <p class="booking-section-desc">Complete checkout processing using simulated dummy cards.</p>
+                    <div style="margin-top:24px; display:flex; flex-direction:column; gap:12px;">
+                        <label class="settings-label">Mock Card Payment</label>
+                        <input type="text" placeholder="Card Number (4111 XXXX XXXX XXXX)" class="settings-input">
+                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:12px;">
+                            <input type="text" placeholder="MM/YY" class="settings-input">
+                            <input type="text" placeholder="CVC" class="settings-input">
+                        </div>
+                    </div>
+                `;
+            } else if (currentStep === 8) {
+                frame.innerHTML = `
+                    <div style="text-align:center; padding:20px;">
+                        <div style="width:72px; height:72px; border-radius:50%; background-color:#DEF7EC; color:#03543F; font-size:32px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+                        <h2 class="booking-section-title" style="margin-bottom:8px;">Booking Success!</h2>
+                        <p class="booking-section-desc" style="max-width:320px; margin:0 auto 24px auto;">Congratulations! Your mentoring sessions have been successfully scheduled with ${selectedMentor ? selectedMentor.name : 'the mentor'}.</p>
+                        
+                        <div style="display:flex; justify-content:center; gap:16px;">
+                            <button class="btn-stepper-nav next" onclick="window.location.href='/calendar'">View Calendar</button>
+                            <button class="btn-stepper-nav back" style="visibility:visible;" onclick="window.location.href='/student-dashboard.html'">Go to Dashboard</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function updateStepHeader() {
+            // Update line percentage across 8 nodes (7 gaps)
+            const percentage = (currentStep - 1) * (100 / 7);
+            document.getElementById('stepperLineActive').style.width = `${percentage}%`;
+
+            // Update nodes
+            for (let i = 1; i <= 8; i++) {
+                const node = document.getElementById(`node-${i}`);
+                if (i < currentStep) {
+                    node.className = 'step-node completed';
+                } else if (i === currentStep) {
+                    node.className = 'step-node active';
+                } else {
+                    node.className = 'step-node';
+                }
+            }
+        }
+
+        // Choice handlers
+        function selectMentorNode(id) {
+            selectedMentor = mentorsList.find(m => m.id === id);
+            renderStep();
+        }
+        function selectSubjectNode(sub) {
+            selectedSubject = sub;
+            renderStep();
+        }
+        function selectPackageNode(id) {
+            selectedPackage = packagesList.find(p => p.id === id);
+            renderStep();
+        }
+        function selectSlotNode(slot) {
+            selectedSlot = slot;
+            renderStep();
+        }
+
+        // Stepper nav triggers
+        function wizardStepNext() {
+            if (currentStep === 1 && !selectedMentor) {
+                window.toast.warning("Selection Missing", "Please select a mentor to proceed.");
+                return;
+            }
+            if (currentStep === 2 && !selectedSubject) {
+                window.toast.warning("Subject Missing", "Please select a subject to proceed.");
+                return;
+            }
+            if (currentStep === 3 && !selectedPackage) {
+                window.toast.warning("Package Missing", "Please select a package to proceed.");
+                return;
+            }
+            if (currentStep === 4 && !selectedDate) {
+                window.toast.warning("Date Missing", "Please pick a date to proceed.");
+                return;
+            }
+            if (currentStep === 5 && !selectedSlot) {
+                window.toast.warning("Slot Missing", "Please pick a time slot.");
+                return;
+            }
+
+            if (currentStep === 7) {
+                window.toast.success("Payment Received", "Processing mock payment transaction...");
+                setTimeout(() => {
+                    currentStep++;
+                    renderStep();
+                }, 1000);
+                return;
+            }
+
+            currentStep++;
+            renderStep();
+        }
+
+        function wizardStepBack() {
+            if (currentStep > 1) {
+                currentStep--;
+                renderStep();
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

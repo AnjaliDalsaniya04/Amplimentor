@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - Amplimentor Workspace</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Dashboard & Settings Stylesheets -->
+    <link rel="stylesheet" href="/mentor-dashboard.css">
+    <link rel="stylesheet" href="/mentor-settings.css">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/config.js"></script>
+    <style>
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Settings layout inside main content area */
+        .settings-grid-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 28px;
+            margin-top: 24px;
+        }
+        .settings-nav-sidebar {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 0;
+            align-self: start;
+        }
+        .settings-nav-tab {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .settings-nav-tab:hover {
+            background-color: #F8FAFC;
+            color: var(--primary);
+        }
+        .settings-nav-tab.active {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            padding-left: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-wrapper">
+        
+        <!-- Sidebar Navigation Drawer -->
+        <aside class="dashboard-sidebar">
+            <a href="/" class="sidebar-logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                    <defs>
+                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Amplimentor</span>
+            </a>
+            
+            <nav class="sidebar-nav">
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Dashboard</span>
+                    <a href="/mentor-dashboard.html" class="sidebar-link">
+                        <i data-lucide="layout-dashboard"></i> Dashboard
+                    </a>
+                </div>
+
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Teaching</span>
+                    <a href="/my-students.html" class="sidebar-link">
+                        <i data-lucide="users"></i> Students
+                    </a>
+                    <a href="/sessions.html" class="sidebar-link">
+                        <i data-lucide="calendar"></i> Sessions
+                    </a>
+                    <a href="/mentor-dashboard.html#availability" class="sidebar-link">
+                        <i data-lucide="clock"></i> Availability
+                    </a>
+                </div>
+
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Communication</span>
+                    <a href="/chat.html" class="sidebar-link">
+                        <i data-lucide="message-square"></i> Messages
+                    </a>
+                    <a href="/mentor-dashboard.html#reviews" class="sidebar-link">
+                        <i data-lucide="star"></i> Reviews
+                    </a>
+                </div>
+
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Finance</span>
+                    <a href="/mentor-dashboard.html#earnings" class="sidebar-link">
+                        <i data-lucide="wallet"></i> Earnings
+                    </a>
+                </div>
+
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Account</span>
+                    <a href="/mentor/public-profile" class="sidebar-link">
+                        <i data-lucide="globe"></i> Public Profile
+                    </a>
+                    <a href="/mentor/profile" class="sidebar-link">
+                        <i data-lucide="edit-3"></i> Edit Profile
+                    </a>
+                    <a href="/mentor-pricing.html" class="sidebar-link">
+                        <i data-lucide="credit-card"></i> Pricing
+                    </a>
+                    <a href="/mentor/settings" class="sidebar-link active">
+                        <i data-lucide="settings"></i> Settings
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="/logout" class="sidebar-link logout-btn">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard content frame -->
+        <main class="dashboard-main">
+            <!-- Header bar -->
+            <header class="dashboard-header">
+                <div class="header-search">
+                    <i data-lucide="search" class="header-search-icon"></i>
+                    <input type="text" placeholder="Search students, sessions..." class="header-search-input" id="dashboardSearch">
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
+                        <i data-lucide="message-square"></i>
+                    </button>
+                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink" onclick="window.location.href='/notifications'">
+                        <i data-lucide="bell"></i>
+                        <span class="badge" id="notificationCount" style="display: none;">3</span>
+                    </button>
+                    
+                    <a href="/mentor/profile" class="header-user-profile">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" alt="Mentor avatar" class="nav-avatar-img" id="headerAvatar">
+                        </div>
+                        <div class="header-user-info">
+                            <h4 class="header-user-name" id="mentorName">Anjali</h4>
+                            <p class="header-user-role">Mentor</p>
+                        </div>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Inner Settings content frame -->
+            <div class="dashboard-content">
+                <div style="margin-bottom: 24px;">
+                    <h1 style="font-size: 28px; font-weight: 800; color: #0F172A; letter-spacing: -0.02em; margin:0;">Account Settings</h1>
+                    <p style="color: var(--text-tertiary); font-size: 14px; margin: 4px 0 0 0;">Manage your instructor profile, schedules, payout systems, and verifications.</p>
+                </div>
+
+                <div class="settings-grid-layout">
+                    <!-- Local Navigation categories -->
+                    <aside class="settings-nav-sidebar">
+                        <div class="settings-nav-tab active" onclick="loadSettingsSection('account', this)">
+                            <i class="fa-solid fa-user-gear"></i> Account Credentials
+                        </div>
+                        <div class="settings-nav-tab" onclick="loadSettingsSection('teaching', this)">
+                            <i class="fa-solid fa-book-open"></i> Teaching Preferences
+                        </div>
+                        <div class="settings-nav-tab" onclick="loadSettingsSection('notifications', this)">
+                            <i class="fa-solid fa-bell"></i> Notifications
+                        </div>
+                        <div class="settings-nav-tab" onclick="loadSettingsSection('payouts', this)">
+                            <i class="fa-solid fa-wallet"></i> Payments & Payouts
+                        </div>
+                        <div class="settings-nav-tab" onclick="loadSettingsSection('verification', this)">
+                            <i class="fa-solid fa-shield-check"></i> Identity Verification
+                        </div>
+                        <div class="settings-nav-tab" onclick="loadSettingsSection('devices', this)">
+                            <i class="fa-solid fa-laptop-code"></i> Active Devices
+                        </div>
+                    </aside>
+
+                    <!-- Settings Category View content card -->
+                    <section class="settings-card" id="settingsFormCard" style="margin-bottom:0;">
+                        <!-- Content loaded dynamically by JS -->
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const headerAvatar = document.getElementById('headerAvatar');
+            const mentorName = document.getElementById('mentorName');
+            const notificationCount = document.getElementById('notificationCount');
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Fetch profile for header
+            const loadProfile = async () => {
+                try {
+                    const res = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                    if (res.ok) {
+                        const user = await res.json();
+                        mentorName.textContent = user.name || 'Anjali';
+                        if (user.photo) {
+                            headerAvatar.src = API_BASE + `/uploads/${user.photo}`;
+                        }
+                    }
+                } catch (e) {
+                    console.error("Profile load error:", e);
+                }
+            };
+
+            const loadNotifications = async () => {
+                try {
+                    const res = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
+                    if (res.ok) {
+                        const data = await res.json();
+                        const count = data.count || 0;
+                        if (count > 0) {
+                            notificationCount.textContent = count;
+                            notificationCount.style.display = 'inline-flex';
+                        }
+                    }
+                } catch (e) {
+                    console.error("Notifications API load error:", e);
+                }
+            };
+
+            loadProfile();
+            loadNotifications();
+
+            // Default to account tab loading
+            loadSettingsSection('account', document.querySelector('.settings-nav-tab.active'));
+        });
+
+        function loadSettingsSection(section, element) {
+            document.querySelectorAll('.settings-nav-tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+
+            const card = document.getElementById('settingsFormCard');
+
+            if (section === 'account') {
+                card.innerHTML = `
+                    <div class="settings-card-header">
+                        <h3 class="settings-card-title"><i class="fa-solid fa-lock" style="color:var(--primary);"></i> Account Credentials</h3>
+                        <span class="settings-desc">Update your login security password regularly.</span>
+                    </div>
+                    <div class="settings-form-grid">
+                        <div class="settings-form-item">
+                            <label class="settings-label">Current Password</label>
+                            <input type="password" class="settings-input">
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">New Password</label>
+                            <input type="password" class="settings-input">
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Confirm New Password</label>
+                            <input type="password" class="settings-input">
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn-settings-save" onclick="alert('Password updated successfully!')">Update Password</button>
+                    </div>
+                `;
+            } else if (section === 'teaching') {
+                card.innerHTML = `
+                    <div class="settings-card-header">
+                        <h3 class="settings-card-title"><i class="fa-solid fa-graduation-cap" style="color:var(--primary);"></i> Teaching Preferences</h3>
+                        <span class="settings-desc">Specify subject focus, grade groups, and default meeting preferences.</span>
+                    </div>
+                    <div class="settings-form-grid">
+                        <div class="settings-form-item">
+                            <label class="settings-label">Primary Subjects</label>
+                            <input type="text" value="NEET Biology, Genetics, Botany" class="settings-input">
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Target Grades</label>
+                            <input type="text" value="Grade 11, Grade 12, Repeater" class="settings-input">
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Default Live Class Tool</label>
+                            <select class="settings-input" style="height:44px;">
+                                <option value="zoom">Zoom Video</option>
+                                <option value="meet">Google Meet</option>
+                            </select>
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Availability Default Slots</label>
+                            <input type="text" value="Mon-Fri, 3:00 PM - 7:00 PM" class="settings-input">
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn-settings-save" onclick="alert('Teaching preferences updated!')">Save Teaching Preferences</button>
+                    </div>
+                `;
+            } else if (section === 'notifications') {
+                card.innerHTML = `
+                    <div class="settings-card-header">
+                        <h3 class="settings-card-title"><i class="fa-solid fa-bell" style="color:var(--primary);"></i> Notification Preferences</h3>
+                        <span class="settings-desc">Control which updates are delivered.</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <div class="notification-switch-row" style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="font-size:14.5px;">Email Notifications</strong>
+                                <p style="font-size:12.5px; margin:2px 0 0 0; color:var(--text-tertiary);">Receive reports of newly booked sessions and payments.</p>
+                            </div>
+                            <input type="checkbox" checked style="width:18px; height:18px;">
+                        </div>
+                        <div class="notification-switch-row" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #F1F5F9; padding-top:16px;">
+                            <div>
+                                <strong style="font-size:14.5px;">SMS Notifications</strong>
+                                <p style="font-size:12.5px; margin:2px 0 0 0; color:var(--text-tertiary);">Instant text notifications when students request urgent help.</p>
+                            </div>
+                            <input type="checkbox" checked style="width:18px; height:18px;">
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn-settings-save" onclick="alert('Notification configs saved successfully!')">Save Preferences</button>
+                    </div>
+                `;
+            } else if (section === 'payouts') {
+                card.innerHTML = `
+                    <div class="settings-card-header">
+                        <h3 class="settings-card-title"><i class="fa-solid fa-money-check-dollar" style="color:var(--primary);"></i> Payments & Payouts</h3>
+                        <span class="settings-desc">Manage bank accounts and direct withdrawal transfers.</span>
+                    </div>
+                    <div class="settings-form-grid">
+                        <div class="settings-form-item">
+                            <label class="settings-label">Bank Account Holder Name</label>
+                            <input type="text" value="Anjali Patel" class="settings-input">
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Account Number / IFSC</label>
+                            <input type="text" value="HDFC0001234 • XXXX XXXX 4321" class="settings-input">
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Monthly Auto-Withdrawal</label>
+                            <select class="settings-input" style="height:44px;">
+                                <option value="auto">Auto-transfer on 1st of month</option>
+                                <option value="manual">Manual transfers only</option>
+                            </select>
+                        </div>
+                        <div class="settings-form-item">
+                            <label class="settings-label">Monthly limit cap</label>
+                            <input type="text" value="₹50,000" class="settings-input">
+                        </div>
+                    </div>
+                    <div style="margin-top: 24px;">
+                        <button class="btn-settings-save" onclick="alert('Withdrawal settings updated!')">Save Payment Settings</button>
+                    </div>
+                `;
+            } else if (section === 'verification') {
+                card.innerHTML = `
+                    <div class="settings-card-header">
+                        <h3 class="settings-card-title"><i class="fa-solid fa-shield-halved" style="color:var(--primary);"></i> Identity & Verification Documents</h3>
+                        <span class="settings-desc">Manage files to obtain your Verified Mentor badge.</span>
+                    </div>
+                    
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; padding:12px; border-radius:8px;">
+                            <div>
+                                <div style="font-weight:700; font-size:13.5px;">Government Identity ID</div>
+                                <span style="font-size:11px; color:#64748B;">Passport, Driver License, or National ID card.</span>
+                            </div>
+                            <span style="background-color:#D1FAE5; color:#065F46; font-size:11px; padding:2px 8px; border-radius:20px; font-weight:700;">Verified</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center; background:#F8FAFC; padding:12px; border-radius:8px;">
+                            <div>
+                                <div style="font-weight:700; font-size:13.5px;">Educational Degree Certificate</div>
+                                <span style="font-size:11px; color:#64748B;">M.Sc or PhD qualification transcript document.</span>
+                            </div>
+                            <span style="background-color:#FEF3C7; color:#92400E; font-size:11px; padding:2px 8px; border-radius:20px; font-weight:700;">Under Review</span>
+                        </div>
+                    </div>
+                `;
+            } else if (section === 'devices') {
+                card.innerHTML = `
+                    <div class="settings-card-header">
+                        <h3 class="settings-card-title"><i class="fa-solid fa-desktop" style="color:var(--primary);"></i> Connected Devices</h3>
+                        <span class="settings-desc">Sessions active on other browser terminals.</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #F1F5F9; padding-bottom:12px;">
+                            <div>
+                                <strong style="font-size:13.5px;">Chrome on Windows Desktop</strong>
+                                <p style="font-size:11px; color:#64748B; margin:2px 0 0 0;">Ahmedabad, India • Active Now</p>
+                            </div>
+                            <span style="font-size:11.5px; font-weight:700; color:var(--primary);">This Device</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <strong style="font-size:13.5px;">Safari on Apple iPad</strong>
+                                <p style="font-size:11px; color:#64748B; margin:2px 0 0 0;">Mumbai, India • Active 2 hrs ago</p>
+                            </div>
+                            <button class="btn-notif-action" onclick="alert('Session revoked!')">Revoke Session</button>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>
