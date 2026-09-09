@@ -590,6 +590,9 @@
         let countdownTimerId = null;
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // Render KPI block immediately so skeleton boxes don't stay blank
+            renderKPIBlock({});
+
             // Logout submit handler
             document.querySelectorAll('.logout-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
@@ -678,6 +681,7 @@
                     sessions.forEach(s => s.date = new Date(s.date));
                     updateCountsBadge();
                     filterAndRender();
+                    updateDynamicKPIValues({});
                 } else {
                     renderEmptyState();
                 }
@@ -694,9 +698,14 @@
                     const stats = await response.json();
                     renderKPIBlock(stats);
                     updateDynamicKPIValues(stats);
+                } else {
+                    renderKPIBlock({});
+                    updateDynamicKPIValues({});
                 }
             } catch (error) {
                 console.error(error);
+                renderKPIBlock({});
+                updateDynamicKPIValues({});
             }
         }
 
@@ -735,7 +744,7 @@
             showToast('Calendar exported successfully!');
         }
 
-        function renderKPIBlock(stats) {
+        function renderKPIBlock(stats = {}) {
             const grid = document.getElementById('kpiStatsGrid');
             if (!grid) return;
             grid.innerHTML = `
