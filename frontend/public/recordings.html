@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Recordings Library - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.3">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nav dropdown overrides */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        .more-dropdown {
+            position: relative;
+        }
+        .more-dropdown-trigger {
+            cursor: pointer;
+        }
+        .more-dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            z-index: 1000;
+            min-width: 190px;
+            margin-top: 6px;
+            padding: 6px 0;
+        }
+        .more-dropdown-menu a {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px !important;
+            color: var(--text-light) !important;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            text-decoration: none;
+            border-bottom: none !important;
+            border-radius: 0 !important;
+        }
+        .more-dropdown-menu a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary) !important;
+        }
+        .more-dropdown.open .more-dropdown-menu {
+            display: block;
+        }
+
+        .rec-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .m-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .m-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+        }
+        .m-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .m-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Filter bar */
+        .filter-row-container {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 24px;
+            margin-bottom: 32px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* Recordings Grid */
+        .recordings-list-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .rec-item-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+        }
+        .rec-item-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(15,23,42,0.04);
+        }
+
+        .thumb-box {
+            height: 160px;
+            background: #1E293B;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+        }
+        .duration-badge {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(15,23,42,0.85);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .rec-details {
+            padding: 18px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .btn-rec-action {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Video Player dialog frame overlays */
+        .player-modal-box {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15,23,42,0.9);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .player-content-wrapper {
+            background: #1E293B;
+            color: white;
+            width: 100%;
+            max-width: 1000px;
+            border-radius: 16px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1.6fr 1fr;
+            border: 1px solid #334155;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .video-box-left {
+            background: #0F172A;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar-box-right {
+            background: #1E293B;
+            padding: 20px;
+            border-left: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            max-height: 480px;
+            overflow-y: auto;
+        }
+
+        .empty-illustration-box {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+
+        @media (max-width: 992px) {
+            .recordings-list-grid { grid-template-columns: repeat(2, 1fr); }
+            .player-content-wrapper { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .recordings-list-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Navigation links -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/quiz">Quizzes</a></li>
+                <li><a href="/study-resources">Resources</a></li>
+                <li class="more-dropdown" id="moreDropdownWrapper">
+                    <a href="#" class="more-dropdown-trigger" onclick="toggleMoreDropdown(event)">More Tools <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></a>
+                    <div class="more-dropdown-menu">
+                        <a href="/attendance.html"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+                        <a href="/session-notes.html"><i class="fa-solid fa-file-signature"></i> Session Notes</a>
+                        <a href="/recordings.html" class="active"><i class="fa-solid fa-video"></i> Video Recordings</a>
+                        <a href="/learning-goals"><i class="fa-solid fa-bullseye"></i> Learning Goals</a>
+                        <a href="/learning-progress"><i class="fa-solid fa-chart-line"></i> Progress Analytics</a>
+                        <a href="/reviews.html"><i class="fa-solid fa-star"></i> Reviews & Feedback</a>
+                        <a href="/certificates.html"><i class="fa-solid fa-certificate"></i> Certificates</a>
+                        <a href="/gamification.html"><i class="fa-solid fa-gamepad"></i> Achievements & XP</a>
+                    </div>
+                </li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content library body -->
+    <div class="rec-container">
+        
+        <!-- Header -->
+        <header style="margin-bottom:32px;">
+            <h1 style="font-size:26px; font-weight:800; margin:0;">Recordings Library</h1>
+            <p style="color:#64748B; font-size:14.5px; margin-top:4px;">Watch previous sessions, verify topics discussions timelines, and download homework materials.</p>
+        </header>
+
+        <!-- Stats row -->
+        <div class="metrics-grid">
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Total Recordings</span>
+                    <div class="m-val" id="statsTotal">4 Classes</div>
+                </div>
+                <div class="m-icon" style="background:#EFF6FF; color:#3B82F6;"><i class="fa-solid fa-video"></i></div>
+            </div>
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Watch Time</span>
+                    <div class="m-val">240 Mins</div>
+                </div>
+                <div class="m-icon" style="background:#FEE2E2; color:#EF4444;"><i class="fa-solid fa-hourglass-half"></i></div>
+            </div>
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Recent Sessions</span>
+                    <div class="m-val">2 Today</div>
+                </div>
+                <div class="m-icon" style="background:#D1FAE5; color:#10B981;"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Downloaded</span>
+                    <div class="m-val">1 Reference</div>
+                </div>
+                <div class="m-icon" style="background:#FEF3C7; color:#D97706;"><i class="fa-solid fa-cloud-arrow-down"></i></div>
+            </div>
+        </div>
+
+        <!-- Filter bar -->
+        <section class="app-filter-bar">
+            <div class="app-search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search recordings..." class="app-search-input" id="recSearchInput" oninput="filterRecordings()">
+            </div>
+            <div class="filter-bar-group">
+                <select class="app-select" style="min-width:140px;" id="subjectFilter" onchange="filterRecordings()">
+                    <option value="all">All Subjects</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+                <select class="app-select" style="min-width:140px;" id="mentorFilter" onchange="filterRecordings()">
+                    <option value="all">All Mentors</option>
+                    <option value="Anjali Patel">Anjali Patel</option>
+                    <option value="Priya Shah">Priya Shah</option>
+                    <option value="Neha Joshi">Neha Joshi</option>
+                </select>
+            </div>
+        </section>
+
+        <!-- Recordings list -->
+        <div class="recordings-list-grid" id="recordingsGridContainer">
+            <!-- Dynamic nodes -->
+        </div>
+
+    </div>
+
+    <!-- Video Player Overlay Modal -->
+    <div class="player-modal-box" id="playerModal">
+        <div class="player-content-wrapper">
+            <!-- Left: Player -->
+            <div class="video-box-left">
+                <!-- Video Screen -->
+                <div style="aspect-ratio: 16/9; background:#000000; position:relative; display:flex; align-items:center; justify-content:center; flex-direction:column;" id="videoScreenFrame">
+                    <i class="fa-solid fa-play" style="font-size:64px; color:#3B82F6; cursor:pointer;" onclick="playSimulatedVideo()"></i>
+                    <span style="font-size:12px; color:#94A3B8; margin-top:16px;" id="playbackStatusLabel">Click Play to begin lecture summary recording</span>
+                    
+                    <!-- Player control bar -->
+                    <div style="position:absolute; bottom:0; left:0; right:0; background:rgba(15,23,42,0.85); padding:10px; display:flex; justify-content:space-between; align-items:center; border-top:1px solid #334155;">
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <button style="border:none; background:transparent; color:white; cursor:pointer;" onclick="playSimulatedVideo()"><i class="fa-solid fa-play"></i></button>
+                            <span style="font-size:11px;" id="videoTimeProgress">00:00 / 60:00</span>
+                        </div>
+                        <div style="display:flex; gap:12px; align-items:center;">
+                            <span style="font-size:11.5px;">Speed:</span>
+                            <select style="background:#1E293B; border:1px solid #334155; color:white; font-size:10.5px; border-radius:4px;" onchange="changeSpeed(this.value)">
+                                <option value="1.0">1.0x (Normal)</option>
+                                <option value="1.25">1.25x</option>
+                                <option value="1.5">1.5x</option>
+                                <option value="2.0">2.0x</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Video details -->
+                <div style="padding:16px;">
+                    <h3 style="font-size:15px; margin:0;" id="modalVideoTitle">Grade 12 Botany</h3>
+                    <div style="font-size:11.5px; color:#94A3B8; margin-top:4px;" id="modalVideoMeta">Subject: Biology • Instructor: Anjali Patel</div>
+                </div>
+            </div>
+
+            <!-- Right: Playback notes, summary, and resources -->
+            <div class="sidebar-box-right">
+                <div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:16px;">
+                        <strong style="font-size:13.5px;"><i class="fa-solid fa-list-ol"></i> Notes Timeline</strong>
+                        <button style="background:transparent; border:none; color:var(--primary); font-size:11.5px; cursor:pointer;" onclick="closeVideoPlayer()">Close</button>
+                    </div>
+
+                    <div style="display:flex; flex-direction:column; gap:10px; font-size:12.5px; max-height:220px; overflow-y:auto;" id="timelineNotesContainer">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </div>
+
+                <div style="border-top:1px solid #334155; padding-top:16px; margin-top:16px;">
+                    <strong style="font-size:13px; color:#D97706;"><i class="fa-solid fa-briefcase"></i> References & Homework</strong>
+                    <div style="background:#1E293B; border:1px solid #334155; padding:10px; border-radius:6px; margin-top:8px; font-size:11.5px; display:flex; justify-content:space-between; align-items:center;">
+                        <span><i class="fa-solid fa-file-pdf"></i> Dihybrid_Cross_sheet.pdf</span>
+                        <button style="border:none; background:#F59E0B; color:white; padding:4px 8px; border-radius:4px; font-size:10.5px; cursor:pointer;" onclick="alert('Downloading homework reference handout...')">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Role Simulator Switcher -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: #FFFFFF; border: 1.5px solid var(--primary); padding: 12px 18px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 99999; display: flex; align-items: center; gap: 12px; font-family: sans-serif; font-size: 13px;">
+        <strong style="color:var(--primary);"><i class="fa-solid fa-user-gear"></i> Role Simulator:</strong>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="student" id="btnSimStudent" onclick="simRoleToggle('student')"> Student</label>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="mentor" id="btnSimMentor" onclick="simRoleToggle('mentor')"> Mentor</label>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        
+        let recordingsDatabase = [
+            { id: 'r-1', title: 'Cell division genetics lecture notes mapping', subject: 'Biology', date: 'July 5, 2026', duration: '60 Mins', mentor: 'Anjali Patel', student: 'Rahul Verma', bookmarked: true, timeline: [
+                { time: '10:15', label: 'Gregor Mendel intro' },
+                { time: '25:40', label: 'Laws of segregation explained' },
+                { time: '48:10', label: 'Dihybrid crosses calculation formulas' }
+            ]},
+            { id: 'r-2', title: 'Newton Laws vector mechanics calculations', subject: 'Physics', date: 'July 4, 2026', duration: '60 Mins', mentor: 'Priya Shah', student: 'Aman Kumar', bookmarked: false, timeline: [
+                { time: '05:20', label: 'Forces mapping vector systems' },
+                { time: '30:15', label: 'Friction coefficient derivatives proof' }
+            ]},
+            { id: 'r-3', title: 'Alkane free radicals mechanisims chain reactions', subject: 'Chemistry', date: 'July 3, 2026', duration: '60 Mins', mentor: 'Neha Joshi', student: 'Priya Singh', bookmarked: false, timeline: [
+                { time: '15:10', label: 'Initiation steps chemical radicals' },
+                { time: '45:30', label: 'Termination reaction curves outlines' }
+            ]},
+            { id: 'r-4', title: 'Definite integrations curves bounds calculation', subject: 'Mathematics', date: 'July 1, 2026', duration: '60 Mins', mentor: 'Neha Joshi', student: 'Rahul Verma', bookmarked: false, timeline: [
+                { time: '12:05', label: 'Riemann sums calculus review' }
+            ]}
+        ];
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        function toggleMoreDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('moreDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('profileDropdownWrapper');
+            if (dropdown) dropdown.classList.remove('open');
+            const more = document.getElementById('moreDropdownWrapper');
+            if (more) more.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    
+                    const saved = localStorage.getItem('simulatedRole');
+                    currentRole = saved ? saved : profile.role;
+                    document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent').checked = true;
+
+                    const brand = document.getElementById('brandLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    renderRecordingsGrid();
+                } else {
+                    const saved = localStorage.getItem('simulatedRole') || 'student';
+                    currentRole = saved;
+                    const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                    if (radio) radio.checked = true;
+                    renderRecordingsGrid();
+                }
+            } catch (err) {
+                console.error(err);
+                const saved = localStorage.getItem('simulatedRole') || 'student';
+                currentRole = saved;
+                const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                if (radio) radio.checked = true;
+                renderRecordingsGrid();
+            }
+        });
+
+        function renderRecordingsGrid() {
+            const grid = document.getElementById('recordingsGridContainer');
+            const filtered = filterRecordingsList();
+
+            if (filtered.length === 0) {
+                grid.parentElement.innerHTML = `
+                    <div class="empty-illustration-box">
+                        <i class="fa-solid fa-video-slash" style="font-size:48px; color:#94A3B8; margin-bottom:16px;"></i>
+                        <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:0 0 4px 0;">No recordings available</h3>
+                        <p style="color:#64748B; font-size:13px; margin:0 0 20px 0;">Schedules session records will show up automatically after classes end.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(rec => {
+                const bookmarkClass = rec.bookmarked ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                const bookmarkColor = rec.bookmarked ? '#F59E0B' : '#64748B';
+                
+                return `
+                    <div class="rec-item-card">
+                        <div class="thumb-box">
+                            <i class="fa-solid fa-video"></i>
+                            <span class="duration-badge">${rec.duration}</span>
+                        </div>
+                        <div class="rec-details">
+                            <div>
+                                <span class="m-lbl" style="font-size:10px; color:var(--primary);">${rec.subject}</span>
+                                <h3 style="font-size:14.5px; font-weight:800; margin:4px 0 8px 0; color:#0F172A;">${rec.title}</h3>
+                                <div style="font-size:11.5px; color:#64748B; margin-top:4px;">
+                                    <span>Instructor: <strong>${rec.mentor}</strong></span><br>
+                                    <span>Date: <strong>${rec.date}</strong></span>
+                                </div>
+                            </div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:12px; margin-top:12px;">
+                                <button class="btn-rec-action" style="background:var(--primary); color:white;" onclick="watchRecording('${rec.id}')"><i class="fa-solid fa-play"></i> Watch</button>
+                                <div style="display:flex; gap:8px;">
+                                    <button style="background:transparent; border:none; cursor:pointer;" onclick="toggleBookmark('${rec.id}')"><i class="${bookmarkClass}" style="color:${bookmarkColor};"></i></button>
+                                    <button style="background:transparent; border:none; cursor:pointer;" onclick="downloadMock('${rec.title}')"><i class="fa-solid fa-download" style="color:#64748B;"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterRecordingsList() {
+            const query = document.getElementById('recSearchInput').value.toLowerCase().trim();
+            const subject = document.getElementById('subjectFilter').value;
+            const mentor = document.getElementById('mentorFilter').value;
+
+            return recordingsDatabase.filter(r => {
+                const matchesSearch = r.title.toLowerCase().includes(query);
+                const matchesSubject = subject === 'all' || r.subject === subject;
+                const matchesMentor = mentor === 'all' || r.mentor === mentor;
+                
+                // Student can only see their own sessions
+                const matchesStudent = currentRole === 'mentor' || r.student === 'Rahul Verma';
+
+                return matchesSearch && matchesSubject && matchesMentor && matchesStudent;
+            });
+        }
+
+        function filterRecordings() {
+            renderRecordingsGrid();
+        }
+
+        function toggleBookmark(id) {
+            const rec = recordingsDatabase.find(r => r.id === id);
+            if (rec) {
+                rec.bookmarked = !rec.bookmarked;
+                window.toast.success(rec.bookmarked ? "Recording bookmarked" : "Bookmark removed");
+                renderRecordingsGrid();
+            }
+        }
+
+        function downloadMock(title) {
+            window.toast.success("Download started", `Video source for "${title}" is downloading...`);
+        }
+
+        // --- CUSTOM VIDEO PLAYER MODAL ---
+        function watchRecording(id) {
+            const rec = recordingsDatabase.find(r => r.id === id);
+            if (!rec) return;
+
+            document.getElementById('modalVideoTitle').textContent = rec.title;
+            document.getElementById('modalVideoMeta').textContent = `Subject: ${rec.subject} • Instructor: ${rec.mentor} • Student: ${rec.student}`;
+            
+            // Render notes timeline
+            const timeline = document.getElementById('timelineNotesContainer');
+            timeline.innerHTML = rec.timeline.map(t => `
+                <div style="background:rgba(255,255,255,0.05); padding:8px; border-radius:6px; cursor:pointer;" onclick="seekToTime('${t.time}')">
+                    <span style="font-weight:700; color:var(--primary); margin-right:6px;">${t.time}</span>
+                    <span>${t.label}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('playerModal').style.display = 'flex';
+        }
+
+        function closeVideoPlayer() {
+            document.getElementById('playerModal').style.display = 'none';
+        }
+
+        function playSimulatedVideo() {
+            const time = document.getElementById('videoTimeProgress');
+            const lbl = document.getElementById('playbackStatusLabel');
+            lbl.innerHTML = `<i class="fa-solid fa-spinner fa-spin" style="font-size:24px; color:var(--primary);"></i><br><span style="font-size:11px; margin-top:8px; display:inline-block;">Streaming high fidelity MP4 recording...</span>`;
+            
+            setTimeout(() => {
+                lbl.innerHTML = `<div style="text-align:center;"><i class="fa-solid fa-circle-play" style="font-size:32px; color:#10B981;"></i><br><span style="font-size:11.5px; font-weight:700; margin-top:6px; display:inline-block;">Playing active classroom whiteboard session...</span></div>`;
+                time.textContent = "00:02 / 60:00";
+            }, 1000);
+        }
+
+        function changeSpeed(val) {
+            window.toast.info("Speed Adjusted", `Playback rate set to ${val}x.`);
+        }
+
+        function seekToTime(time) {
+            document.getElementById('videoTimeProgress').textContent = `${time} / 60:00`;
+            window.toast.success("Timeline seek", `Jumped to timestamp slot: ${time}`);
+        }
+
+        function simRoleToggle(role) {
+            localStorage.setItem('simulatedRole', role);
+            window.location.reload();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

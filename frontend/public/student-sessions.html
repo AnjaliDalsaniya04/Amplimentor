@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sessions Workspace - Student - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Original Main Navbar styling -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <!-- Student planner dashboard styling -->
+    <link rel="stylesheet" href="/student-sessions.css">
+    <script src="/config.js"></script>
+    <style>
+        /* Custom tweaks to override original style.css layout conflicts */
+        .navbar {
+            background-color: #FFFFFF !important;
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: var(--shadow-sm);
+            padding: 0; height: 72px; display: flex; align-items: center;
+        }
+        .nav-container {
+            max-width: 1500px; width: 100%; margin: 0 auto; padding: 0 24px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .nav-brand { font-weight: 800; color: var(--primary) !important; font-size: 1.4rem; letter-spacing: -0.03em; }
+        .nav-menu { display: flex; gap: 8px; align-items: center; list-style: none; margin: 0; padding: 0; }
+        .nav-menu li a {
+            color: var(--text-secondary) !important; font-weight: 600; font-size: 14px;
+            padding: 8px 16px; border-radius: 8px; text-decoration: none;
+        }
+        .nav-menu li a:hover, .nav-menu li a.active { color: var(--primary) !important; background-color: var(--primary-light); }
+        .nav-menu li a.logout-btn { color: var(--danger) !important; }
+        .nav-menu li a.logout-btn:hover { background-color: var(--danger-light); }
+        
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background-color: var(--text-primary); color: #FFFFFF;
+            padding: 12px 24px; border-radius: 8px; box-shadow: var(--shadow-lg); z-index: 1000;
+            font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 10px;
+            transform: translateY(100px); opacity: 0; transition: all var(--transition-normal);
+        }
+        .toast.show { transform: translateY(0); opacity: 1; }
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+
+        /* Grid layout for placeholder widgets below empty state */
+        .placeholder-widgets-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .placeholder-widget-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color-light);
+            border-radius: var(--radius-card);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+        .placeholder-widget-card h4 {
+            font-size: 13.5px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        /* Profile Dropdown styling */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-menu a.profile-dropdown-trigger:hover {
+            background-color: var(--primary-light) !important;
+            color: var(--primary) !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: var(--primary-light);
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand">Amplimentor</a>
+            <ul class="nav-menu">
+                <li><a href="/student/mentors" id="mentorsLink">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html" class="active">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu">
+                        <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                        <a href="#" onclick="event.preventDefault(); alert('Opening Settings...');"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="#" onclick="event.preventDefault(); alert('Opening Help & Support...');"><i class="fa-solid fa-circle-question"></i> Help</a>
+                        <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Student Session Dashboard Grid -->
+    <div class="student-sessions-container">
+        
+        <!-- Compact Page Header -->
+        <header class="page-header-row">
+            <div class="page-title-group">
+                <h1>My Learning Sessions</h1>
+                <p>Manage your upcoming lessons, homework prep, goals progress, and class history.</p>
+            </div>
+            <div class="header-action-group">
+                <!-- List View / Calendar View Toggle -->
+                <div class="view-toggle-group">
+                    <button class="toggle-view-btn active" id="listViewBtn" onclick="setViewMode('list')" title="List View">
+                        <i class="fa-solid fa-list-ul"></i>
+                    </button>
+                    <button class="toggle-view-btn" id="calendarViewBtn" onclick="setViewMode('calendar')" title="Calendar View">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Summary KPIs (4 Cards) -->
+        <section class="kpi-grid" id="kpiStatsGrid">
+            <!-- Skeletons loaded via JS -->
+            <div class="kpi-card skeleton-box" style="height: 80px;"></div>
+            <div class="kpi-card skeleton-box" style="height: 80px;"></div>
+            <div class="kpi-card skeleton-box" style="height: 80px;"></div>
+            <div class="kpi-card skeleton-box" style="height: 80px;"></div>
+        </section>
+
+        <!-- Segmented Tab Navigation -->
+        <div class="tab-navigation-bar">
+            <div class="segmented-tabs-wrapper">
+                <button class="segment-tab-btn active" onclick="setFilterTab('upcoming')">
+                    Upcoming <span class="segment-badge" id="badgeUpcoming">0</span>
+                </button>
+                <button class="segment-tab-btn" onclick="setFilterTab('today')">
+                    Today <span class="segment-badge" id="badgeToday">0</span>
+                </button>
+                <button class="segment-tab-btn" onclick="setFilterTab('completed')">
+                    Completed <span class="segment-badge" id="badgeCompleted">0</span>
+                </button>
+                <button class="segment-tab-btn" onclick="setFilterTab('cancelled')">
+                    Cancelled <span class="segment-badge" id="badgeCancelled">0</span>
+                </button>
+                <button class="segment-tab-btn" onclick="setFilterTab('all')">
+                    All Sessions <span class="segment-badge" id="badgeAll">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sticky Search & Filter Bar -->
+        <section class="app-filter-bar">
+            <div class="app-search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="filterSearch" placeholder="Search mentors, classes, or subjects..." class="app-search-input" oninput="applyFilters()">
+            </div>
+            <div class="filter-bar-group">
+                <input type="date" id="filterDateStart" class="app-select" onchange="applyFilters()">
+                <input type="date" id="filterDateEnd" class="app-select" onchange="applyFilters()">
+
+                <select id="filterSubject" class="app-select" onchange="applyFilters()">
+                    <option value="">All Subjects</option>
+                    <option value="Biology">Biology</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Mathematics">Mathematics</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+
+                <select id="filterType" class="app-select" onchange="applyFilters()">
+                    <option value="">All Modes</option>
+                    <option value="google">Google Meet</option>
+                    <option value="zoom">Zoom</option>
+                    <option value="other">Video Call</option>
+                </select>
+
+                <select id="filterSort" class="app-select" onchange="applyFilters()">
+                    <option value="date-asc">Date (Asc)</option>
+                    <option value="date-desc">Date (Desc)</option>
+                    <option value="topic-asc">Topic (A-Z)</option>
+                </select>
+
+                <button class="btn-reset-filters" onclick="resetFilters()">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+                </button>
+            </div>
+        </section>
+
+        <!-- Primary 2-Column Split (75%/25%) -->
+        <div class="split-layout-grid">
+            
+            <!-- Left Side (75%): Next Session, Lists / Calendar View, Placeholder Widgets -->
+            <div class="layout-left-col">
+                
+                <!-- Next Session (Today Banner Highlight) -->
+                <div class="today-banner" id="todayHighlightBanner" style="display: none;">
+                    <!-- Next booked slot -->
+                </div>
+
+                <!-- LIST VIEW -->
+                <div id="listViewContainer">
+                    <h2 class="layout-section-title" id="sectionTitleLabel">Upcoming Sessions</h2>
+                    <div class="cards-list-group" id="sessionsList">
+                        <div class="empty-state-card skeleton-box" style="height: 180px;"></div>
+                    </div>
+                </div>
+
+                <!-- CALENDAR VIEW -->
+                <div id="calendarViewContainer" style="display: none;">
+                    <div class="calendar-view-panel">
+                        <div class="calendar-header-row">
+                            <h2 class="calendar-month-title" id="calendarMonthLabel">July 2026</h2>
+                            <div class="calendar-nav-group">
+                                <button class="btn-icon-only" onclick="shiftCalendarMonth(-1)">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </button>
+                                <button class="btn-student outline" onclick="resetCalendarToToday()">Today</button>
+                                <button class="btn-icon-only" onclick="shiftCalendarMonth(1)">
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="calendar-grid-header">
+                            <span class="calendar-header-day">Sun</span>
+                            <span class="calendar-header-day">Mon</span>
+                            <span class="calendar-header-day">Tue</span>
+                            <span class="calendar-header-day">Wed</span>
+                            <span class="calendar-header-day">Thu</span>
+                            <span class="calendar-header-day">Fri</span>
+                            <span class="calendar-header-day">Sat</span>
+                        </div>
+                        <div class="calendar-grid-body" id="calendarGridBody"></div>
+                    </div>
+                </div>
+
+                <!-- HELPFUL LEARNING WIDGETS BELOW EMPTY STATE -->
+                <div id="studentPlaceholderWidgets" class="placeholder-widgets-grid" style="display: none;">
+                    <!-- 1. Recommended Mentors -->
+                    <div class="placeholder-widget-card" style="grid-column: span 2;">
+                        <h4><i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Recommended Mentors</h4>
+                        <div style="display: flex; gap: 16px; overflow-x: auto; padding: 4px 0;">
+                            <div style="background:var(--bg-main); border:1px solid var(--border-color); border-radius:12px; padding:10px; min-width:200px; text-align:center;">
+                                <img src="/default-avatar.png" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                                <div style="font-weight:700; font-size:13px; margin-top:6px;">Dr. Priya Mehta</div>
+                                <div style="font-size:11px; color:var(--text-tertiary);">Syllabus NEET Biology</div>
+                                <a href="/student/mentors" class="btn-student secondary" style="font-size:11px; padding:4px 8px; margin-top:8px; display:inline-block; border-radius:6px;">Book Free Trial</a>
+                            </div>
+                            <div style="background:var(--bg-main); border:1px solid var(--border-color); border-radius:12px; padding:10px; min-width:200px; text-align:center;">
+                                <img src="/default-avatar.png" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                                <div style="font-weight:700; font-size:13px; margin-top:6px;">Amit Patel</div>
+                                <div style="font-size:11px; color:var(--text-tertiary);">JEE Main Mathematics</div>
+                                <a href="/student/mentors" class="btn-student secondary" style="font-size:11px; padding:4px 8px; margin-top:8px; display:inline-block; border-radius:6px;">Book Free Trial</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. Homework Checklist -->
+                    <div class="placeholder-widget-card">
+                        <h4><i class="fa-solid fa-file-signature" style="color: var(--accent);"></i> Homework Checklist</h4>
+                        <div class="homework-checklist">
+                            <div class="homework-item">
+                                <input type="checkbox" class="homework-checkbox" checked id="hwp1" onchange="showToast('Homework updated!')">
+                                <label for="hwp1" style="font-size: 11.5px;">Read Chapter 3 Botany summary worksheets</label>
+                            </div>
+                            <div class="homework-item">
+                                <input type="checkbox" class="homework-checkbox" id="hwp2" onchange="showToast('Homework updated!')">
+                                <label for="hwp2" style="font-size: 11.5px;">Solve physics refraction exercise worksheets</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Learning Progress -->
+                    <div class="placeholder-widget-card">
+                        <h4><i class="fa-solid fa-circle-notch" style="color: var(--primary);"></i> Course Progress</h4>
+                        <div style="font-size:13px; font-weight:700;">Physics - Optics Unit</div>
+                        <div style="font-size:11px; color:var(--text-tertiary); margin-top:2px;">6/8 classes attended • 75% Complete</div>
+                        <div class="learning-progress-wrap" style="margin-top:6px;">
+                            <div class="learning-progress-fill" style="width:75%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Recently Viewed Mentors -->
+                    <div class="placeholder-widget-card">
+                        <h4><i class="fa-solid fa-clock-rotate-left" style="color: var(--warning);"></i> Recently Viewed</h4>
+                        <div class="reminder-list">
+                            <div style="display:flex; align-items:center; gap: 8px;">
+                                <img src="/default-avatar.png" style="width:24px; height:24px; border-radius:50%;">
+                                <div style="font-size:11.5px; font-weight:600;">Siddharth Verma (Chemistry)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Study Resources -->
+                    <div class="placeholder-widget-card">
+                        <h4><i class="fa-solid fa-book" style="color: var(--primary);"></i> Shared Study Resources</h4>
+                        <div class="reminder-list">
+                            <a href="#" onclick="event.preventDefault(); alert('Downloading worksheet PDF...')" style="font-size:11.5px; color:var(--primary); text-decoration:none;">
+                                <i class="fa-solid fa-file-pdf"></i> JEE_Math_Optics_Formula_Sheet.pdf
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side (25%): Sidebar Widgets -->
+            <div class="layout-right-col">
+                <!-- Quick Actions (2 Primary, 2 Secondary) -->
+                <div class="sidebar-panel">
+                    <div class="sidebar-title">
+                        <i class="fa-solid fa-bolt" style="color: var(--primary);"></i> Quick Actions
+                    </div>
+                    <div class="quick-actions-panel">
+                        <div class="quick-actions-primary-row">
+                            <a href="/student/mentors" class="quick-action-primary-btn">
+                                <i class="fa-solid fa-user-plus"></i>
+                                <span>Find Mentor</span>
+                            </a>
+                            <a href="/student/mentors" class="quick-action-primary-btn">
+                                <i class="fa-solid fa-calendar-plus"></i>
+                                <span>Book Session</span>
+                            </a>
+                        </div>
+                        <div class="quick-actions-secondary-row">
+                            <button class="quick-action-secondary-btn" onclick="focusSubjectFilter()">
+                                <i class="fa-solid fa-search"></i>
+                                <span>Subjects</span>
+                            </button>
+                            <button class="quick-action-secondary-btn" onclick="alert('Opening shared worksheets folder...');">
+                                <i class="fa-solid fa-folder-open"></i>
+                                <span>Materials</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Connected Active Mentor -->
+                <div class="sidebar-panel" id="currentMentorWidget">
+                    <div class="sidebar-title">
+                        <i class="fa-solid fa-chalkboard-user" style="color: var(--accent);"></i> Connected Mentor
+                    </div>
+                    <div class="reminder-list">
+                        <p style="font-size: 12.5px; color: var(--text-tertiary);">No active mentor connected.</p>
+                    </div>
+                </div>
+
+                <!-- Learning Progress tracker -->
+                <div class="sidebar-panel">
+                    <div class="sidebar-title">
+                        <i class="fa-solid fa-graduation-cap" style="color: var(--primary);"></i> Study Goal Progress
+                    </div>
+                    <div style="font-size: 15px; font-weight: 800; color: var(--text-primary);">JEE Preparation</div>
+                    <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">Subject: Math & Physics (78% Complete)</div>
+                    <div class="learning-progress-wrap">
+                        <div class="learning-progress-fill" style="width: 78%;"></div>
+                    </div>
+                </div>
+
+                <!-- Next Reminder widget -->
+                <div class="sidebar-panel" id="upcomingReminderList">
+                    <div class="sidebar-title">
+                        <i class="fa-solid fa-bell" style="color: var(--accent);"></i> Next Reminders
+                    </div>
+                    <div class="reminder-list">
+                        <div class="reminder-item scheduled">
+                            <div class="reminder-item-text">Optics numerical worksheets review</div>
+                            <div class="reminder-item-meta">Optics class prep • 5 hours remaining</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Study Streak -->
+                <div class="sidebar-panel">
+                    <div class="sidebar-title">
+                        <i class="fa-solid fa-fire" style="color: var(--warning);"></i> Active Study Streak
+                    </div>
+                    <div class="streak-box">
+                        <span class="streak-fire">🔥</span>
+                        <div class="streak-details">
+                            <h4>15 Day Learning Streak!</h4>
+                            <p>Attend class tomorrow to keep it lit.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collapsible Saved/Bookmarked Mentors widget -->
+                <details class="sidebar-panel" style="cursor: pointer;">
+                    <summary class="sidebar-title" style="margin: 0; outline: none;">
+                        <i class="fa-solid fa-heart" style="color: var(--danger); margin-right: 4px;"></i> Collapsible Saved Mentors
+                    </summary>
+                    <div class="reminder-list" id="savedMentorsWidgetList" style="margin-top: 12px; cursor: default;">
+                        <div style="font-size: 12px; color: var(--text-tertiary);">No bookmarked mentors yet.</div>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </div>
+
+    <!-- Details Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDetailsDrawer()"></div>
+    <div class="details-drawer" id="detailsDrawer">
+        <header class="drawer-header">
+            <div class="drawer-title-group">
+                <h2 id="drawerTopic">Class Details</h2>
+                <p id="drawerSessionId">Session ID: --</p>
+            </div>
+            <button class="btn-drawer-close" onclick="closeDetailsDrawer()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+        <div class="drawer-content" id="drawerContent"></div>
+        <footer class="drawer-footer" id="drawerFooter"></footer>
+    </div>
+
+    <!-- Modals Overlay -->
+    <div class="modal-overlay" id="rescheduleModal" onclick="closeModalOnBackdrop(event, 'rescheduleModal')">
+        <div class="modal-card">
+            <header class="modal-header">
+                <h3>Request Reschedule</h3>
+                <button class="btn-drawer-close" onclick="closeRescheduleModal()">&times;</button>
+            </header>
+            <form id="rescheduleForm" onsubmit="handleRescheduleSubmit(event)">
+                <input type="hidden" id="rescheduleSessionId">
+                <div class="modal-body">
+                    <div class="modal-form-group">
+                        <label for="rescheduleDate">Proposed Date & Time</label>
+                        <input type="datetime-local" id="rescheduleDate" class="modal-input" required>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn-student outline" onclick="closeRescheduleModal()">Cancel</button>
+                    <button type="submit" class="btn-student primary">Request Changes</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="endRelationshipModal" onclick="closeModalOnBackdrop(event, 'endRelationshipModal')">
+        <div class="modal-card">
+            <header class="modal-header">
+                <h3>Review Mentor & End Relationship</h3>
+                <button class="btn-drawer-close" onclick="closeEndRelationshipModal()">&times;</button>
+            </header>
+            <form id="endRelationshipForm" onsubmit="handleEndRelationshipSubmit(event)">
+                <input type="hidden" id="endRelationshipHistoryId">
+                <div class="modal-body">
+                    <div class="modal-form-group">
+                        <label for="reasonForEnding">Reason for Ending</label>
+                        <select id="reasonForEnding" name="reasonForEnding" class="modal-select" required>
+                            <option value="">Select a reason...</option>
+                            <option value="Goals achieved">Goals achieved</option>
+                            <option value="Schedule conflicts">Schedule conflicts</option>
+                            <option value="Not a good fit">Not a good fit</option>
+                            <option value="Personal reasons">Personal reasons</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="rating">Rating (1-5 stars)</label>
+                        <select id="rating" name="rating" class="modal-select" required>
+                            <option value="">Select rating...</option>
+                            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                            <option value="4">⭐⭐⭐⭐ Very Good</option>
+                            <option value="3">⭐⭐⭐ Good</option>
+                            <option value="2">⭐⭐ Fair</option>
+                            <option value="1">⭐ Poor</option>
+                        </select>
+                    </div>
+                    <div class="modal-form-group">
+                        <label for="feedback">Written Feedback</label>
+                        <textarea id="feedback" name="feedback" placeholder="Share your experience working together..." class="modal-textarea"></textarea>
+                    </div>
+                </div>
+                <footer class="modal-footer">
+                    <button type="button" class="btn-student outline" onclick="closeEndRelationshipModal()">Cancel</button>
+                    <button type="submit" class="btn-student primary" style="background-color: var(--danger);">Submit Rating</button>
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Alerts -->
+    <div class="toast success" id="toastMessage">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastText">Action successful!</span>
+    </div>
+
+    <!-- Controller script -->
+    <script>
+        let currentUser = null;
+        let sessions = [];
+        let mentoringHistory = [];
+        
+        let viewMode = 'list';
+        let filterTab = 'upcoming';
+        
+        let calendarYear = new Date().getFullYear();
+        let calendarMonth = new Date().getMonth();
+        let countdownTimerId = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Logout submit handler
+            document.querySelectorAll('.logout-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/logout', { method: 'POST', credentials: 'include' })
+                        .then(() => { window.location.href = '/login.html'; })
+                        .catch(() => { window.location.href = '/login.html'; });
+                });
+            });
+
+            await loadUserInfo();
+            await Promise.all([
+                loadSessions(),
+                loadMentoringHistory(),
+                loadHistoryStats()
+            ]);
+            countdownTimerId = setInterval(updateCountdownDisplays, 60000);
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastMessage');
+            const toastText = document.getElementById('toastText');
+            toast.className = `toast ${type} show`;
+            toastText.textContent = message;
+            
+            const icon = toast.querySelector('i');
+            icon.className = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        async function loadUserInfo() {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    currentUser = await response.json();
+                    if (currentUser.role !== 'student') {
+                        window.location.replace('/mentor-sessions.html');
+                    }
+                    // Update navigation name/avatar
+                    document.getElementById('navName').textContent = currentUser.name;
+                    if (currentUser.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + currentUser.photo;
+                    }
+                } else {
+                    currentUser = currentUser || { role: 'student', name: 'Rahul Verma' };
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadSessions() {
+            try {
+                const response = await fetch(API_BASE + '/api/sessions', { credentials: 'include' });
+                if (response.ok) {
+                    sessions = await response.json();
+                    sessions.forEach(s => s.date = new Date(s.date));
+                    updateCountsBadge();
+                    filterAndRender();
+                } else {
+                    renderEmptyState();
+                }
+            } catch (error) {
+                console.error(error);
+                renderEmptyState();
+            }
+        }
+
+        async function loadHistoryStats() {
+            try {
+                const response = await fetch(API_BASE + '/api/mentoring-history/stats', { credentials: 'include' });
+                if (response.ok) {
+                    const stats = await response.json();
+                    renderKPIBlock(stats);
+                    updateDynamicKPIValues(stats);
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function loadMentoringHistory() {
+            try {
+                const response = await fetch(API_BASE + '/api/mentoring-history', { credentials: 'include' });
+                if (response.ok) {
+                    mentoringHistory = await response.json();
+                    updateStudentMentorWidgets();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function focusSubjectFilter() {
+            document.getElementById('filterSubject').focus();
+            showToast('Filter classes by subject choice.');
+        }
+
+        function renderKPIBlock(stats) {
+            const grid = document.getElementById('kpiStatsGrid');
+            if (!grid) return;
+            grid.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-details">
+                        <span class="kpi-label">Today's Session</span>
+                        <span class="kpi-number" id="kpiToday">0</span>
+                        <span class="kpi-trend"><i class="fa-solid fa-bell"></i> Action active</span>
+                    </div>
+                    <div class="kpi-icon-wrap blue">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-details">
+                        <span class="kpi-label">Upcoming Sessions</span>
+                        <span class="kpi-number" id="kpiUpcoming">0</span>
+                        <span class="kpi-trend"><i class="fa-solid fa-calendar"></i> Booked ahead</span>
+                    </div>
+                    <div class="kpi-icon-wrap purple">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-details">
+                        <span class="kpi-label">Learning Hours</span>
+                        <span class="kpi-number">${(stats.completedSessions || 0) * 1.5} hrs</span>
+                        <span class="kpi-trend"><i class="fa-solid fa-bolt"></i> Total logged</span>
+                    </div>
+                    <div class="kpi-icon-wrap orange">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-details">
+                        <span class="kpi-label">Completed Sessions</span>
+                        <span class="kpi-number">${stats.completedSessions || 0}</span>
+                        <span class="kpi-trend"><i class="fa-solid fa-graduation-cap"></i> Syllabus tracked</span>
+                    </div>
+                    <div class="kpi-icon-wrap gray">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateDynamicKPIValues(stats) {
+            const todayStart = new Date().setHours(0,0,0,0);
+            const todayEnd = new Date().setHours(23,59,59,999);
+            
+            let countUpcoming = 0;
+            let countToday = 0;
+
+            sessions.forEach(s => {
+                const sTime = s.date.getTime();
+                if (s.status !== 'cancelled' && s.status !== 'completed') {
+                    if (sTime >= todayStart && sTime <= todayEnd) {
+                        countToday++;
+                    } else if (sTime > todayEnd) {
+                        countUpcoming++;
+                    }
+                }
+            });
+
+            const kpiToday = document.getElementById('kpiToday');
+            if (kpiToday) kpiToday.textContent = countToday;
+
+            const kpiUpcoming = document.getElementById('kpiUpcoming');
+            if (kpiUpcoming) kpiUpcoming.textContent = countUpcoming;
+        }
+
+        function updateStudentMentorWidgets() {
+            const activeRel = mentoringHistory.find(h => h.status === 'active');
+            const widget = document.getElementById('currentMentorWidget');
+            if (widget && activeRel) {
+                const avatar = activeRel.mentor.photo ? `${API_BASE}/uploads/${activeRel.mentor.photo}` : '/default-avatar.png';
+                widget.innerHTML = `
+                    <div class="sidebar-title">
+                        <i class="fa-solid fa-chalkboard-user" style="color: var(--accent);"></i> Connected Mentor
+                    </div>
+                    <div class="saved-mentor-row" style="margin-bottom:0;">
+                        <div class="saved-mentor-profile">
+                            <img src="${avatar}" class="saved-mentor-avatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                            <div>
+                                <div class="saved-mentor-name">${activeRel.mentor.name}</div>
+                                <div style="font-size:11px; color:var(--text-tertiary);">${activeRel.mentor.company || 'Physics Faculty'}</div>
+                            </div>
+                        </div>
+                        <span class="saved-mentor-status">Connected</span>
+                    </div>
+                `;
+            }
+
+            const savedList = document.getElementById('savedMentorsWidgetList');
+            if (savedList && mentoringHistory.length > 0) {
+                savedList.innerHTML = mentoringHistory.slice(0, 2).map(h => {
+                    const avatar = h.mentor.photo ? `${API_BASE}/uploads/${h.mentor.photo}` : '/default-avatar.png';
+                    return `
+                        <div class="saved-mentor-row">
+                            <div class="saved-mentor-profile">
+                                <img src="${avatar}" class="saved-mentor-avatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                                <span class="saved-mentor-name">${h.mentor.name}</span>
+                            </div>
+                            <span class="saved-mentor-status"><i class="fa-solid fa-circle" style="font-size:6px;"></i> Active</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function setFilterTab(tab) {
+            filterTab = tab;
+            document.querySelectorAll('.segment-tab-btn').forEach(btn => {
+                if (btn.textContent.trim().toLowerCase().includes(tab === 'all' ? 'all sessions' : tab)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            document.getElementById('sectionTitleLabel').textContent = {
+                'upcoming': 'Upcoming Sessions', 'today': "Today's Schedule", 'completed': 'Completed Classes', 'cancelled': 'Cancelled Sessions', 'all': 'All Sessions'
+            }[tab] || 'Sessions';
+            filterAndRender();
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            if (mode === 'list') {
+                document.getElementById('listViewBtn').classList.add('active');
+                document.getElementById('calendarViewBtn').classList.remove('active');
+                document.getElementById('listViewContainer').style.display = 'block';
+                document.getElementById('calendarViewContainer').style.display = 'none';
+            } else {
+                document.getElementById('listViewBtn').classList.remove('active');
+                document.getElementById('calendarViewBtn').classList.add('active');
+                document.getElementById('listViewContainer').style.display = 'none';
+                document.getElementById('calendarViewContainer').style.display = 'block';
+                renderCalendar();
+            }
+        }
+
+        function updateCountsBadge() {
+            const todayStart = new Date().setHours(0,0,0,0);
+            const todayEnd = new Date().setHours(23,59,59,999);
+            
+            let countUpcoming = 0;
+            let countToday = 0;
+            let countCompleted = 0;
+            let countCancelled = 0;
+
+            sessions.forEach(s => {
+                const sTime = s.date.getTime();
+                if (s.status === 'cancelled') {
+                    countCancelled++;
+                } else if (s.status === 'completed') {
+                    countCompleted++;
+                } else {
+                    if (sTime >= todayStart && sTime <= todayEnd) {
+                        countToday++;
+                    } else if (sTime > todayEnd) {
+                        countUpcoming++;
+                    }
+                }
+            });
+
+            document.getElementById('badgeUpcoming').textContent = countUpcoming;
+            document.getElementById('badgeToday').textContent = countToday;
+            document.getElementById('badgeCompleted').textContent = countCompleted;
+            document.getElementById('badgeCancelled').textContent = countCancelled;
+            document.getElementById('badgeAll').textContent = sessions.length;
+        }
+
+        function applyFilters() {
+            filterAndRender();
+        }
+
+        // Reset
+        function resetFilters() {
+            document.getElementById('filterSearch').value = '';
+            document.getElementById('filterDateStart').value = '';
+            document.getElementById('filterDateEnd').value = '';
+            document.getElementById('filterSubject').value = '';
+            document.getElementById('filterType').value = '';
+            document.getElementById('filterSort').value = 'date-asc';
+            filterAndRender();
+        }
+
+        function filterAndRender() {
+            const searchQuery = document.getElementById('filterSearch').value.toLowerCase().trim();
+            const dateStart = document.getElementById('filterDateStart').value ? new Date(document.getElementById('filterDateStart').value).setHours(0,0,0,0) : null;
+            const dateEnd = document.getElementById('filterDateEnd').value ? new Date(document.getElementById('filterDateEnd').value).setHours(23,59,59,999) : null;
+            const subject = document.getElementById('filterSubject').value;
+            const type = document.getElementById('filterType').value;
+            const sort = document.getElementById('filterSort').value;
+
+            const todayStart = new Date().setHours(0,0,0,0);
+            const todayEnd = new Date().setHours(23,59,59,999);
+
+            let filtered = sessions.filter(s => {
+                const sTime = s.date.getTime();
+                if (filterTab === 'upcoming') {
+                    return (s.status === 'scheduled' || s.status === 'pending') && sTime > todayEnd;
+                } else if (filterTab === 'today') {
+                    return sTime >= todayStart && sTime <= todayEnd && s.status !== 'cancelled';
+                } else if (filterTab === 'completed') {
+                    return s.status === 'completed';
+                } else if (filterTab === 'cancelled') {
+                    return s.status === 'cancelled';
+                }
+                return true;
+            });
+
+            if (searchQuery) {
+                filtered = filtered.filter(s => {
+                    const mentorName = s.mentor?.name?.toLowerCase() || '';
+                    const topic = s.topic?.toLowerCase() || '';
+                    return mentorName.includes(searchQuery) || topic.includes(searchQuery);
+                });
+            }
+
+            if (dateStart) filtered = filtered.filter(s => s.date.getTime() >= dateStart);
+            if (dateEnd) filtered = filtered.filter(s => s.date.getTime() <= dateEnd);
+
+            if (subject) {
+                filtered = filtered.filter(s => s.topic.toLowerCase().includes(subject.toLowerCase()));
+            }
+
+            if (type) {
+                filtered = filtered.filter(s => {
+                    const link = (s.meetingLink || '').toLowerCase();
+                    if (type === 'zoom') return link.includes('zoom.us');
+                    if (type === 'google') return link.includes('meet.google');
+                    return false;
+                });
+            }
+
+            filtered.sort((a, b) => {
+                if (sort === 'date-asc') return a.date.getTime() - b.date.getTime();
+                if (sort === 'date-desc') return b.date.getTime() - a.date.getTime();
+                if (sort === 'topic-asc') return a.topic.localeCompare(b.topic);
+                return 0;
+            });
+
+            renderTodayBanner();
+            renderListView(filtered);
+            if (viewMode === 'calendar') renderCalendar();
+        }
+
+        function renderTodayBanner() {
+            const todayStart = new Date().setHours(0,0,0,0);
+            const todayEnd = new Date().setHours(23,59,59,999);
+            
+            const todaySessions = sessions.filter(s => 
+                s.date.getTime() >= todayStart && s.date.getTime() <= todayEnd && s.status === 'scheduled'
+            );
+
+            const banner = document.getElementById('todayHighlightBanner');
+            if (todaySessions.length === 0) {
+                banner.style.display = 'none';
+                return;
+            }
+
+            todaySessions.sort((a, b) => a.date.getTime() - b.date.getTime());
+            const activeSession = todaySessions[0];
+            const timeDiff = activeSession.date.getTime() - Date.now();
+            const minDiff = Math.round(timeDiff / 60000);
+
+            let statusText = minDiff > 0 ? `Class starts in ${minDiff} minutes` : 'Live Class Ongoing';
+
+            const partnerPhoto = activeSession.mentor.photo;
+            const avatarSrc = partnerPhoto ? `${API_BASE}/uploads/${partnerPhoto}` : '/default-avatar.png';
+
+            banner.innerHTML = `
+                <div class="today-banner-header">
+                    <span class="today-banner-tag"><i class="fa-solid fa-hourglass-start fa-fade"></i> Next Scheduled Class</span>
+                    <span class="today-countdown">${statusText}</span>
+                </div>
+                <div class="today-body-row">
+                    <div class="today-participant-info">
+                        <img src="${avatarSrc}" class="today-avatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                        <div>
+                            <span class="today-subject-title">${activeSession.topic}</span>
+                            <div class="today-subject-meta">with ${activeSession.mentor.name} (Physics Mentor)</div>
+                        </div>
+                    </div>
+                    <div class="today-actions">
+                        <button class="btn-student outline" onclick="openDetailsDrawer('${activeSession.id}')">View Notes</button>
+                        ${activeSession.meetingLink ? `
+                            <a href="${activeSession.meetingLink}" target="_blank" class="btn-student primary"><i class="fa-solid fa-video"></i> Join Class</a>
+                        ` : `
+                            <button class="btn-student primary" style="opacity: 0.6; cursor:not-allowed;" disabled><i class="fa-solid fa-video"></i> Link Pending</button>
+                        `}
+                    </div>
+                </div>
+            `;
+            banner.style.display = 'block';
+        }
+
+        function renderEmptyState() {
+            const list = document.getElementById('sessionsList');
+            // Compact empty state (height constrained 260px - 320px)
+            list.innerHTML = `
+                <div class="empty-state-card">
+                    <i class="fa-solid fa-folder-open empty-icon"></i>
+                    <div class="empty-title">You haven't booked any sessions yet</div>
+                    <p class="empty-desc">Schedule matching sessions with subject experts and start learning today.</p>
+                    <a href="/student/mentors" class="btn-student primary">Find Mentors</a>
+                </div>`;
+            
+            // Show placeholder widgets below empty state
+            document.getElementById('studentPlaceholderWidgets').style.display = 'grid';
+        }
+
+        function downloadNotesFile(id, topic) {
+            showToast(`Downloading notes worksheet for ${topic}...`);
+            const element = document.createElement('a');
+            const file = new Blob([`Amplimentor Learning Notes\nClass ID: ${id}\nTopic: ${topic}\nDate: ${new Date().toLocaleDateString()}\n\nTask Notes: Completed homework review, resolved syllabus question papers.`], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = `learning_notes_${id.substring(0,6)}.txt`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function renderListView(sessionsListToShow) {
+            const list = document.getElementById('sessionsList');
+            if (sessionsListToShow.length === 0) {
+                renderEmptyState();
+                return;
+            }
+
+            // Hide placeholder widgets if sessions exist
+            document.getElementById('studentPlaceholderWidgets').style.display = 'none';
+
+            list.innerHTML = sessionsListToShow.map(session => {
+                const partnerAvatar = session.mentor.photo ? `${API_BASE}/uploads/${session.mentor.photo}` : '/default-avatar.png';
+                
+                let modeText = 'Video Call';
+                let modeIconClass = 'fa-solid fa-video';
+                const link = (session.meetingLink || '').toLowerCase();
+                if (link.includes('zoom.us')) {
+                    modeText = 'Zoom Meet';
+                    modeIconClass = 'fa-brands fa-zoom';
+                } else if (link.includes('meet.google')) {
+                    modeText = 'Google Meet';
+                    modeIconClass = 'fa-solid fa-circle-video';
+                }
+
+                let actionBtnMarkup = '';
+                
+                if (session.status === 'scheduled' || session.status === 'live' || session.status === 'pending') {
+                        actionBtnMarkup += `
+                            <a href="/session-workspace" class="btn-student primary">Join Session Workspace</a>
+                        `;
+                    
+                    actionBtnMarkup += `
+                        <button class="btn-student outline" onclick="downloadNotesFile('${session.id}', '${session.topic}')">Download Notes</button>
+                        <a href="/chat.html" class="btn-student outline">Ask Question</a>
+                        <button class="btn-student outline" onclick="openRescheduleModal('${session.id}', '${session.date.toISOString().slice(0,16)}')">Reschedule Request</button>
+                        <button class="btn-student danger-outline" style="border-radius:var(--radius-button); font-size:12px; padding:6px 12px;" onclick="updateSessionStatus('${session.id}', 'cancelled')">Cancel Booking</button>
+                    `;
+                } else if (session.status === 'completed') {
+                    const relationship = mentoringHistory.find(h => h.mentorId === session.mentorId && h.status === 'active');
+                    if (relationship) {
+                        actionBtnMarkup += `
+                            <button class="btn-student outline" onclick="openEndRelationshipModal('${relationship.id}')">Review Mentor</button>
+                        `;
+                    }
+                }
+
+                return `
+                    <div class="student-session-card">
+                        <div class="card-left-info">
+                            <div class="card-time-block">
+                                <span class="card-date-lbl">${session.date.toLocaleDateString([], {month: 'short', day: 'numeric', year: 'numeric'})}</span>
+                                <span class="card-hour-lbl">${session.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+                            </div>
+                            <img src="${partnerAvatar}" class="card-avatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                            <div class="card-details">
+                                <span class="card-subject-title">${session.topic}</span>
+                                <span class="card-partner-name">Mentor: ${session.mentor.name}</span>
+                                <div class="card-pills-row">
+                                    <span class="card-meta-pill"><i class="fa-solid fa-clock"></i> 1.5 Hours</span>
+                                    <span class="card-meta-pill"><i class="${modeIconClass}"></i> ${modeText}</span>
+                                    <span class="card-meta-pill"><i class="fa-solid fa-star" style="color:var(--warning);"></i> 4.8 Rating</span>
+                                    <span class="card-meta-pill"><i class="fa-solid fa-pencil"></i> Homework Assigned</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-right-controls">
+                            <span class="status-badge ${session.status}">${session.status}</span>
+                            <div class="card-actions-wrapper">
+                                ${actionBtnMarkup}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGridBody');
+            const label = document.getElementById('calendarMonthLabel');
+            if (!grid) return;
+            
+            const firstDayIndex = new Date(calendarYear, calendarMonth, 1).getDay();
+            const lastDate = new Date(calendarYear, calendarMonth + 1, 0).getDate();
+            const prevLastDate = new Date(calendarYear, calendarMonth, 0).getDate();
+            
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            label.textContent = `${monthNames[calendarMonth]} ${calendarYear}`;
+
+            grid.innerHTML = '';
+            let cells = [];
+
+            for (let i = firstDayIndex - 1; i >= 0; i--) {
+                cells.push({ dayNum: prevLastDate - i, isCurrentMonth: false, dateObj: new Date(calendarYear, calendarMonth - 1, prevLastDate - i) });
+            }
+            for (let i = 1; i <= lastDate; i++) {
+                cells.push({ dayNum: i, isCurrentMonth: true, dateObj: new Date(calendarYear, calendarMonth, i) });
+            }
+            const totalCellsRequired = cells.length <= 35 ? 35 : 42;
+            const nextMonthPadding = totalCellsRequired - cells.length;
+            for (let i = 1; i <= nextMonthPadding; i++) {
+                cells.push({ dayNum: i, isCurrentMonth: false, dateObj: new Date(calendarYear, calendarMonth + 1, i) });
+            }
+
+            cells.forEach(cell => {
+                const cellTime = cell.dateObj.setHours(0,0,0,0);
+                const isToday = cellTime === new Date().setHours(0,0,0,0);
+
+                const dayEvents = sessions.filter(s => new Date(s.date).setHours(0,0,0,0) === cellTime);
+                const cellClass = `calendar-day-cell ${cell.isCurrentMonth ? '' : 'other-month'} ${isToday ? 'today' : ''}`;
+                
+                const eventsMarkup = dayEvents.map(e => `
+                    <button class="event-tag ${e.status}" onclick="openDetailsDrawer('${e.id}')">
+                        ${e.date.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'})} ${e.mentor.name}
+                    </button>
+                `).join('');
+
+                grid.innerHTML += `
+                    <div class="${cellClass}">
+                        <span class="day-num-lbl">${cell.dayNum}</span>
+                        <div class="events-pile">${eventsMarkup}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function shiftCalendarMonth(direction) {
+            calendarMonth += direction;
+            if (calendarMonth < 0) { calendarMonth = 11; calendarYear--; }
+            else if (calendarMonth > 11) { calendarMonth = 0; calendarYear++; }
+            renderCalendar();
+        }
+
+        function resetCalendarToToday() {
+            calendarYear = new Date().getFullYear();
+            calendarMonth = new Date().getMonth();
+            renderCalendar();
+        }
+
+        async function openDetailsDrawer(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            document.getElementById('drawerTopic').textContent = session.topic;
+            document.getElementById('drawerSessionId').textContent = `Session ID: ${session.id.substring(0,8)}`;
+            
+            const partnerAvatar = session.mentor.photo ? `${API_BASE}/uploads/${session.mentor.photo}` : '/default-avatar.png';
+
+            const detailHtml = `
+                <div class="drawer-section">
+                    <span class="drawer-label">Mentor Profile</span>
+                    <div class="drawer-participant-box">
+                        <img src="${partnerAvatar}" class="drawer-part-avatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                        <div>
+                            <div class="drawer-part-name">${session.mentor.name}</div>
+                            <div class="drawer-part-sub">Syllabus Expert • Aakash Faculty</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="drawer-grid-meta">
+                    <div class="drawer-section">
+                        <span class="drawer-label">Date</span>
+                        <div class="drawer-part-name" style="font-size:13px;">${session.date.toLocaleDateString()}</div>
+                    </div>
+                    <div class="drawer-section">
+                        <span class="drawer-label">Time</span>
+                        <div class="drawer-part-name" style="font-size:13px;">${session.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    </div>
+                </div>
+
+                <div class="drawer-section">
+                    <span class="drawer-label">Syllabus Homework Tasks</span>
+                    <div class="drawer-notes-pad" style="background-color:#FFFBEB; border-color:#FEF3C7; color:#78350F;">
+                        📚 Complete Optics exercises 1 to 10 in standard worksheets.
+                    </div>
+                </div>
+
+                <div class="drawer-section">
+                    <span class="drawer-label">Shared Meeting Resources</span>
+                    <div class="drawer-notes-pad">
+                        <p style="margin:0;">${session.notes || 'No session resource notes shared yet.'}</p>
+                    </div>
+                </div>
+
+                <div class="drawer-section">
+                    <span class="drawer-label">Worksheet Files Download</span>
+                    <div class="drawer-participant-box" style="background:#fff; border-style:dashed;">
+                        <i class="fa-solid fa-file-invoice" style="font-size:20px; color:var(--primary);"></i>
+                        <span style="font-size:12px; font-weight:600; cursor:pointer;" onclick="alert('Downloading notes...');">Optics_Theory_Draft.pdf</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('drawerContent').innerHTML = detailHtml;
+
+            let footerActions = '';
+            if (session.status === 'scheduled' || session.status === 'live') {
+                if (session.meetingLink) {
+                    footerActions += `<a href="${session.meetingLink}" target="_blank" class="btn-student primary" style="flex-grow:1;">Join Class</a>`;
+                }
+                footerActions += `
+                    <button class="btn-student outline" onclick="downloadNotesFile('${session.id}', '${session.topic}')">Download Notes</button>
+                    <button class="btn-student outline" onclick="openRescheduleModal('${session.id}', '${session.date.toISOString().slice(0,16)}')">Reschedule Request</button>
+                `;
+            } else {
+                footerActions += `<p style="font-size:13px; font-weight:700; color:var(--text-tertiary); text-align:center; width:100%;">Class status: ${session.status}</p>`;
+            }
+
+            document.getElementById('drawerFooter').innerHTML = footerActions;
+
+            document.getElementById('drawerOverlay').classList.add('open');
+            document.getElementById('detailsDrawer').classList.add('open');
+        }
+
+        function closeDetailsDrawer() {
+            document.getElementById('drawerOverlay').classList.remove('open');
+            document.getElementById('detailsDrawer').classList.remove('open');
+        }
+
+        async function updateSessionStatus(sessionId, newStatus) {
+            if (newStatus === 'cancelled' && !confirm('Are you sure you want to cancel this booking?')) return;
+            try {
+                const response = await fetch(`/api/sessions/${sessionId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ status: newStatus })
+                });
+                if (response.ok) {
+                    showToast(`Booking marked as ${newStatus}`);
+                    closeDetailsDrawer();
+                    loadSessions();
+                    loadHistoryStats();
+                } else {
+                    showToast('Failed to update booking status.', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function closeModalOnBackdrop(e, id) {
+            if (e.target === document.getElementById(id)) {
+                if (id === 'rescheduleModal') closeRescheduleModal();
+                if (id === 'endRelationshipModal') closeEndRelationshipModal();
+            }
+        }
+
+        function closeRescheduleModal() { document.getElementById('rescheduleModal').classList.remove('open'); }
+        async function handleRescheduleSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('rescheduleSessionId').value;
+            const newDate = document.getElementById('rescheduleDate').value;
+            try {
+                const response = await fetch(`/api/sessions/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify({ date: newDate })
+                });
+                if (response.ok) {
+                    showToast('Reschedule request sent successfully!');
+                    closeRescheduleModal();
+                    loadSessions();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        function openEndRelationshipModal(historyId) {
+            document.getElementById('endRelationshipHistoryId').value = historyId;
+            document.getElementById('endRelationshipModal').classList.add('open');
+        }
+        function closeEndRelationshipModal() { document.getElementById('endRelationshipModal').classList.remove('open'); }
+        
+        async function handleEndRelationshipSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('endRelationshipHistoryId').value;
+            const formData = new FormData(e.target);
+            
+            const postData = {
+                reasonForEnding: formData.get('reasonForEnding'),
+                rating: parseInt(formData.get('rating')),
+                feedback: formData.get('feedback')
+            };
+
+            try {
+                const response = await fetch(`/api/mentoring-history/${id}/end`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include',
+                    body: JSON.stringify(postData)
+                });
+
+                if (response.ok) {
+                    showToast('Mentor rated successfully!');
+                    closeEndRelationshipModal();
+                    loadMentoringHistory();
+                    loadHistoryStats();
+                } else {
+                    const error = await response.json();
+                    showToast(error.message || 'Failed to submit review.', 'error');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

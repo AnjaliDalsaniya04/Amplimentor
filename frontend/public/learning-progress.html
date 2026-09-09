@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Analytics & Progress - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Analytics Page container */
+        .analytics-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Top summary metrics strip */
+        .metrics-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .metric-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .metric-val {
+            font-size: 28px;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+        }
+        .metric-lbl {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+        }
+        .metric-icon-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background-color: #EFF6FF;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        /* Core layout panels */
+        .analytics-main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+        }
+        .analytics-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+        }
+        .analytics-card-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0 0 20px 0;
+            letter-spacing: -0.01em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Simulated Growth Bar Graph using grid */
+        .growth-bar-graph-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            height: 200px;
+            border-bottom: 2px solid #E2E8F0;
+            padding: 0 20px 8px 20px;
+        }
+        .graph-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            width: 50px;
+        }
+        .graph-bar {
+            width: 32px;
+            background-color: var(--primary);
+            border-radius: 6px 6px 0 0;
+            transition: height 0.5s ease-out;
+        }
+        .graph-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+        }
+
+        /* Weak/Strong topic lists */
+        .topic-list-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13.5px;
+        }
+        .topic-list-row:last-child {
+            border-bottom: none;
+        }
+        .topic-strength-badge {
+            font-size: 10px;
+            font-weight: 800;
+            padding: 2px 8px;
+            border-radius: 12px;
+            text-transform: uppercase;
+        }
+        .topic-strength-badge.strong { background-color: #D1FAE5; color: #065F46; }
+        .topic-strength-badge.weak { background-color: #FEE2E2; color: #991B1B; }
+
+        @media (max-width: 992px) {
+            .metrics-strip {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .analytics-main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 576px) {
+            .metrics-strip {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Nav bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li id="dynamicNavLink"><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Filled by JS -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main analytics dashboard wrapper -->
+    <div class="analytics-container">
+        <div style="margin-bottom: 32px;">
+            <h1 style="font-size: 28px; font-weight: 800; color: #0F172A; letter-spacing: -0.02em; margin:0;" id="pageMainHeader">Learning Progress & Analytics</h1>
+            <p style="color: var(--text-tertiary); font-size: 14.5px; margin-top: 4px;">Track key metrics, subject score distributions, and goals milestones completions.</p>
+        </div>
+
+        <!-- Metrics cards row -->
+        <section class="metrics-strip" id="metricsRowContainer">
+            <!-- Dynamic metric cards filled by JS -->
+        </section>
+
+        <!-- Charts and topics tables -->
+        <div class="analytics-main-grid">
+            
+            <!-- Left: Growth Chart -->
+            <article class="analytics-card">
+                <h3 class="analytics-card-title"><i class="fa-solid fa-chart-line" style="color:var(--primary);"></i> Monthly Learning Growth</h3>
+                <div class="growth-bar-graph-container" id="barGraphBody">
+                    <!-- Graph Columns loaded by JS -->
+                </div>
+            </article>
+
+            <!-- Right: Weak / Strong subjects checklist -->
+            <article class="analytics-card">
+                <h3 class="analytics-card-title"><i class="fa-solid fa-bolt" style="color:#F59E0B;"></i> Topic Strength Analysis</h3>
+                <div id="topicStrengthListBody">
+                    <!-- List rows loaded by JS -->
+                </div>
+            </article>
+
+        </div>
+
+        <!-- Goals & Feedback Row -->
+        <div class="analytics-main-grid" style="margin-top: 32px;">
+            
+            <!-- Left: Goal milestones checklists tracker -->
+            <article class="analytics-card">
+                <h3 class="analytics-card-title"><i class="fa-solid fa-bullseye" style="color:#8B5CF6;"></i> Learning Goals Tracker</h3>
+                <div id="goalsProgressBody">
+                    <!-- Loaded dynamically -->
+                </div>
+            </article>
+
+            <!-- Right: Mentor Feedback Timeline -->
+            <article class="analytics-card">
+                <h3 class="analytics-card-title"><i class="fa-solid fa-comments" style="color:#10B981;"></i> Mentor Feedback Timeline</h3>
+                <div id="feedbackTimelineBody">
+                    <!-- Loaded dynamically -->
+                </div>
+            </article>
+
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+
+                    const brand = document.getElementById('brandLink');
+                    const dynLink = document.getElementById('dynamicNavLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard.html';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dynLink.innerHTML = '<a href="/my-students.html">My Students</a>';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard.html';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dynLink.innerHTML = '<a href="/student/mentors">Find Mentors</a>';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student-settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    renderProgressDashboard();
+                } else {
+                    renderProgressDashboard();
+                }
+            } catch (err) {
+                console.error(err);
+                renderProgressDashboard();
+            }
+        });
+
+        function renderProgressDashboard() {
+            const metrics = document.getElementById('metricsRowContainer');
+            const graph = document.getElementById('barGraphBody');
+            const topics = document.getElementById('topicStrengthListBody');
+
+            if (currentRole === 'student') {
+                document.getElementById('pageMainHeader').textContent = "My Learning Analytics";
+
+                // Load Student Metrics
+                metrics.innerHTML = `
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Study Streak</span>
+                            <div class="metric-val">12 Days</div>
+                        </div>
+                        <div class="metric-icon-box" style="background:#FEF2F2; color:#EF4444;"><i class="fa-solid fa-fire"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Learning Hours</span>
+                            <div class="metric-val">18.5 Hrs</div>
+                        </div>
+                        <div class="metric-icon-box"><i class="fa-solid fa-user-clock"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Quiz Average</span>
+                            <div class="metric-val">88%</div>
+                        </div>
+                        <div class="metric-icon-box" style="background:#F0FDF4; color:#10B981;"><i class="fa-solid fa-circle-question"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Homework Rate</span>
+                            <div class="metric-val">92%</div>
+                        </div>
+                        <div class="metric-icon-box" style="background:#FFFBEB; color:#F59E0B;"><i class="fa-solid fa-book-open"></i></div>
+                    </div>
+                `;
+
+                // Load monthly learning columns (Student: Hours per month)
+                const mockGraphData = [
+                    { label: 'Jan', value: '40px', hours: '4h' },
+                    { label: 'Feb', value: '70px', hours: '7h' },
+                    { label: 'Mar', value: '110px', hours: '11h' },
+                    { label: 'Apr', value: '140px', hours: '14h' },
+                    { label: 'May', value: '185px', hours: '18.5h' }
+                ];
+                graph.innerHTML = mockGraphData.map(col => `
+                    <div class="graph-column">
+                        <span style="font-size:10px; font-weight:700; color:#3B82F6;">${col.hours}</span>
+                        <div class="graph-bar" style="height: ${col.value};"></div>
+                        <span class="graph-lbl">${col.label}</span>
+                    </div>
+                `).join('');
+
+                // Load Student Subject Strong vs Weak
+                topics.innerHTML = `
+                    <div class="topic-list-row">
+                        <strong>Cell Structure & Division (Biology)</strong>
+                        <span class="topic-strength-badge strong">Strong (94%)</span>
+                    </div>
+                    <div class="topic-list-row">
+                        <strong>Electromagnetism Gauss Law (Physics)</strong>
+                        <span class="topic-strength-badge strong">Strong (88%)</span>
+                    </div>
+                    <div class="topic-list-row">
+                        <strong>Organic Haloalkanes mechanisms (Chemistry)</strong>
+                        <span class="topic-strength-badge weak">Needs Review (62%)</span>
+                    </div>
+                `;
+
+                // Goals list progress
+                document.getElementById('goalsProgressBody').innerHTML = `
+                    <div style="margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; font-weight:700;">
+                            <span>Biology Target Course Syllabus</span>
+                            <span>75%</span>
+                        </div>
+                        <div style="width:100%; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                            <div style="width:75%; height:100%; background:#8B5CF6;"></div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom:12px;">
+                        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px; font-weight:700;">
+                            <span>Attempt 10 mock NEET tests</span>
+                            <span>40%</span>
+                        </div>
+                        <div style="width:100%; height:6px; background:#F1F5F9; border-radius:3px; overflow:hidden;">
+                            <div style="width:40%; height:100%; background:#8B5CF6;"></div>
+                        </div>
+                    </div>
+                `;
+
+                // Mentor Feedback Timeline
+                document.getElementById('feedbackTimelineBody').innerHTML = `
+                    <div style="border-left:2px solid #E2E8F0; padding-left:16px; display:flex; flex-direction:column; gap:16px; margin-top: 8px;">
+                        <div style="position:relative;">
+                            <div style="position:absolute; left:-22px; top:4px; width:10px; height:10px; border-radius:50%; background:#10B981;"></div>
+                            <strong style="font-size:13px; color:#0F172A;">Jul 4, 2026 - Anjali Patel</strong>
+                            <p style="margin:4px 0 0 0; font-size:12px; color:#64748B;">Rahul demonstrated outstanding speed in Genetics probability exercises today.</p>
+                        </div>
+                        <div style="position:relative;">
+                            <div style="position:absolute; left:-22px; top:4px; width:10px; height:10px; border-radius:50%; background:#10B981;"></div>
+                            <strong style="font-size:13px; color:#0F172A;">Jun 29, 2026 - Priya Shah</strong>
+                            <p style="margin:4px 0 0 0; font-size:12px; color:#64748B;">Derivation steps are good, but needs to draw Gauss diagrams carefully.</p>
+                        </div>
+                    </div>
+                `;
+
+            } else {
+                document.getElementById('pageMainHeader').textContent = "Student Performance Analytics";
+
+                // Load Mentor dashboard metrics (average student counts/ratings)
+                metrics.innerHTML = `
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Total Students</span>
+                            <div class="metric-val">4 Active</div>
+                        </div>
+                        <div class="metric-icon-box" style="background:#EEF2FF; color:#4F46E5;"><i class="fa-solid fa-users"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Sessions Completed</span>
+                            <div class="metric-val">24 Slots</div>
+                        </div>
+                        <div class="metric-icon-box"><i class="fa-solid fa-calendar-check"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Average Score</span>
+                            <div class="metric-val">84.5%</div>
+                        </div>
+                        <div class="metric-icon-box" style="background:#F0FDF4; color:#10B981;"><i class="fa-solid fa-chart-line"></i></div>
+                    </div>
+                    <div class="metric-card">
+                        <div>
+                            <span class="metric-lbl">Total Ratings</span>
+                            <div class="metric-val">4.9 Stars</div>
+                        </div>
+                        <div class="metric-icon-box" style="background:#FFFBEB; color:#F59E0B;"><i class="fa-solid fa-star"></i></div>
+                    </div>
+                `;
+
+                // Load growth graph (Mentor: Payouts/Sessions scale)
+                const mockGraphData = [
+                    { label: 'Jan', value: '30px', hours: '3' },
+                    { label: 'Feb', value: '80px', hours: '8' },
+                    { label: 'Mar', value: '120px', hours: '12' },
+                    { label: 'Apr', value: '160px', hours: '16' },
+                    { label: 'May', value: '240px', hours: '24' }
+                ];
+                graph.innerHTML = mockGraphData.map(col => `
+                    <div class="graph-column">
+                        <span style="font-size:10px; font-weight:700; color:#10B981;">${col.hours} S</span>
+                        <div class="graph-bar" style="height: ${col.value}; background-color:#10B981;"></div>
+                        <span class="graph-lbl">${col.label}</span>
+                    </div>
+                `).join('');
+
+                // Load Mentor student review lists
+                topics.innerHTML = `
+                    <div class="topic-list-row">
+                        <strong>Rahul Verma (Grade 12 Botany)</strong>
+                        <span class="topic-strength-badge strong" style="background:#EFF6FF; color:#1E40AF;">92% Progress</span>
+                    </div>
+                    <div class="topic-list-row">
+                        <strong>Aman Kumar (Grade 11 Mechanics)</strong>
+                        <span class="topic-strength-badge strong" style="background:#EFF6FF; color:#1E40AF;">84% Progress</span>
+                    </div>
+                    <div class="topic-list-row">
+                        <strong>Priya Singh (Grade 12 Kinetics)</strong>
+                        <span class="topic-strength-badge weak" style="background:#FFFBEB; color:#92400E;">Needs Focus (58%)</span>
+                    </div>
+                `;
+
+                // Goals list progress for Mentor
+                document.getElementById('goalsProgressBody').innerHTML = `
+                    <div style="font-size:13px; color:#64748B;">
+                        Select a student from your dashboard to view and recommend target goals.
+                    </div>
+                `;
+
+                // Mentor Feedback logs
+                document.getElementById('feedbackTimelineBody').innerHTML = `
+                    <div style="font-size:13px; color:#64748B;">
+                        Log feedback entries directly from your student reviews log tabs.
+                    </div>
+                `;
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

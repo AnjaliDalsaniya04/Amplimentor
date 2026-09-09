@@ -1,479 +1,956 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mentor Profile - Amplimentor</title>
-  <link rel="stylesheet" href="/style.css?v=1.3">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Dashboard & Notion/Vercel Profile Stylesheet -->
+    <link rel="stylesheet" href="/mentor-dashboard.css">
+    <link rel="stylesheet" href="/mentor-profile.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="/config.js"></script>
 </head>
 <body>
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="/mentor-dashboard.html" class="nav-brand">Amplimentor</a>
-      <ul class="nav-menu">
-        <li><a href="/mentor/profile">Profile</a></li>
-        <li><a href="/my-students.html">My Students</a></li>
-        <li><a href="/chat.html">Chat</a></li>
-        <li><a href="/chat-history.html">Chat History</a></li>
-        <li><a href="/sessions.html">Sessions</a></li>
-        <li><a href="/mentor-pricing">Pricing</a></li>
-        <li class="notification-item">
-            <a href="#" id="notificationLink"><i class="fas fa-bell"></i><span class="notification-count" id="notificationCount"></span></a>
-            <div class="notification-dropdown" id="notificationDropdown"></div>
-        </li>
-        <li><a href="/logout" class="logout-btn">Logout</a></li>
-      </ul>
+    <div class="dashboard-wrapper">
+        
+        <!-- Sidebar Navigation Drawer -->
+        <aside class="dashboard-sidebar">
+            <a href="/" class="sidebar-logo">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
+                    <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                    <defs>
+                        <linearGradient id="sidebarLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#3B82F6"/>
+                            <stop offset="1" stop-color="#4F46E5"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span>Amplimentor</span>
+            </a>
+            
+            <nav class="sidebar-nav">
+                <!-- Group 1: General -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Dashboard</span>
+                    <a href="/mentor-dashboard.html" class="sidebar-link">
+                        <i data-lucide="layout-dashboard"></i> Dashboard
+                    </a>
+                </div>
+
+                <!-- Group 2: Teaching -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Teaching</span>
+                    <a href="/my-students.html" class="sidebar-link">
+                        <i data-lucide="users"></i> Students
+                    </a>
+                    <a href="/sessions.html" class="sidebar-link">
+                        <i data-lucide="calendar"></i> Sessions
+                    </a>
+                    <a href="/mentor-dashboard.html#availability" class="sidebar-link">
+                        <i data-lucide="clock"></i> Availability
+                    </a>
+                </div>
+
+                <!-- Group 3: Communication -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Communication</span>
+                    <a href="/chat.html" class="sidebar-link">
+                        <i data-lucide="message-square"></i> Messages
+                    </a>
+                    <a href="/mentor-dashboard.html#reviews" class="sidebar-link">
+                        <i data-lucide="star"></i> Reviews
+                    </a>
+                </div>
+
+                <!-- Group 4: Finance -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Finance</span>
+                    <a href="/mentor-dashboard.html#earnings" class="sidebar-link">
+                        <i data-lucide="wallet"></i> Earnings
+                    </a>
+                </div>
+
+                <!-- Group 5: Account -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Account</span>
+                    <a href="/mentor/public-profile" class="sidebar-link">
+                        <i data-lucide="globe"></i> Public Profile
+                    </a>
+                    <a href="/mentor/profile" class="sidebar-link active">
+                        <i data-lucide="edit-3"></i> Edit Profile
+                    </a>
+                    <a href="/mentor-pricing.html" class="sidebar-link">
+                        <i data-lucide="credit-card"></i> Pricing
+                    </a>
+                    <a href="/mentor/settings" class="sidebar-link">
+                        <i data-lucide="settings"></i> Settings
+                    </a>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="/logout" class="sidebar-link logout-btn">
+                    <i data-lucide="log-out"></i> Logout
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Dashboard content frame -->
+        <main class="dashboard-main">
+            <!-- Header bar -->
+            <header class="dashboard-header">
+                <div class="header-search">
+                    <i data-lucide="search" class="header-search-icon"></i>
+                    <input type="text" placeholder="Search students, sessions..." class="header-search-input" id="dashboardSearch">
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
+                        <i data-lucide="message-square"></i>
+                    </button>
+                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
+                        <i data-lucide="bell"></i>
+                        <span class="badge" id="notificationCount" style="display: none;">3</span>
+                    </button>
+                    
+                    <a href="/mentor/profile" class="header-user-profile">
+                        <img src="/default-avatar.svg" alt="Mentor avatar" class="header-avatar" id="headerAvatar">
+                        <div class="header-user-info">
+                            <h4 class="header-user-name" id="mentorName">Anjali</h4>
+                            <p class="header-user-role">Mentor</p>
+                        </div>
+                    </a>
+                </div>
+            </header>
+
+            <!-- Scrollable dashboard settings sheet -->
+            <div class="dashboard-content">
+                <div class="edit-profile-container">
+                    
+                    <!-- Clean profile header banner (Minimal & Full Width) -->
+                    <div class="subtle-gradient-banner animated-section"></div>
+                    <div class="profile-header-area animated-section">
+                        <div class="avatar-upload-row">
+                            <img src="/default-avatar.svg" alt="Avatar" class="avatar-image-box" id="mentorPhoto">
+                            <div class="avatar-upload-details">
+                                <label class="btn-upload-photo-label" for="edit-photo">Upload Photo</label>
+                                <input type="file" id="edit-photo" accept="image/*" style="display: none;">
+                                <span style="font-size: 11px; color: var(--text-tertiary);">PNG or JPG, max 5MB</span>
+                            </div>
+                        </div>
+                        
+                        <div class="header-title-details">
+                            <div class="header-meta-left">
+                                <div class="header-name-row">
+                                    <h2 class="header-name" id="headerProfileName">Anjali Patel</h2>
+                                    <span class="mentor-badge-verified">
+                                        <i data-lucide="check-circle-2" style="width: 10px; height: 10px; fill: currentColor; color: #FFF;"></i> Verified Mentor
+                                    </span>
+                                </div>
+                                <span class="header-sub-details" id="headerProfileRole">NEET Biology Faculty • Aakash BYJU'S</span>
+                                <span style="font-size: 12.5px; color: var(--text-tertiary); font-weight: 500; margin-top: 4px;" id="headerProfileLoc">📍 Ahmedabad, Gujarat</span>
+                            </div>
+                            <a href="/mentor/public-profile" class="btn-preview-public">
+                                <i data-lucide="eye" style="width:14px; height:14px;"></i> Preview Public Profile
+                            </a>
+                        </div>
+                        <div class="upload-loading" id="upload-loading" style="display: none; font-size: 12px; color: var(--primary); margin-top: 10px;">
+                            <i data-lucide="loader-2" style="width: 14px; height: 14px; animation: spin 1s linear infinite;"></i> Uploading photo...
+                        </div>
+                    </div>
+
+                    <!-- Spacious Two-Column Grid -->
+                    <div class="profile-grid-cols">
+                        
+                        <!-- Left Column (65% Content Width) -->
+                        <div class="left-content-col">
+                            
+                            <!-- 1. Basic Information -->
+                            <div class="settings-section-card profile-card animated-section delay-1" id="basic-info">
+                                <div class="section-header-row">
+                                    <div class="section-title-col">
+                                        <h3 class="section-title">Basic Information</h3>
+                                        <span class="section-desc">Manage your identity and general tagline details.</span>
+                                    </div>
+                                    <button class="btn-section-edit view-state" onclick="enterEditMode('basic-info')">
+                                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <!-- View state -->
+                                <div class="view-state">
+                                    <div class="fields-display-grid">
+                                        <div class="field-block">
+                                            <span class="field-lbl">Full Name</span>
+                                            <span class="field-val" id="valName">Anjali Patel</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Location</span>
+                                            <span class="field-val" id="valLocation">Ahmedabad, Gujarat</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Phone Number</span>
+                                            <span class="field-val" id="valPhone">Not Specified</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Languages Spoken</span>
+                                            <span class="field-val" id="valLanguages">English, Hindi</span>
+                                        </div>
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Tagline Headline</span>
+                                            <span class="field-val" id="valHeadline">Helping pre-medical students master Zoology and botany.</span>
+                                        </div>
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Short Biography</span>
+                                            <span class="field-val" id="valBio">Biography descriptions go here.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit state -->
+                                <div class="edit-state">
+                                    <div class="edit-form-grid">
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-name">Full Name</label>
+                                            <input type="text" id="edit-name" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-location">Location</label>
+                                            <input type="text" id="edit-location" class="form-input" placeholder="City, State">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-phone">Phone Number</label>
+                                            <input type="tel" id="edit-phone" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-languages">Languages (comma-separated)</label>
+                                            <input type="text" id="edit-languages" class="form-input" placeholder="English, Hindi">
+                                        </div>
+                                        <div class="form-item full-width">
+                                            <label class="form-label" for="edit-headline">Tagline Headline</label>
+                                            <input type="text" id="edit-headline" class="form-input">
+                                        </div>
+                                        <div class="form-item full-width">
+                                            <label class="form-label" for="edit-bio">Short Biography</label>
+                                            <textarea id="edit-bio" class="form-input" placeholder="Provide a short bio..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions-row">
+                                        <button class="btn-form-cancel" onclick="cancelEditMode('basic-info')">Cancel</button>
+                                        <button class="btn-form-save" onclick="saveBasicInfo()">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Professional Details -->
+                            <div class="settings-section-card profile-card animated-section delay-2" id="prof-details">
+                                <div class="section-header-row">
+                                    <div class="section-title-col">
+                                        <h3 class="section-title">Professional Details</h3>
+                                        <span class="section-desc">Institute designations, experience, and covered subjects.</span>
+                                    </div>
+                                    <button class="btn-section-edit view-state" onclick="enterEditMode('prof-details')">
+                                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <!-- View state -->
+                                <div class="view-state">
+                                    <div class="fields-display-grid">
+                                        <div class="field-block">
+                                            <span class="field-lbl">Organization</span>
+                                            <span class="field-val" id="valCompany">Aakash BYJU'S</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Designation</span>
+                                            <span class="field-val" id="valRole">NEET Biology Faculty</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Years of Experience</span>
+                                            <span class="field-val" id="valExperience">8 Years</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Teaching Mode</span>
+                                            <span class="field-val">Online & Offline</span>
+                                        </div>
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Subjects Covered</span>
+                                            <div class="chips-list-wrap" id="valSubjects"></div>
+                                        </div>
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Teaching Skills / Methodologies</span>
+                                            <div class="chips-list-wrap" id="valSkills"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit state -->
+                                <div class="edit-state">
+                                    <div class="edit-form-grid">
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-company">Organization</label>
+                                            <input type="text" id="edit-company" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-role">Designation</label>
+                                            <input type="text" id="edit-role" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-experience">Experience</label>
+                                            <select id="edit-experience" class="form-input">
+                                                <option value="0-2 years">0-2 years</option>
+                                                <option value="3-5 years">3-5 years</option>
+                                                <option value="6-10 years">6-10 years</option>
+                                                <option value="10+ years">10+ years</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-mode">Teaching Mode</label>
+                                            <select id="edit-mode" class="form-input">
+                                                <option value="Online">Online Only</option>
+                                                <option value="Offline">Offline Only</option>
+                                                <option value="Online & Offline">Online & Offline</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-item full-width">
+                                            <label class="form-label" for="edit-expertiseAreas">Subjects Covered (comma-separated)</label>
+                                            <textarea id="edit-expertiseAreas" class="form-input" placeholder="NEET Biology, Botany, Zoology"></textarea>
+                                        </div>
+                                        <div class="form-item full-width">
+                                            <label class="form-label" for="edit-technicalSkills">Teaching Skills (comma-separated)</label>
+                                            <textarea id="edit-technicalSkills" class="form-input" placeholder="Concept Building, Revision Strategy, Visual Learning"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions-row">
+                                        <button class="btn-form-cancel" onclick="cancelEditMode('prof-details')">Cancel</button>
+                                        <button class="btn-form-save" onclick="saveProfessionalInfo()">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 3. Education & Certifications -->
+                            <div class="settings-section-card profile-card animated-section delay-2" id="edu-certs">
+                                <div class="section-header-row">
+                                    <div class="section-title-col">
+                                        <h3 class="section-title">Education & Certifications</h3>
+                                        <span class="section-desc">Degrees, certificates, recognitions, and career milestones.</span>
+                                    </div>
+                                    <button class="btn-section-edit view-state" onclick="enterEditMode('edu-certs')">
+                                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <!-- View state -->
+                                <div class="view-state">
+                                    <div class="fields-display-grid">
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Education Degrees</span>
+                                            <span class="field-val" id="valEducation">M.Sc Biotech (MS University)</span>
+                                        </div>
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Certifications & Credentials</span>
+                                            <div class="chips-list-wrap" id="valCertifications"></div>
+                                        </div>
+                                        <div class="field-block full-width">
+                                            <span class="field-lbl">Career Timeline List</span>
+                                            <div class="timeline-list-view">
+                                                <div class="timeline-item-view">
+                                                    <span class="timeline-item-year">2024 - Present</span>
+                                                    <span class="timeline-item-title">Senior Biology Faculty Lead</span>
+                                                    <span class="timeline-item-subtitle" id="timelineOrg">Aakash BYJU'S</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit state -->
+                                <div class="edit-state">
+                                    <div class="edit-form-grid">
+                                        <div class="form-item full-width">
+                                            <label class="form-label" for="edit-education">Education Degrees</label>
+                                            <textarea id="edit-education" class="form-input" placeholder="e.g. M.Sc Biotech, MS University"></textarea>
+                                        </div>
+                                        <div class="form-item full-width">
+                                            <label class="form-label" for="edit-certifications">Certificates (comma-separated)</label>
+                                            <textarea id="edit-certifications" class="form-input" placeholder="Aakash Master Faculty, NCERT Biology Lead"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-actions-row">
+                                        <button class="btn-form-cancel" onclick="cancelEditMode('edu-certs')">Cancel</button>
+                                        <button class="btn-form-save" onclick="saveTimelineInfo()">Save Changes</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column (35% Width - Sticky Wrapper) -->
+                        <div class="sticky-sidebar-col">
+                            
+                            <!-- 11. Profile Strength Widget -->
+                            <div class="strength-card">
+                                <div class="strength-pct-row">
+                                    <span class="strength-pct-title">Profile Completion</span>
+                                    <span class="strength-pct-val">82%</span>
+                                </div>
+                                <div class="strength-bar-track">
+                                    <div class="strength-bar-fill" style="width: 82%;"></div>
+                                </div>
+                                <ul class="strength-missing-list">
+                                    <li class="strength-missing-item"><i data-lucide="check-circle" style="color:var(--success);"></i> Upload Profile Banner</li>
+                                    <li class="strength-missing-item"><i data-lucide="check-circle" style="color:var(--success);"></i> Add 2 Certificates</li>
+                                    <li class="strength-missing-item"><i data-lucide="plus-circle"></i> Upload Intro Video</li>
+                                </ul>
+                            </div>
+
+                            <!-- Quick Stats strip card -->
+                            <div class="settings-section-card">
+                                <div class="section-header-row" style="margin-bottom:14px; padding-bottom:8px;">
+                                    <h3 class="section-title" style="font-size:16px;">Quick Stats</h3>
+                                </div>
+                                <div class="quick-stats-strip-box">
+                                    <div class="quick-stat-badge-item">
+                                        <span class="quick-stat-badge-val" id="statsStudents">1200+</span>
+                                        <span class="quick-stat-badge-lbl">Students</span>
+                                    </div>
+                                    <div class="quick-stat-badge-item">
+                                        <span class="quick-stat-badge-val" id="statsSessions">1800+</span>
+                                        <span class="quick-stat-badge-lbl">Sessions</span>
+                                    </div>
+                                    <div class="quick-stat-badge-item">
+                                        <span class="quick-stat-badge-val" id="statsRating">4.8</span>
+                                        <span class="quick-stat-badge-lbl">Rating</span>
+                                    </div>
+                                    <div class="quick-stat-badge-item">
+                                        <span class="quick-stat-badge-val" id="statsExperience">8 Yrs</span>
+                                        <span class="quick-stat-badge-lbl">Experience</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 4. Availability & Pricing -->
+                            <div class="settings-section-card profile-card" id="avail-pricing">
+                                <div class="section-header-row">
+                                    <div class="section-title-col">
+                                        <h3 class="section-title">Availability & Pricing</h3>
+                                    </div>
+                                    <button class="btn-section-edit view-state" onclick="enterEditMode('avail-pricing')">
+                                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <!-- View state -->
+                                <div class="view-state">
+                                    <div class="fields-display-grid" style="grid-template-columns: 1fr;">
+                                        <div class="field-block">
+                                            <span class="field-lbl">Weekly Availability</span>
+                                            <span class="field-val" id="valAvailability">Weekdays</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Active Students Limit</span>
+                                            <span class="field-val" id="valMaxStudents">3</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Standard Session Price</span>
+                                            <span class="field-val" id="valPrice">₹399</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit state -->
+                                <div class="edit-state">
+                                    <div class="edit-form-grid" style="grid-template-columns: 1fr;">
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-availability">Availability General</label>
+                                            <select id="edit-availability" class="form-input">
+                                                <option value="Weekdays">Weekdays</option>
+                                                <option value="Weekends">Weekends</option>
+                                                <option value="Flexible">Flexible</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-maxStudents">Max Students</label>
+                                            <select id="edit-maxStudents" class="form-input">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="Unlimited">Unlimited</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-price">Session Price (₹)</label>
+                                            <input type="number" id="edit-price" class="form-input">
+                                        </div>
+                                    </div>
+                                    <div class="form-actions-row">
+                                        <button class="btn-form-cancel" onclick="cancelEditMode('avail-pricing')">Cancel</button>
+                                        <button class="btn-form-save" onclick="saveAvailabilityPricingInfo()">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 5. Media & Socials -->
+                            <div class="settings-section-card profile-card" id="media-socials">
+                                <div class="section-header-row">
+                                    <div class="section-title-col">
+                                        <h3 class="section-title">Media & Socials</h3>
+                                    </div>
+                                    <button class="btn-section-edit view-state" onclick="enterEditMode('media-socials')">
+                                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <!-- View state -->
+                                <div class="view-state">
+                                    <div class="fields-display-grid" style="grid-template-columns: 1fr;">
+                                        <div class="field-block">
+                                            <span class="field-lbl">LinkedIn URL</span>
+                                            <a id="lnkLinkedin" class="field-val" href="#" target="_blank" style="color:var(--primary); text-decoration:none;">LinkedIn Link</a>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">GitHub URL</span>
+                                            <a id="lnkGithub" class="field-val" href="#" target="_blank" style="color:var(--primary); text-decoration:none;">GitHub Link</a>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Portfolio Website</span>
+                                            <a id="lnkPortfolio" class="field-val" href="#" target="_blank" style="color:var(--primary); text-decoration:none;">Portfolio Link</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit state -->
+                                <div class="edit-state">
+                                    <div class="edit-form-grid" style="grid-template-columns: 1fr;">
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-linkedin">LinkedIn URL</label>
+                                            <input type="url" id="edit-linkedin" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-github">GitHub URL</label>
+                                            <input type="url" id="edit-github" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="edit-portfolio">Portfolio URL</label>
+                                            <input type="url" id="edit-portfolio" class="form-input">
+                                        </div>
+                                    </div>
+                                    <div class="form-actions-row">
+                                        <button class="btn-form-cancel" onclick="cancelEditMode('media-socials')">Cancel</button>
+                                        <button class="btn-form-save" onclick="saveMediaInfo()">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 6. Account & Security Settings -->
+                            <div class="settings-section-card profile-card" id="account-sec">
+                                <div class="section-header-row">
+                                    <div class="section-title-col">
+                                        <h3 class="section-title">Account & Security</h3>
+                                    </div>
+                                    <button class="btn-section-edit view-state" onclick="enterEditMode('account-sec')">
+                                        <i data-lucide="edit-2" style="width: 14px; height: 14px;"></i> Edit
+                                    </button>
+                                </div>
+                                
+                                <!-- View state -->
+                                <div class="view-state">
+                                    <div class="fields-display-grid" style="grid-template-columns: 1fr;">
+                                        <div class="field-block">
+                                            <span class="field-lbl">Notification Alerts</span>
+                                            <span class="field-val">Enabled (Email, SMS)</span>
+                                        </div>
+                                        <div class="field-block">
+                                            <span class="field-lbl">Credential Status</span>
+                                            <span class="field-val">Password set (Active)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Edit state -->
+                                <div class="edit-state">
+                                    <div class="edit-form-grid" style="grid-template-columns: 1fr;">
+                                        <div class="form-item">
+                                            <label class="form-label" for="oldPassword">Current Password</label>
+                                            <input type="password" id="oldPassword" class="form-input">
+                                        </div>
+                                        <div class="form-item">
+                                            <label class="form-label" for="newPassword">New Password</label>
+                                            <input type="password" id="newPassword" class="form-input">
+                                        </div>
+                                    </div>
+                                    <div class="form-actions-row">
+                                        <button class="btn-form-cancel" onclick="cancelEditMode('account-sec')">Cancel</button>
+                                        <button class="btn-form-save" onclick="saveAccountInfo()">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </main>
     </div>
-  </nav>
-  <div class="container">
-    <main>
-      <section class="hero">
-        <h1>My Mentor Profile</h1>
-        <p class="hero-sub">Manage your professional information and mentoring preferences</p>
-      </section>
-      
-      <section class="profile" id="mentor-profile-section">
-        <div id="profile-view">
-          <div class="profile-info">
-            <div style="text-align: center;">
-              <img id="mentorPhoto" src="/default-avatar.svg" style="border-radius: 50%; width: 120px; height: 120px; object-fit: cover; border: 4px solid #0077c2;" onerror="this.onerror=null;this.src='/default-avatar.svg'">
-              <h2 id="mentorName">Mentor Name</h2>
-              <p><strong id="company"></strong></p>
-            </div>
-            <div>
-              <p><strong>Email:</strong> <span id="mentorEmail"></span></p>
-              <p><strong>Role:</strong> <span id="mentorRole"></span></p>
-              <p><strong>Experience:</strong> <span id="experience"></span></p>
-              <p><strong>Phone:</strong> <span id="phoneNumber"></span></p>
-              <p><strong>Location:</strong> <span id="location"></span></p>
-            </div>
-          </div>
-          <div class="profile-section">
-            <h3>About Me</h3>
-            <p id="bio"></p>
-          </div>
-          <div class="profile-section">
-            <h3>Professional Links</h3>
-            <p><strong>LinkedIn:</strong> <a id="linkedIn" href="#" target="_blank"></a></p>
-            <p><strong>GitHub:</strong> <a id="github" href="#" target="_blank"></a></p>
-            <p><strong>Portfolio:</strong> <a id="portfolio" href="#" target="_blank"></a></p>
-          </div>
-          <div class="profile-section">
-            <h3>Expertise & Skills</h3>
-            <p><strong>Areas of Expertise:</strong> <span id="expertiseAreas"></span></p>
-            <p><strong>Technical Skills:</strong> <span id="technicalSkills"></span></p>
-            <p><strong>Industry:</strong> <span id="industry"></span></p>
-          </div>
-          <div class="profile-section">
-            <h3>Mentoring Preferences</h3>
-            <p><strong>Mentoring Style:</strong> <span id="mentoringStyle"></span></p>
-            <p><strong>Preferred Meeting Frequency:</strong> <span id="meetingFrequency"></span></p>
-            <p><strong>Communication Preference:</strong> <span id="communicationPreference"></span></p>
-            <p><strong>Availability:</strong> <span id="availability"></span></p>
-            <p><strong>Max Students:</strong> <span id="maxStudents"></span></p>
-          </div>
-          <div class="profile-section">
-            <h3>Education & Certifications</h3>
-            <p><strong>Education:</strong> <span id="education"></span></p>
-            <p><strong>Certifications:</strong> <span id="certifications"></span></p>
-          </div>
-          <div class="profile-actions">
-            <button id="editProfileBtn" class="cta-btn">Edit Profile</button>
-          </div>
-        </div>
 
-        <div id="profile-edit" style="display: none;">
-          <h3>Edit Your Profile</h3>
-          <div class="info-grid">
-            <div class="info-item">
-              <label for="edit-name">Full Name</label>
-              <input type="text" id="edit-name" class="edit-input">
-            </div>
-            <div class="info-item">
-              <label for="edit-company">Company / Organization</label>
-              <input type="text" id="edit-company" class="edit-input">
-            </div>
-            <div class="info-item">
-              <label for="edit-role">Job Title / Role</label>
-              <input type="text" id="edit-role" class="edit-input">
-            </div>
-            <div class="info-item">
-              <label for="edit-experience">Years of Experience</label>
-              <select id="edit-experience" class="edit-input">
-                <option value="">Select...</option>
-                <option value="0-2 years">0-2 years</option>
-                <option value="3-5 years">3-5 years</option>
-                <option value="6-10 years">6-10 years</option>
-                <option value="10+ years">10+ years</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-phone">Phone Number</label>
-              <input type="tel" id="edit-phone" class="edit-input">
-            </div>
-            <div class="info-item">
-              <label for="edit-location">Location</label>
-              <input type="text" id="edit-location" class="edit-input" placeholder="City, Country">
-            </div>
-            <div class="info-item">
-              <label for="edit-bio">About Me</label>
-              <textarea id="edit-bio" class="edit-input" placeholder="Tell us about your background and mentoring approach..."></textarea>
-            </div>
-            <div class="info-item">
-              <label for="edit-linkedin">LinkedIn Profile URL</label>
-              <input type="url" id="edit-linkedin" class="edit-input" placeholder="https://linkedin.com/in/your-profile">
-            </div>
-            <div class="info-item">
-              <label for="edit-github">GitHub Profile URL</label>
-              <input type="url" id="edit-github" class="edit-input" placeholder="https://github.com/your-username">
-            </div>
-            <div class="info-item">
-              <label for="edit-portfolio">Portfolio URL</label>
-              <input type="url" id="edit-portfolio" class="edit-input" placeholder="https://your-portfolio.com">
-            </div>
-            <div class="info-item">
-              <label for="edit-expertiseAreas">Areas of Expertise (comma-separated)</label>
-              <textarea id="edit-expertiseAreas" class="edit-input" placeholder="e.g., Web Development, Data Science, UI/UX"></textarea>
-            </div>
-            <div class="info-item">
-              <label for="edit-technicalSkills">Technical Skills (comma-separated)</label>
-              <textarea id="edit-technicalSkills" class="edit-input" placeholder="e.g., JavaScript, Python, React, Node.js"></textarea>
-            </div>
-            <div class="info-item">
-              <label for="edit-industry">Industry</label>
-              <select id="edit-industry" class="edit-input">
-                <option value="">Select...</option>
-                <option value="Technology">Technology</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Finance">Finance</option>
-                <option value="Education">Education</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Design">Design</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-mentoringStyle">Mentoring Style</label>
-              <select id="edit-mentoringStyle" class="edit-input">
-                <option value="">Select...</option>
-                <option value="Hands-on">Hands-on</option>
-                <option value="Guided">Guided</option>
-                <option value="Consultative">Consultative</option>
-                <option value="Collaborative">Collaborative</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-meetingFrequency">Preferred Meeting Frequency</label>
-              <select id="edit-meetingFrequency" class="edit-input">
-                <option value="">Select...</option>
-                <option value="Weekly">Weekly</option>
-                <option value="Bi-weekly">Bi-weekly</option>
-                <option value="Monthly">Monthly</option>
-                <option value="As needed">As needed</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-communicationPreference">Preferred Communication</label>
-              <select id="edit-communicationPreference" class="edit-input">
-                <option value="">Select...</option>
-                <option value="Video Call">Video Call</option>
-                <option value="Chat">Chat</option>
-                <option value="Email">Email</option>
-                <option value="Phone">Phone</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-availability">Availability</label>
-              <select id="edit-availability" class="edit-input">
-                <option value="">Select...</option>
-                <option value="Weekdays">Weekdays</option>
-                <option value="Weekends">Weekends</option>
-                <option value="Evenings">Evenings</option>
-                <option value="Flexible">Flexible</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-maxStudents">Maximum Number of Students</label>
-              <select id="edit-maxStudents" class="edit-input">
-                <option value="">Select...</option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="Unlimited">Unlimited</option>
-              </select>
-            </div>
-            <div class="info-item">
-              <label for="edit-education">Education</label>
-              <textarea id="edit-education" class="edit-input" placeholder="e.g., Bachelor's in Computer Science, University of XYZ"></textarea>
-            </div>
-            <div class="info-item">
-              <label for="edit-certifications">Certifications (comma-separated)</label>
-              <textarea id="edit-certifications" class="edit-input" placeholder="e.g., AWS Certified Developer, Google Cloud Professional"></textarea>
-            </div>
-            <div class="info-item">
-              <label for="edit-photo">Change Profile Photo</label>
-              <div class="photo-upload-container">
-                  <input type="file" id="edit-photo" class="edit-input" accept="image/*">
-                  <div class="photo-preview" id="photo-preview" style="display: none;">
-                      <img id="preview-image" src="" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 50%; margin-top: 10px;">
-                      <button type="button" id="remove-photo" class="remove-photo-btn" style="margin-top: 10px; padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer;">Remove Photo</button>
-                  </div>
-                  <div class="upload-loading" id="upload-loading" style="display: none; text-align: center; margin-top: 10px;">
-                      <div class="spinner" style="display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #0077c2; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                      <span style="margin-left: 10px; color: #0077c2;">Uploading photo...</span>
-                  </div>
-                  <div class="upload-info" style="font-size: 0.9rem; color: #666; margin-top: 5px;">
-                      Supported formats: JPG, PNG, GIF (max 5MB)
-                  </div>
-              </div>
-            </div>
-          </div>
-          <div class="profile-actions">
-            <button id="saveProfileBtn" class="cta-btn">Save Changes</button>
-            <button id="cancelEditBtn" class="cta-btn" style="background: #6c757d;">Cancel</button>
-          </div>
+    <!-- Notification dropover overlay card -->
+    <div id="notificationDropdown" style="display: none; position: absolute; top: 72px; right: 32px; width: 320px; background-color: #ffffff; border: 1px solid #E2E8F0; border-radius: 14px; box-shadow: 0 10px 25px rgba(15,23,42,0.1); z-index: 1000; padding: 16px; box-sizing: border-box;">
+        <div style="font-weight: 700; color: #0F172A; margin-bottom: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 8px;">Notifications</div>
+        <div id="notificationsContent" style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="font-size: 0.85rem; color: #64748B; text-align: center; padding: 12px 0;">No new notifications</div>
         </div>
-      </section>
-    </main>
-    <footer>
-      <p>&copy; 2025 Amplimentor. All rights reserved.</p>
-    </footer>
-  </div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const viewMode = document.getElementById('profile-view');
-      const editMode = document.getElementById('profile-edit');
-      
-      function populateProfileData(mentor) {
-        // Helper function to set text content
-        const setText = (id, text) => document.getElementById(id).textContent = text || 'N/A';
-        // Helper function to set href
-        const setLink = (id, url) => {
-          const el = document.getElementById(id);
-          if (url) {
-            el.href = url;
-            el.textContent = url;
-            el.style.display = 'inline';
-          } else {
-            el.style.display = 'none';
-            el.textContent = '';
-          }
-        };
+    </div>
 
-        setText('mentorName', mentor.name);
-        setText('company', mentor.company);
-        setText('mentorEmail', mentor.email);
-        setText('mentorRole', mentor.role);
-        setText('experience', mentor.experience);
-        setText('phoneNumber', mentor.phoneNumber);
-        setText('location', mentor.location);
-        setText('bio', mentor.bio);
-        setLink('linkedIn', mentor.linkedIn);
-        setLink('github', mentor.github);
-        setLink('portfolio', mentor.portfolio);
-        setText('expertiseAreas', (mentor.expertiseAreas && mentor.expertiseAreas.length) ? mentor.expertiseAreas.join(', ') : '');
-        setText('technicalSkills', (mentor.technicalSkills && mentor.technicalSkills.length) ? mentor.technicalSkills.join(', ') : '');
-        setText('industry', mentor.industry);
-        setText('mentoringStyle', mentor.mentoringStyle);
-        setText('meetingFrequency', mentor.meetingFrequency);
-        setText('communicationPreference', mentor.communicationPreference);
-        setText('availability', mentor.availability);
-        setText('maxStudents', mentor.maxStudents);
-        setText('education', mentor.education);
-        setText('certifications', (mentor.certifications && mentor.certifications.length) ? mentor.certifications.join(', ') : '');
-        
-        const mentorPhoto = document.getElementById('mentorPhoto');
-        if (mentor.photo) {
-          mentorPhoto.src = API_BASE + '/uploads/' + mentor.photo;
-        } else {
-          mentorPhoto.src = '/default-avatar.svg';
+    <!-- Page Controller Javascript -->
+    <script>
+        let currentMentor = {};
+
+        function enterEditMode(cardId) {
+            document.getElementById(cardId).classList.add('editing');
         }
 
-        // Populate edit form
-        document.getElementById('edit-name').value = mentor.name || '';
-        document.getElementById('edit-company').value = mentor.company || '';
-        document.getElementById('edit-role').value = mentor.role || '';
-        document.getElementById('edit-experience').value = mentor.experience || '';
-        document.getElementById('edit-phone').value = mentor.phoneNumber || '';
-        document.getElementById('edit-location').value = mentor.location || '';
-        document.getElementById('edit-bio').value = mentor.bio || '';
-        document.getElementById('edit-linkedin').value = mentor.linkedIn || '';
-        document.getElementById('edit-github').value = mentor.github || '';
-        document.getElementById('edit-portfolio').value = mentor.portfolio || '';
-        document.getElementById('edit-expertiseAreas').value = (mentor.expertiseAreas && mentor.expertiseAreas.length) ? mentor.expertiseAreas.join(', ') : '';
-        document.getElementById('edit-technicalSkills').value = (mentor.technicalSkills && mentor.technicalSkills.length) ? mentor.technicalSkills.join(', ') : '';
-        document.getElementById('edit-industry').value = mentor.industry || '';
-        document.getElementById('edit-mentoringStyle').value = mentor.mentoringStyle || '';
-        document.getElementById('edit-meetingFrequency').value = mentor.meetingFrequency || '';
-        document.getElementById('edit-communicationPreference').value = mentor.communicationPreference || '';
-        document.getElementById('edit-availability').value = mentor.availability || '';
-        document.getElementById('edit-maxStudents').value = mentor.maxStudents || '';
-        document.getElementById('edit-education').value = mentor.education || '';
-        document.getElementById('edit-certifications').value = (mentor.certifications && mentor.certifications.length) ? mentor.certifications.join(', ') : '';
-      }
+        function cancelEditMode(cardId) {
+            document.getElementById(cardId).classList.remove('editing');
+            resetCardInputs(cardId);
+        }
 
-      function fetchMentorProfile() {
-        fetch(API_BASE + '/api/mentor/profile', { credentials: 'include' })
-          .then(res => res.ok ? res.json() : Promise.reject('Failed to load profile'))
-          .then(populateProfileData)
-          .catch(console.error);
-      }
-
-      document.getElementById('editProfileBtn').addEventListener('click', () => {
-        viewMode.style.display = 'none';
-        editMode.style.display = 'block';
-      });
-
-      document.getElementById('cancelEditBtn').addEventListener('click', () => {
-        editMode.style.display = 'none';
-        viewMode.style.display = 'block';
-      });
-
-      document.getElementById('saveProfileBtn').addEventListener('click', () => {
-        const updatedData = {
-          name: document.getElementById('edit-name').value,
-          company: document.getElementById('edit-company').value,
-          role: document.getElementById('edit-role').value,
-          experience: document.getElementById('edit-experience').value,
-          phoneNumber: document.getElementById('edit-phone').value,
-          location: document.getElementById('edit-location').value,
-          bio: document.getElementById('edit-bio').value,
-          linkedIn: document.getElementById('edit-linkedin').value,
-          github: document.getElementById('edit-github').value,
-          portfolio: document.getElementById('edit-portfolio').value,
-          expertiseAreas: document.getElementById('edit-expertiseAreas').value.split(',').map(s => s.trim()).filter(Boolean),
-          technicalSkills: document.getElementById('edit-technicalSkills').value.split(',').map(s => s.trim()).filter(Boolean),
-          industry: document.getElementById('edit-industry').value,
-          mentoringStyle: document.getElementById('edit-mentoringStyle').value,
-          meetingFrequency: document.getElementById('edit-meetingFrequency').value,
-          communicationPreference: document.getElementById('edit-communicationPreference').value,
-          availability: document.getElementById('edit-availability').value,
-          maxStudents: document.getElementById('edit-maxStudents').value,
-          education: document.getElementById('edit-education').value,
-          certifications: document.getElementById('edit-certifications').value.split(',').map(s => s.trim()).filter(Boolean),
-        };
-
-        const photoFile = document.getElementById('edit-photo').files[0];
-
-        const saveProfileData = () => {
-          fetch(API_BASE + '/api/mentor/profile', {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(updatedData),
-          })
-          .then(res => res.ok ? res.json() : Promise.reject('Failed to save profile data'))
-          .then(() => {
-            editMode.style.display = 'none';
-            viewMode.style.display = 'block';
-            fetchMentorProfile(); // Refresh data
-            // Clear photo preview
-            document.getElementById('photo-preview').style.display = 'none';
-            document.getElementById('edit-photo').value = '';
-          })
-          .catch(error => {
-            console.error('Error saving profile:', error);
-            alert('Failed to save profile. Please try again.');
-          });
-        };
-
-        if (photoFile) {
-          // Validate file size
-          if (photoFile.size > 5 * 1024 * 1024) {
-            alert('File size too large. Maximum size is 5MB.');
-            return;
-          }
-
-          // Validate file type
-          if (!photoFile.type.startsWith('image/')) {
-            alert('Please select an image file.');
-            return;
-          }
-
-          // Show loading indicator
-          document.getElementById('upload-loading').style.display = 'block';
-          document.getElementById('saveProfileBtn').disabled = true;
-          document.getElementById('saveProfileBtn').textContent = 'Uploading...';
-
-          const formData = new FormData();
-          formData.append('photo', photoFile);
-          fetch(API_BASE + '/api/mentor/upload-photo', {
-            method: 'POST',
-            credentials: 'include',
-            body: formData,
-          })
-          .then(res => {
-            if (!res.ok) {
-              return res.json().then(err => Promise.reject(err.message || 'Photo upload failed'));
+        function resetCardInputs(cardId) {
+            const m = currentMentor;
+            if (cardId === 'basic-info') {
+                document.getElementById('edit-name').value = m.name || '';
+                document.getElementById('edit-location').value = m.location || '';
+                document.getElementById('edit-phone').value = m.phoneNumber || '';
+                document.getElementById('edit-languages').value = (m.languages || []).join(', ');
+                document.getElementById('edit-headline').value = m.bioHeadline || m.designation || '';
+                document.getElementById('edit-bio').value = m.bio || '';
+            } else if (cardId === 'prof-details') {
+                document.getElementById('edit-company').value = m.company || m.organization || '';
+                document.getElementById('edit-role').value = m.role || m.designation || '';
+                document.getElementById('edit-experience').value = m.experience || '6-10 years';
+                document.getElementById('edit-mode').value = m.teachingMode || 'Online & Offline';
+                document.getElementById('edit-expertiseAreas').value = (m.expertiseAreas || []).join(', ');
+                document.getElementById('edit-technicalSkills').value = (m.technicalSkills || []).join(', ');
+            } else if (cardId === 'edu-certs') {
+                document.getElementById('edit-education').value = m.education || '';
+                document.getElementById('edit-certifications').value = (m.certifications || []).join(', ');
+            } else if (cardId === 'avail-pricing') {
+                document.getElementById('edit-availability').value = m.availability || 'Weekdays';
+                document.getElementById('edit-maxStudents').value = m.maxStudents || '3';
+                document.getElementById('edit-price').value = m.sessionPrice ? m.sessionPrice.replace(/[^0-9]/g, '') : '399';
+            } else if (cardId === 'media-socials') {
+                document.getElementById('edit-linkedin').value = m.linkedIn || '';
+                document.getElementById('edit-github').value = m.github || '';
+                document.getElementById('edit-portfolio').value = m.portfolio || '';
             }
-            return res.json();
-          })
-          .then(data => {
-            console.log('Photo uploaded successfully:', data);
-            // Hide loading indicator
-            document.getElementById('upload-loading').style.display = 'none';
-            document.getElementById('saveProfileBtn').disabled = false;
-            document.getElementById('saveProfileBtn').textContent = 'Save Changes';
-            saveProfileData();
-          })
-          .catch(error => {
-            console.error('Photo upload error:', error);
-            // Hide loading indicator
-            document.getElementById('upload-loading').style.display = 'none';
-            document.getElementById('saveProfileBtn').disabled = false;
-            document.getElementById('saveProfileBtn').textContent = 'Save Changes';
-            alert('Failed to upload photo: ' + error);
-          });
-        } else {
-          saveProfileData();
         }
-      });
 
-      // Photo preview functionality
-      document.getElementById('edit-photo').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        const preview = document.getElementById('photo-preview');
-        const previewImage = document.getElementById('preview-image');
-        
-        if (file) {
-          // Validate file size
-          if (file.size > 5 * 1024 * 1024) {
-            alert('File size too large. Maximum size is 5MB.');
-            this.value = '';
-            preview.style.display = 'none';
-            return;
-          }
+        document.addEventListener('DOMContentLoaded', () => {
+            const headerAvatar = document.getElementById('headerAvatar');
+            const mentorName = document.getElementById('mentorName');
+            const notificationCount = document.getElementById('notificationCount');
+            const notificationLink = document.getElementById('notificationLink');
+            const notificationDropdown = document.getElementById('notificationDropdown');
+            const notificationsContent = document.getElementById('notificationsContent');
 
-          // Validate file type
-          if (!file.type.startsWith('image/')) {
-            alert('Please select an image file.');
-            this.value = '';
-            preview.style.display = 'none';
-            return;
-          }
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
 
-          const reader = new FileReader();
-          reader.onload = function(e) {
-            previewImage.src = e.target.result;
-            preview.style.display = 'block';
-          };
-          reader.readAsDataURL(file);
-        } else {
-          preview.style.display = 'none';
+            // Notification dropdown toggle
+            notificationLink.addEventListener('click', (e) => {
+                e.stopPropagation();
+                notificationDropdown.style.display = notificationDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', () => {
+                notificationDropdown.style.display = 'none';
+            });
+
+            // Photo change upload handler
+            document.getElementById('edit-photo').addEventListener('change', async function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size exceeds 5MB limit.');
+                    return;
+                }
+                if (!file.type.startsWith('image/')) {
+                    alert('Please select an image file.');
+                    return;
+                }
+
+                document.getElementById('upload-loading').style.display = 'block';
+                const formData = new FormData();
+                formData.append('photo', file);
+
+                try {
+                    const res = await fetch(API_BASE + '/api/mentor/upload-photo', {
+                        method: 'POST',
+                        credentials: 'include',
+                        body: formData
+                    });
+                    if (res.ok) {
+                        fetchProfile();
+                    } else {
+                        const err = await res.json();
+                        alert('Upload failed: ' + (err.message || 'Error'));
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert('Failed to connect to media server.');
+                } finally {
+                    document.getElementById('upload-loading').style.display = 'none';
+                }
+            });
+
+            // Logout click
+            document.querySelectorAll('.logout-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/logout', { method: 'POST' })
+                        .then(() => { window.location.href = '/login.html'; })
+                        .catch(() => { window.location.href = '/login.html'; });
+                });
+            });
+
+            fetchProfile();
+            loadNotifications();
+        });
+
+        function populateFormViews(mentor) {
+            currentMentor = mentor;
+
+            // Image variables
+            const photoUrl = mentor.photo ? (API_BASE + '/uploads/' + mentor.photo) : '/default-avatar.svg';
+            document.getElementById('mentorPhoto').src = photoUrl;
+            document.getElementById('headerAvatar').src = photoUrl;
+
+            // Header labels
+            document.getElementById('mentorName').textContent = mentor.name || 'Anjali';
+            document.getElementById('headerProfileName').textContent = mentor.name || 'Anjali Patel';
+            
+            const role = mentor.role || mentor.designation || 'NEET Biology Faculty';
+            const company = mentor.company || mentor.organization || 'Aakash BYJU\'S';
+            document.getElementById('headerProfileRole').textContent = `${role} • ${company}`;
+            document.getElementById('headerProfileLoc').innerHTML = `📍 ${mentor.location || 'Ahmedabad, Gujarat'}`;
+
+            // Mini Right Stats
+            document.getElementById('statsStudents').textContent = mentor.studentsMentored ? (mentor.studentsMentored + '+') : '1200+';
+            document.getElementById('statsSessions').textContent = mentor.studentsMentored ? Math.round(mentor.studentsMentored * 1.5) + '+' : '1800+';
+            document.getElementById('statsRating').textContent = mentor.rating || '4.8';
+            document.getElementById('statsExperience').textContent = mentor.experience ? mentor.experience.replace(/[^0-9]/g, '') + ' Yrs' : '8 Yrs';
+
+            // Helper to set view fields
+            const setVal = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    if (val) {
+                        el.textContent = val;
+                        el.classList.remove('empty');
+                    } else {
+                        el.textContent = 'Not Specified';
+                        el.classList.add('empty');
+                    }
+                }
+            };
+
+            // Section 1 fields
+            setVal('valName', mentor.name);
+            setVal('valLocation', mentor.location);
+            setVal('valPhone', mentor.phoneNumber);
+            setVal('valLanguages', (mentor.languages || []).join(', '));
+            setVal('valHeadline', mentor.bioHeadline || mentor.designation);
+            setVal('valBio', mentor.bio);
+
+            // Section 2 fields
+            setVal('valCompany', company);
+            setVal('timelineOrg', company);
+            setVal('valRole', role);
+            setVal('valExperience', mentor.experience || '8 Years');
+            setVal('valEducation', mentor.education || 'M.Sc Biotech');
+
+            // Subjects Chips list
+            const valSubjects = document.getElementById('valSubjects');
+            valSubjects.innerHTML = '';
+            if (mentor.expertiseAreas && mentor.expertiseAreas.length > 0) {
+                mentor.expertiseAreas.forEach(a => {
+                    valSubjects.innerHTML += `<span class="read-tag-pill">${a}</span>`;
+                });
+            } else {
+                valSubjects.innerHTML = '<span class="field-val empty">No subjects listed</span>';
+            }
+
+            // Skills Chips list
+            const valSkills = document.getElementById('valSkills');
+            valSkills.innerHTML = '';
+            if (mentor.technicalSkills && mentor.technicalSkills.length > 0) {
+                mentor.technicalSkills.forEach(s => {
+                    valSkills.innerHTML += `<span class="read-tag-pill blue">${s}</span>`;
+                });
+            } else {
+                valSkills.innerHTML = '<span class="field-val empty">No methodologies listed</span>';
+            }
+
+            // Certifications Chips list
+            const valCertifications = document.getElementById('valCertifications');
+            valCertifications.innerHTML = '';
+            if (mentor.certifications && mentor.certifications.length > 0) {
+                mentor.certifications.forEach(c => {
+                    valCertifications.innerHTML += `<span class="read-tag-pill blue">${c}</span>`;
+                });
+            } else {
+                valCertifications.innerHTML = '<span class="field-val empty">No certificates uploaded</span>';
+            }
+
+            // Section 4 fields
+            setVal('valAvailability', mentor.availability || 'Weekdays');
+            setVal('valMaxStudents', mentor.maxStudents || '3');
+            setVal('valPrice', mentor.sessionPrice || '₹399');
+
+            // Section 5 links
+            const setupLink = (id, url) => {
+                const link = document.getElementById(id);
+                if (link) {
+                    if (url) {
+                        link.href = url;
+                        link.style.display = 'inline-flex';
+                    } else {
+                        link.style.display = 'none';
+                    }
+                }
+            };
+            setupLink('lnkLinkedin', mentor.linkedIn);
+            setupLink('lnkGithub', mentor.github);
+            setupLink('lnkPortfolio', mentor.portfolio);
+
+            // Populate forms inputs
+            resetCardInputs('basic-info');
+            resetCardInputs('prof-details');
+            resetCardInputs('edu-certs');
+            resetCardInputs('avail-pricing');
+            resetCardInputs('media-socials');
+
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
         }
-      });
 
-      // Remove photo functionality
-      document.getElementById('remove-photo').addEventListener('click', function() {
-        document.getElementById('edit-photo').value = '';
-        document.getElementById('photo-preview').style.display = 'none';
-      });
+        function fetchProfile() {
+            fetch(API_BASE + '/api/mentor/profile', { credentials: 'include' })
+                .then(res => res.ok ? res.json() : Promise.reject('Failed to load profile details'))
+                .then(populateFormViews)
+                .catch(console.error);
+        }
 
-      fetchMentorProfile();
-    });
-  </script>
+        function saveProfileFieldSection(payload, cardId) {
+            fetch(API_BASE + '/api/mentor/profile', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(payload)
+            })
+            .then(res => res.ok ? res.json() : Promise.reject('Failed to save profile fields'))
+            .then(() => {
+                cancelEditMode(cardId);
+                fetchProfile();
+            })
+            .catch(error => {
+                console.error(error);
+                alert('Update failed. Please check inputs and retry.');
+            });
+        }
+
+        function saveBasicInfo() {
+            const payload = {
+                name: document.getElementById('edit-name').value,
+                location: document.getElementById('edit-location').value,
+                phoneNumber: document.getElementById('edit-phone').value,
+                languages: document.getElementById('edit-languages').value.split(',').map(s => s.trim()).filter(Boolean),
+                bioHeadline: document.getElementById('edit-headline').value,
+                bio: document.getElementById('edit-bio').value
+            };
+            saveProfileFieldSection(payload, 'basic-info');
+        }
+
+        function saveProfessionalInfo() {
+            const payload = {
+                company: document.getElementById('edit-company').value,
+                organization: document.getElementById('edit-company').value,
+                role: document.getElementById('edit-role').value,
+                designation: document.getElementById('edit-role').value,
+                experience: document.getElementById('edit-experience').value,
+                teachingMode: document.getElementById('edit-mode').value,
+                expertiseAreas: document.getElementById('edit-expertiseAreas').value.split(',').map(s => s.trim()).filter(Boolean),
+                technicalSkills: document.getElementById('edit-technicalSkills').value.split(',').map(s => s.trim()).filter(Boolean)
+            };
+            saveProfileFieldSection(payload, 'prof-details');
+        }
+
+        function saveTimelineInfo() {
+            const payload = {
+                education: document.getElementById('edit-education').value,
+                certifications: document.getElementById('edit-certifications').value.split(',').map(s => s.trim()).filter(Boolean)
+            };
+            saveProfileFieldSection(payload, 'edu-certs');
+        }
+
+        function saveAvailabilityPricingInfo() {
+            const payload = {
+                availability: document.getElementById('edit-availability').value,
+                maxStudents: document.getElementById('edit-maxStudents').value,
+                sessionPrice: '₹' + document.getElementById('edit-price').value
+            };
+            saveProfileFieldSection(payload, 'avail-pricing');
+        }
+
+        function saveMediaInfo() {
+            const payload = {
+                linkedIn: document.getElementById('edit-linkedin').value,
+                github: document.getElementById('edit-github').value,
+                portfolio: document.getElementById('edit-portfolio').value
+            };
+            saveProfileFieldSection(payload, 'media-socials');
+        }
+
+        function saveAccountInfo() {
+            alert('Settings updated successfully (Simulation)');
+            cancelEditMode('account-sec');
+        }
+
+        const loadNotifications = async () => {
+            try {
+                const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/notifications');
+                if (res.ok) {
+                    const data = await res.json();
+                    const count = data.count || 0;
+                    if (count > 0) {
+                        notificationCount.textContent = count;
+                        notificationCount.style.display = 'inline-flex';
+                    }
+                    
+                    if (data.notifications && data.notifications.length > 0) {
+                        notificationsContent.innerHTML = data.notifications.map(n => `
+                            <div style="font-size: 0.85rem; color: #475569; padding: 8px 10px; background-color: #F8FAFC; border-radius: 8px; border: 1px solid #F1F5F9;">
+                                ${n.text || n.message}
+                            </div>
+                        `).join('');
+                    }
+                }
+            } catch (e) {
+                console.error("Notifications API load error:", e);
+            }
+        };
+    </script>
+    <script src="/navigation-loader.js"></script>
 </body>
-</html> 
+</html>

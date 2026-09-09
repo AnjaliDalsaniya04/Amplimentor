@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Resources Library - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Library Grid layout */
+        .library-workspace-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: minmax(260px, 280px) minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        /* Sidebar folders */
+        .library-sidebar {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 0;
+            align-self: start;
+        }
+        .folder-link-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14.5px;
+            color: #475569;
+            transition: background 0.2s, color 0.2s;
+        }
+        .folder-link-row:hover {
+            background-color: #F8FAFC;
+            color: var(--primary);
+        }
+        .folder-link-row.active {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+        }
+
+        /* Resource card element */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+        .resource-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(15,23,42,0.05);
+        }
+        .file-icon-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .file-icon-badge.pdf { background-color: #FEF2F2; color: #EF4444; }
+        .file-icon-badge.video { background-color: #EEF2FF; color: #4F46E5; }
+        .file-icon-badge.sheet { background-color: #FFFBEB; color: #F59E0B; }
+
+        .resource-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: #1E293B;
+            margin: 0;
+            line-height: 1.4;
+        }
+        .resource-meta {
+            font-size: 11.5px;
+            color: #94A3B8;
+            font-weight: 600;
+        }
+
+        .bookmark-icon-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: #94A3B8;
+            transition: color 0.15s;
+        }
+        .bookmark-icon-btn.active {
+            color: #F59E0B;
+        }
+
+        .btn-download-file {
+            width: 100%;
+            background-color: #F1F5F9;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+        .btn-download-file:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 992px) {
+            .resource-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        @media (max-width: 768px) {
+            .library-workspace-container {
+                grid-template-columns: 1fr;
+            }
+            .resource-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li id="dynamicNavLink"><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Filled by JS -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Workspace structure -->
+    <div class="library-workspace-container">
+        
+        <!-- Sidebar folder links -->
+        <aside class="library-sidebar">
+            <div class="folder-link-row active" onclick="switchFolderCategory('all', this)">
+                <span>All Resources</span>
+                <span id="badgeAll">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('pdf', this)">
+                <span>PDF Documents</span>
+                <span id="badgePdf">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('ppt', this)">
+                <span>PPT Slides</span>
+                <span id="badgePpt">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('video', this)">
+                <span>Videos & Recordings</span>
+                <span id="badgeVideo">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('worksheet', this)">
+                <span>Worksheets</span>
+                <span id="badgeWorksheet">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('formula', this)">
+                <span>Formula Sheets</span>
+                <span id="badgeFormula">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('papers', this)">
+                <span>Practice Papers</span>
+                <span id="badgePapers">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('bookmarks', this)">
+                <span>Bookmarks</span>
+                <span id="badgeBookmarks" style="color:#F59E0B;"><i class="fa-solid fa-star"></i></span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('downloads', this)">
+                <span>Downloads</span>
+                <span id="badgeDownloads">0</span>
+            </div>
+            <div class="folder-link-row" onclick="switchFolderCategory('recent', this)">
+                <span>Recent Files</span>
+                <span id="badgeRecent">0</span>
+            </div>
+        </aside>
+
+        <!-- Right Side: File Browser -->
+        <main style="display:flex; flex-direction:column; gap:24px; width: 100%;">
+            <div class="app-filter-bar">
+                <div class="app-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search files, formula sheets..." class="app-search-input" id="fileSearchInput" oninput="filterFilesList()">
+                </div>
+            </div>
+
+            <!-- Grid of resource items -->
+            <div class="resource-grid" id="resourceFileGrid">
+                <!-- Loaded dynamically by JS -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let files = [];
+        let activeCategory = 'all';
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+
+                    const brand = document.getElementById('brandLink');
+                    const dynLink = document.getElementById('dynamicNavLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard.html';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dynLink.innerHTML = '<a href="/my-students.html">My Students</a>';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard.html';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dynLink.innerHTML = '<a href="/student/mentors">Find Mentors</a>';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student-settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    seedMockFiles();
+                } else {
+                    seedMockFiles();
+                }
+            } catch (err) {
+                console.error(err);
+                seedMockFiles();
+            }
+        });
+
+        function seedMockFiles() {
+            files = [
+                { id: 'f-1', name: 'NCERT Biology Cell Division notes.pdf', type: 'pdf', size: '2.4 MB', bookmarked: true, isRecent: true, isDownloaded: true },
+                { id: 'f-2', name: 'Optics Formula Sheets class 12.pdf', type: 'formula', size: '1.8 MB', bookmarked: false, isRecent: true, isDownloaded: false },
+                { id: 'f-3', name: 'Halogenation of alkanes lecture recording.mp4', type: 'video', size: '42 MB', bookmarked: false, isRecent: false, isDownloaded: false },
+                { id: 'f-4', name: 'Genetics hybrid crosses Punnett worksheets.xlsx', type: 'worksheet', size: '840 KB', bookmarked: true, isRecent: false, isDownloaded: true },
+                { id: 'f-5', name: 'JEE Physics practice question paper 2026.pdf', type: 'papers', size: '3.1 MB', bookmarked: false, isRecent: false, isDownloaded: false },
+                { id: 'f-6', name: 'Chemical Kinetics PPT Slides.pptx', type: 'ppt', size: '4.2 MB', bookmarked: false, isRecent: true, isDownloaded: false },
+                { id: 'f-7', name: 'Punnett Square Genetics Formula Sheet.pdf', type: 'formula', size: '920 KB', bookmarked: true, isRecent: true, isDownloaded: true },
+                { id: 'f-8', name: 'NEET Practice paper Biology genetics.pdf', type: 'papers', size: '2.9 MB', bookmarked: false, isRecent: false, isDownloaded: false }
+            ];
+
+            updateCategoryCounts();
+            renderFilesGrid();
+        }
+
+        function updateCategoryCounts() {
+            document.getElementById('badgeAll').textContent = files.length;
+            document.getElementById('badgePdf').textContent = files.filter(f => f.type === 'pdf').length;
+            document.getElementById('badgePpt').textContent = files.filter(f => f.type === 'ppt').length;
+            document.getElementById('badgeVideo').textContent = files.filter(f => f.type === 'video').length;
+            document.getElementById('badgeWorksheet').textContent = files.filter(f => f.type === 'worksheet').length;
+            document.getElementById('badgeFormula').textContent = files.filter(f => f.type === 'formula').length;
+            document.getElementById('badgePapers').textContent = files.filter(f => f.type === 'papers').length;
+            document.getElementById('badgeDownloads').textContent = files.filter(f => f.isDownloaded).length;
+            document.getElementById('badgeRecent').textContent = files.filter(f => f.isRecent).length;
+        }
+
+        function switchFolderCategory(category, element) {
+            activeCategory = category;
+            document.querySelectorAll('.folder-link-row').forEach(row => row.classList.remove('active'));
+            element.classList.add('active');
+            renderFilesGrid();
+        }
+
+        function renderFilesGrid() {
+            const grid = document.getElementById('resourceFileGrid');
+            grid.innerHTML = '';
+
+            const query = document.getElementById('fileSearchInput').value.toLowerCase().trim();
+
+            let filtered = files;
+            if (activeCategory !== 'all') {
+                if (activeCategory === 'bookmarks') {
+                    filtered = files.filter(f => f.bookmarked);
+                } else if (activeCategory === 'downloads') {
+                    filtered = files.filter(f => f.isDownloaded);
+                } else if (activeCategory === 'recent') {
+                    filtered = files.filter(f => f.isRecent);
+                } else {
+                    filtered = files.filter(f => f.type === activeCategory);
+                }
+            }
+
+            if (query !== '') {
+                filtered = filtered.filter(f => f.name.toLowerCase().includes(query));
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div style="grid-column: span 3; text-align:center; padding:48px 0;">
+                        <div style="font-size:48px; color:#94A3B8; margin-bottom:12px;"><i class="fa-solid fa-folder-open"></i></div>
+                        <h3 class="info-title">No resources found</h3>
+                        <span style="font-size:12px; color:#64748B;">Try selecting a different filter category.</span>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(f => {
+                let badgeClass = 'pdf';
+                let iconClass = 'fa-file-pdf';
+                if (f.type === 'video') { badgeClass = 'video'; iconClass = 'fa-circle-play'; }
+                else if (f.type === 'worksheet') { badgeClass = 'sheet'; iconClass = 'fa-file-excel'; }
+
+                const starClass = f.bookmarked ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+
+                grid.innerHTML += `
+                    <div class="resource-card">
+                        <button class="bookmark-icon-btn ${f.bookmarked ? 'active' : ''}" onclick="toggleBookmark('${f.id}')">
+                            <i class="${starClass}"></i>
+                        </button>
+                        
+                        <div class="file-icon-badge ${badgeClass}">
+                            <i class="fa-solid ${iconClass}"></i>
+                        </div>
+
+                        <div>
+                            <h4 class="resource-title" title="${f.name}">${f.name}</h4>
+                            <span class="resource-meta">${f.size} • ${f.type.toUpperCase()}</span>
+                        </div>
+
+                        <div style="margin-top:auto;">
+                            <button class="btn-download-file" onclick="downloadFileSimulation('${f.name}')">
+                                <i class="fa-solid fa-download"></i> Download Resource
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterFilesList() {
+            renderFilesGrid();
+        }
+
+        function toggleBookmark(fileId) {
+            const file = files.find(f => f.id === fileId);
+            if (file) {
+                file.bookmarked = !file.bookmarked;
+                window.toast.success(file.bookmarked ? "Bookmark added" : "Bookmark removed");
+                renderFilesGrid();
+            }
+        }
+
+        function downloadFileSimulation(name) {
+            window.toast.success("Download started", `Downloading ${name}...`);
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

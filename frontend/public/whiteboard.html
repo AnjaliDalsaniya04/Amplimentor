@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Whiteboard - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #F1F5F9;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Toolbar Header */
+        .whiteboard-toolbar {
+            height: 56px;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E2E8F0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+            gap: 16px;
+        }
+        .tools-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tool-btn {
+            width: 36px;
+            height: 36px;
+            border: 1px solid #E2E8F0;
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            color: #475569;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .tool-btn:hover {
+            background-color: #F8FAFC;
+            color: #3B82F6;
+        }
+        .tool-btn.active {
+            background-color: #EFF6FF;
+            border-color: #3B82F6;
+            color: #3B82F6;
+        }
+
+        .canvas-container {
+            flex-grow: 1;
+            position: relative;
+            background-color: #FFFFFF;
+        }
+        #whiteboardCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+
+        /* Collaborative pointer overlay */
+        .cursor-pointer-mock {
+            position: absolute;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #E11D48;
+            transition: top 0.1s linear, left 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+    <!-- Whiteboard controls -->
+    <header class="whiteboard-toolbar">
+        <div class="tools-group">
+            <button class="tool-btn active" id="toolPen" onclick="setWhiteboardTool('pen')" title="Pen tool"><i class="fa-solid fa-pencil"></i></button>
+            <button class="tool-btn" id="toolEraser" onclick="setWhiteboardTool('eraser')" title="Eraser tool"><i class="fa-solid fa-eraser"></i></button>
+            
+            <div style="width:1px; height:24px; background:#E2E8F0; margin:0 4px;"></div>
+            
+            <!-- Colors -->
+            <button class="tool-btn" style="background:#000000; width:20px; height:20px; border-radius:50%;" onclick="setPenColor('#000000')"></button>
+            <button class="tool-btn" style="background:#EF4444; width:20px; height:20px; border-radius:50%;" onclick="setPenColor('#EF4444')"></button>
+            <button class="tool-btn" style="background:#3B82F6; width:20px; height:20px; border-radius:50%;" onclick="setPenColor('#3B82F6')"></button>
+            <button class="tool-btn" style="background:#10B981; width:20px; height:20px; border-radius:50%;" onclick="setPenColor('#10B981')"></button>
+            
+            <div style="width:1px; height:24px; background:#E2E8F0; margin:0 4px;"></div>
+            
+            <!-- Shapes -->
+            <button class="tool-btn" id="shapeCircle" onclick="drawShapeMock('circle')" title="Insert Circle"><i class="fa-regular fa-circle"></i></button>
+            <button class="tool-btn" id="shapeRect" onclick="drawShapeMock('rectangle')" title="Insert Rectangle"><i class="fa-regular fa-square"></i></button>
+            <button class="tool-btn" onclick="insertMathFormula()" title="Insert Math Equation"><i class="fa-solid fa-square-root-variable"></i></button>
+            <button class="tool-btn" onclick="insertTextNode()" title="Insert Text Box"><i class="fa-solid fa-font"></i></button>
+            <button class="tool-btn" onclick="uploadWhiteboardImageSim()" title="Upload Image Reference" style="color:var(--primary);"><i class="fa-solid fa-image"></i></button>
+        </div>
+
+        <div class="tools-group">
+            <button class="tool-btn" onclick="clearCanvas()" title="Clear Canvas"><i class="fa-solid fa-trash-can"></i></button>
+            <button class="tool-btn" onclick="undoDraw()" title="Undo"><i class="fa-solid fa-rotate-left"></i></button>
+            <button class="tool-btn" onclick="redoDraw()" title="Redo"><i class="fa-solid fa-rotate-right"></i></button>
+            <button class="tool-btn" onclick="exportPDF()" title="Export PDF" style="width:auto; padding:0 12px; font-weight:700; font-size:12px; gap:6px; background:#10B981; color:white; border:none;"><i class="fa-solid fa-file-pdf"></i> Export PDF</button>
+        </div>
+    </header>
+
+    <!-- Canvas wrapper -->
+    <div class="canvas-container" id="canvasWrap">
+        <canvas id="whiteboardCanvas"></canvas>
+        
+        <!-- Mock participant cursor pointer -->
+        <div class="cursor-pointer-mock" id="mockCursor" style="top: 200px; left: 300px;">
+            <i class="fa-solid fa-arrow-pointer" style="transform: rotate(-45deg);"></i>
+            <span>Anjali Patel</span>
+        </div>
+    </div>
+
+    <script>
+        let canvas, ctx;
+        let drawing = false;
+        let activeTool = 'pen';
+        let strokeColor = '#000000';
+        let brushSize = 3;
+        let drawingHistory = [];
+        let historyStep = -1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            canvas = document.getElementById('whiteboardCanvas');
+            ctx = canvas.getContext('2d');
+
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            // Canvas drawing events
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            // Touch events for tablets/mobiles
+            canvas.addEventListener('touchstart', (e) => startDrawing(e.touches[0]));
+            canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
+            canvas.addEventListener('touchend', stopDrawing);
+
+            // Trigger collaborative simulated draws
+            triggerSimulatedDraws();
+        });
+
+        function resizeCanvas() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            redrawCanvasHistory();
+        }
+
+        function startDrawing(e) {
+            drawing = true;
+            ctx.beginPath();
+            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        }
+
+        function draw(e) {
+            if (!drawing) return;
+
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            
+            if (activeTool === 'eraser') {
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.lineWidth = 20;
+            } else {
+                ctx.strokeStyle = strokeColor;
+            }
+
+            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            ctx.stroke();
+        }
+
+        function stopDrawing() {
+            if (drawing) {
+                drawing = false;
+                ctx.closePath();
+                saveCanvasState();
+            }
+        }
+
+        function setWhiteboardTool(tool) {
+            activeTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(btn => btn.classList.remove('active'));
+            if (tool === 'pen') document.getElementById('toolPen').classList.add('active');
+            if (tool === 'eraser') document.getElementById('toolEraser').classList.add('active');
+        }
+
+        function setPenColor(color) {
+            strokeColor = color;
+            setWhiteboardTool('pen');
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            saveCanvasState();
+        }
+
+        function saveCanvasState() {
+            historyStep++;
+            if (historyStep < drawingHistory.length) {
+                drawingHistory.length = historyStep;
+            }
+            drawingHistory.push(canvas.toDataURL());
+        }
+
+        function undoDraw() {
+            if (historyStep > 0) {
+                historyStep--;
+                const img = new Image();
+                img.src = drawingHistory[historyStep];
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+        }
+
+        function redoDraw() {
+            if (historyStep < drawingHistory.length - 1) {
+                historyStep++;
+                const img = new Image();
+                img.src = drawingHistory[historyStep];
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+        }
+
+        function redrawCanvasHistory() {
+            if (historyStep >= 0) {
+                const img = new Image();
+                img.src = drawingHistory[historyStep];
+                img.onload = () => {
+                    ctx.drawImage(img, 0, 0);
+                };
+            }
+        }
+
+        // Shapes and simulation helpers
+        function drawShapeMock(type) {
+            ctx.lineWidth = brushSize;
+            ctx.strokeStyle = strokeColor;
+            
+            if (type === 'circle') {
+                ctx.beginPath();
+                ctx.arc(canvas.width / 2, canvas.height / 2, 60, 0, 2 * Math.PI);
+                ctx.stroke();
+            } else if (type === 'rectangle') {
+                ctx.strokeRect(canvas.width / 2 - 80, canvas.height / 2 - 50, 160, 100);
+            }
+            saveCanvasState();
+        }
+
+        function insertMathFormula() {
+            ctx.font = '24px serif';
+            ctx.fillStyle = strokeColor;
+            ctx.fillText('∫ (3x² + 2x) dx = x³ + x² + C', canvas.width / 2 - 120, canvas.height / 2);
+            saveCanvasState();
+        }
+
+        function insertTextNode() {
+            ctx.font = '16px sans-serif';
+            ctx.fillStyle = strokeColor;
+            ctx.fillText('Genetics: Mendel\'s first law of dominance.', canvas.width / 2 - 140, canvas.height / 2 - 60);
+            saveCanvasState();
+        }
+
+        function uploadWhiteboardImageSim() {
+            window.toast.success("Image Reference Added", "NCERT Botany genetics schematic loaded onto canvas.");
+            
+            // Draw nice mock Punnett genetics cross diagram
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#3B82F6';
+            ctx.fillStyle = '#EFF6FF';
+            ctx.fillRect(canvas.width / 2 - 120, canvas.height / 2 - 80, 240, 160);
+            ctx.strokeRect(canvas.width / 2 - 120, canvas.height / 2 - 80, 240, 160);
+            
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2 - 120, canvas.height / 2);
+            ctx.lineTo(canvas.width / 2 + 120, canvas.height / 2);
+            ctx.moveTo(canvas.width / 2, canvas.height / 2 - 80);
+            ctx.lineTo(canvas.width / 2, canvas.height / 2 + 80);
+            ctx.stroke();
+
+            ctx.fillStyle = '#0F172A';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText("T", canvas.width / 2 - 60, canvas.height / 2 - 50);
+            ctx.fillText("t", canvas.width / 2 + 60, canvas.height / 2 - 50);
+            ctx.fillText("T", canvas.width / 2 - 60, canvas.height / 2 + 30);
+            ctx.fillText("t", canvas.width / 2 + 60, canvas.height / 2 + 30);
+            
+            ctx.fillStyle = '#D97706';
+            ctx.fillText("Reference Punnett Cross", canvas.width / 2 - 100, canvas.height / 2 - 95);
+
+            saveCanvasState();
+        }
+
+        function exportPDF() {
+            alert('Exporting whiteboard sketch as vector PDF document. Saved successfully!');
+        }
+
+        // Simulated secondary user drawing curves together
+        function triggerSimulatedDraws() {
+            const cursor = document.getElementById('mockCursor');
+            let coords = [
+                { x: 300, y: 200 },
+                { x: 320, y: 220 },
+                { x: 360, y: 250 },
+                { x: 420, y: 290 },
+                { x: 500, y: 310 }
+            ];
+
+            let index = 0;
+            const drawInterval = setInterval(() => {
+                if (index < coords.length) {
+                    cursor.style.left = `${coords[index].x}px`;
+                    cursor.style.top = `${coords[index].y}px`;
+
+                    // Draw line matching mock cursor
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = '#EF4444'; // Red pointer color
+                    if (index === 0) {
+                        ctx.beginPath();
+                        ctx.moveTo(coords[0].x, coords[0].y);
+                    } else {
+                        ctx.lineTo(coords[index].x, coords[index].y);
+                        ctx.stroke();
+                    }
+
+                    index++;
+                } else {
+                    clearInterval(drawInterval);
+                    ctx.closePath();
+                    saveCanvasState();
+                }
+            }, 800);
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

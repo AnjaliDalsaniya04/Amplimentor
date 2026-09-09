@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Session Calendar - Amplimentor</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nav dropdown trigger styling fixes */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Calendar Layout */
+        .calendar-workspace-container {
+            max-width: 1300px;
+            margin: 40px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 32px;
+        }
+
+        /* Sidebar Control Center */
+        .calendar-control-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            align-self: start;
+        }
+        .control-section-title {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            margin-bottom: 12px;
+        }
+        .filter-checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+        }
+        .filter-checkbox-row input {
+            cursor: pointer;
+            width: 16px;
+            height: 16px;
+        }
+        .color-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .color-dot.scheduled { background-color: #3B82F6; }
+        .color-dot.completed { background-color: #10B981; }
+        .color-dot.cancelled { background-color: #EF4444; }
+        .color-dot.availability { background-color: #64748B; }
+
+        /* Calendar Workspace */
+        .calendar-view-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+        .calendar-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .toolbar-navigation {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .calendar-title-label {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            min-width: 180px;
+        }
+        .btn-toolbar-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: #FFFFFF;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+        .btn-toolbar-circle:hover {
+            background-color: #F1F5F9;
+        }
+
+        .view-switcher-tabs {
+            display: flex;
+            background-color: #F1F5F9;
+            padding: 4px;
+            border-radius: 8px;
+        }
+        .view-tab-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .view-tab-btn.active {
+            background: #FFFFFF;
+            color: var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        /* MONTH GRID VIEW */
+        .calendar-grid-header {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94A3B8;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .calendar-month-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            grid-auto-rows: 100px;
+            border-left: 1px solid var(--border);
+            border-top: 1px solid var(--border);
+        }
+        .calendar-day-cell {
+            background-color: #FFFFFF;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            overflow-y: auto;
+            position: relative;
+        }
+        .calendar-day-cell.other-month {
+            background-color: #F8FAFC;
+        }
+        .day-num-lbl {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748B;
+        }
+        .calendar-day-cell.today .day-num-lbl {
+            background-color: var(--primary);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 12px;
+            width: fit-content;
+        }
+
+        /* Event styles in grid */
+        .calendar-event-item {
+            font-size: 11px;
+            font-weight: 700;
+            border: none;
+            border-radius: 4px;
+            padding: 2px 6px;
+            cursor: pointer;
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .calendar-event-item.scheduled { background-color: #EFF6FF; color: #1E40AF; border-left: 3px solid #3B82F6; }
+        .calendar-event-item.completed { background-color: #ECFDF5; color: #065F46; border-left: 3px solid #10B981; }
+        .calendar-event-item.cancelled { background-color: #FEF2F2; color: #991B1B; border-left: 3px solid #EF4444; }
+        .calendar-event-item.availability { background-color: #F1F5F9; color: #475569; border-left: 3px solid #64748B; }
+
+        /* WEEK AND DAY VIEW LAYOUTS */
+        .calendar-agenda-view, .calendar-week-view {
+            display: none;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .agenda-list-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .agenda-list-row:hover {
+            border-color: var(--primary);
+            background-color: #F8FAFC;
+        }
+        .agenda-time-box {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 100px;
+        }
+        .agenda-time { font-size: 14.5px; font-weight: 700; color: #0F172A; }
+        .agenda-date { font-size: 11px; font-weight: 600; color: #94A3B8; }
+        .agenda-details { flex-grow: 1; margin-left: 16px; }
+        .agenda-title { font-size: 14.5px; font-weight: 700; color: #1E293B; }
+        .agenda-mentor { font-size: 12.5px; color: #64748B; margin-top: 2px; }
+
+        /* Global Modal Dialog System styling */
+        .dialog-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        .dialog-box {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 24px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: var(--shadow-lg);
+            animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes modalPop {
+            0% { transform: scale(0.95); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .dialog-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        .dialog-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+        }
+        .btn-dialog-close {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #94A3B8;
+        }
+        .dialog-body {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        .dialog-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        .btn-dialog-action {
+            padding: 8px 18px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-dialog-action.primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        .btn-dialog-action.secondary {
+            background-color: transparent;
+            border: 1px solid var(--border);
+            color: #475569;
+        }
+        .btn-dialog-action.danger {
+            background-color: #EF4444;
+            color: white;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-workspace-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li id="dynamicNavLink"><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html" class="active">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Filled by JS -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Calendar Workspace container -->
+    <div class="calendar-workspace-container">
+        
+        <!-- Sidebar filters and controls -->
+        <aside class="calendar-control-panel">
+            <div>
+                <h3 class="control-section-title">Calendar Filters</h3>
+                <label class="filter-checkbox-row">
+                    <input type="checkbox" id="checkScheduled" checked onchange="filterCalendarData()">
+                    <span class="color-dot scheduled"></span> Scheduled Sessions
+                </label>
+                <label class="filter-checkbox-row">
+                    <input type="checkbox" id="checkCompleted" checked onchange="filterCalendarData()">
+                    <span class="color-dot completed"></span> Completed
+                </label>
+                <label class="filter-checkbox-row">
+                    <input type="checkbox" id="checkCancelled" checked onchange="filterCalendarData()">
+                    <span class="color-dot cancelled"></span> Cancelled
+                </label>
+                <label class="filter-checkbox-row">
+                    <input type="checkbox" id="checkAvailability" checked onchange="filterCalendarData()">
+                    <span class="color-dot availability"></span> Working Slots
+                </label>
+            </div>
+
+            <div style="border-top: 1px solid var(--border); padding-top: 20px;">
+                <h3 class="control-section-title">Today's Highlight</h3>
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                    <div style="background-color: #EFF6FF; padding: 12px; border-radius: 8px; border-left: 3px solid #3B82F6;">
+                        <span style="font-size: 11px; font-weight:700; color:var(--primary); text-transform:uppercase;">Next Live slot</span>
+                        <div style="font-weight:700; font-size:13px; margin: 4px 0;" id="sidebarTodayTopic">Botany syllabus review</div>
+                        <span style="font-size:11px; color:#64748B;"><i class="fa-solid fa-clock"></i> Tomorrow • 10:00 AM</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Calendar view frame -->
+        <main class="calendar-view-panel">
+            <!-- Toolbar -->
+            <div class="calendar-toolbar">
+                <div class="toolbar-navigation">
+                    <button class="btn-toolbar-circle" onclick="shiftMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="btn-toolbar-circle" onclick="shiftMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                    <button class="btn-notif-action" onclick="goToToday()">Today</button>
+                    <span class="calendar-title-label" id="calendarTitle">Month Year</span>
+                </div>
+
+                <div class="view-switcher-tabs">
+                    <button class="view-tab-btn active" id="tabMonth" onclick="switchCalendarView('month')">Month</button>
+                    <button class="view-tab-btn" id="tabWeek" onclick="switchCalendarView('week')">Week</button>
+                    <button class="view-tab-btn" id="tabDay" onclick="switchCalendarView('day')">Day</button>
+                    <button class="view-tab-btn" id="tabAgenda" onclick="switchCalendarView('agenda')">Agenda</button>
+                </div>
+            </div>
+
+            <!-- Header of weekdays (Month and Week view only) -->
+            <div class="calendar-grid-header" id="gridWeekdays">
+                <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+            </div>
+
+            <!-- Month Grid Frame -->
+            <div class="calendar-month-grid" id="monthGrid">
+                <!-- Days grid cells filled by JS -->
+            </div>
+
+            <!-- Agenda/List Frame -->
+            <div class="calendar-agenda-view" id="agendaView">
+                <!-- Agenda rows filled by JS -->
+            </div>
+            
+            <!-- Week/Day Frame wrapper -->
+            <div id="hourlyFrame" style="display:none; flex-direction:column; gap:12px;">
+                <div class="empty-state-card" style="padding: 24px;">
+                    <div class="empty-illustration" style="width: 80px; height:80px; font-size:32px;"><i class="fa-solid fa-calendar-minus"></i></div>
+                    <h3 class="empty-title">Hourly details view</h3>
+                    <p class="empty-description">Showing schedules for selected calendar day.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Session Details Modal Dialog -->
+    <div class="dialog-overlay" id="detailsModal">
+        <div class="dialog-box">
+            <div class="dialog-header">
+                <h3 class="dialog-title" id="modalTopic">Session Details</h3>
+                <button class="btn-dialog-close" onclick="closeDetailsModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="dialog-body" id="modalBody">
+                <!-- Dynamic slot details -->
+            </div>
+            <div class="dialog-footer">
+                <button class="btn-dialog-action secondary" onclick="closeDetailsModal()">Close</button>
+                <button class="btn-dialog-action danger" id="btnCancelSession" onclick="cancelActiveSession()">Cancel Session</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let sessions = [];
+        let filteredSessions = [];
+        let currentDate = new Date();
+        let activeView = 'month';
+        let selectedSessionId = null;
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+
+                    const brand = document.getElementById('brandLink');
+                    const dynLink = document.getElementById('dynamicNavLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard.html';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dynLink.innerHTML = '<a href="/my-students.html">My Students</a>';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard.html';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dynLink.innerHTML = '<a href="/student/mentors">Find Mentors</a>';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    loadCalendarData();
+                } else {
+                    loadCalendarData();
+                }
+            } catch (err) {
+                console.error(err);
+                seedMockSessions();
+            }
+        });
+
+        async function loadCalendarData() {
+            try {
+                const response = await fetch(API_BASE + '/api/sessions', { credentials: 'include' });
+                if (response.ok) {
+                    sessions = await response.json();
+                    
+                    // Format dates
+                    sessions.forEach(s => s.date = new Date(s.date));
+
+                    if (sessions.length === 0) {
+                        seedMockSessions();
+                    } else {
+                        filterCalendarData();
+                    }
+                } else {
+                    seedMockSessions();
+                }
+            } catch {
+                seedMockSessions();
+            }
+        }
+
+        function seedMockSessions() {
+            // Populate rich mock data for visual correctness
+            const baseDate = new Date();
+            sessions = [
+                {
+                    id: 'sess-mock-1',
+                    topic: 'Botany syllabus review - Chapter 12 Cell Biology',
+                    date: new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() + 1, 10, 0),
+                    status: 'scheduled',
+                    mentor: { name: 'Anjali Patel' },
+                    student: { name: 'Rahul Verma' },
+                    notes: 'Prepare notes for Cell Division worksheets.'
+                },
+                {
+                    id: 'sess-mock-2',
+                    topic: 'Optics CBSE derivations revision exercises',
+                    date: new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() - 2, 14, 0),
+                    status: 'completed',
+                    mentor: { name: 'Priya Shah' },
+                    student: { name: 'Rahul Verma' },
+                    notes: 'Checked all formula derivations worksheet.'
+                },
+                {
+                    id: 'sess-mock-3',
+                    topic: 'Chemistry Trial class',
+                    date: new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate() + 3, 16, 30),
+                    status: 'cancelled',
+                    mentor: { name: 'Neha Joshi' },
+                    student: { name: 'Rahul Verma' },
+                    notes: 'Cancelled due to school exam conflict.'
+                },
+                {
+                    id: 'sess-mock-4',
+                    topic: 'Availability slot defaulting',
+                    date: new Date(baseDate.getFullYear(), baseDate.getMonth(), baseDate.getDate(), 12, 0),
+                    status: 'availability',
+                    mentor: { name: 'Anjali Patel' },
+                    student: { name: 'Open Slot' },
+                    notes: 'Regular availability teaching hours.'
+                }
+            ];
+            filterCalendarData();
+        }
+
+        function filterCalendarData() {
+            const sched = document.getElementById('checkScheduled').checked;
+            const compl = document.getElementById('checkCompleted').checked;
+            const canc = document.getElementById('checkCancelled').checked;
+            const avail = document.getElementById('checkAvailability').checked;
+
+            filteredSessions = sessions.filter(s => {
+                if (s.status === 'scheduled' && !sched) return false;
+                if (s.status === 'completed' && !compl) return false;
+                if (s.status === 'cancelled' && !canc) return false;
+                if (s.status === 'availability' && !avail) return false;
+                return true;
+            });
+
+            // Update sidebar next slot
+            const upcoming = sessions.find(s => s.status === 'scheduled' && s.date > new Date());
+            if (upcoming) {
+                document.getElementById('sidebarTodayTopic').textContent = upcoming.topic;
+            }
+
+            renderCalendarGrid();
+        }
+
+        function switchCalendarView(view) {
+            activeView = view;
+            document.querySelectorAll('.view-tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (view === 'month') document.getElementById('tabMonth').classList.add('active');
+            if (view === 'week') document.getElementById('tabWeek').classList.add('active');
+            if (view === 'day') document.getElementById('tabDay').classList.add('active');
+            if (view === 'agenda') document.getElementById('tabAgenda').classList.add('active');
+
+            const monthGrid = document.getElementById('monthGrid');
+            const weekdays = document.getElementById('gridWeekdays');
+            const agenda = document.getElementById('agendaView');
+            const hourly = document.getElementById('hourlyFrame');
+
+            if (view === 'month') {
+                monthGrid.style.display = 'grid';
+                weekdays.style.display = 'grid';
+                agenda.style.display = 'none';
+                hourly.style.display = 'none';
+            } else if (view === 'agenda') {
+                monthGrid.style.display = 'none';
+                weekdays.style.display = 'none';
+                agenda.style.display = 'flex';
+                hourly.style.display = 'none';
+            } else {
+                // Hourly detail placeholder for Week/Day view in Phase 2
+                monthGrid.style.display = 'none';
+                weekdays.style.display = 'none';
+                agenda.style.display = 'none';
+                hourly.style.display = 'flex';
+            }
+
+            renderCalendarGrid();
+        }
+
+        function shiftMonth(val) {
+            currentDate.setMonth(currentDate.getMonth() + val);
+            renderCalendarGrid();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderCalendarGrid();
+        }
+
+        function renderCalendarGrid() {
+            const titleLabel = document.getElementById('calendarTitle');
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            
+            titleLabel.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+
+            if (activeView === 'month') {
+                renderMonthView();
+            } else if (activeView === 'agenda') {
+                renderAgendaView();
+            }
+        }
+
+        function renderMonthView() {
+            const grid = document.getElementById('monthGrid');
+            grid.innerHTML = '';
+
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+            const prevLastDate = new Date(year, month, 0).getDate();
+
+            let cells = [];
+
+            // Previous month padding cells
+            for (let i = firstDayIndex - 1; i >= 0; i--) {
+                cells.push({ dayNum: prevLastDate - i, isCurrent: false, date: new Date(year, month - 1, prevLastDate - i) });
+            }
+            // Current month cells
+            for (let i = 1; i <= lastDate; i++) {
+                cells.push({ dayNum: i, isCurrent: true, date: new Date(year, month, i) });
+            }
+            // Next month padding cells
+            const totalCells = cells.length <= 35 ? 35 : 42;
+            const nextPadding = totalCells - cells.length;
+            for (let i = 1; i <= nextPadding; i++) {
+                cells.push({ dayNum: i, isCurrent: false, date: new Date(year, month + 1, i) });
+            }
+
+            cells.forEach(cell => {
+                const cellTime = cell.date.setHours(0,0,0,0);
+                const isToday = cellTime === new Date().setHours(0,0,0,0);
+
+                const dayEvents = filteredSessions.filter(s => s.date.setHours(0,0,0,0) === cellTime);
+                const cellClass = `calendar-day-cell ${cell.isCurrent ? '' : 'other-month'} ${isToday ? 'today' : ''}`;
+
+                const eventsHtml = dayEvents.map(e => `
+                    <button class="calendar-event-item ${e.status}" onclick="openDetailsModal('${e.id}')">
+                        ${e.date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} ${currentRole === 'student' ? e.mentor.name : e.student.name}
+                    </button>
+                `).join('');
+
+                grid.innerHTML += `
+                    <div class="${cellClass}">
+                        <span class="day-num-lbl">${cell.dayNum}</span>
+                        <div style="display:flex; flex-direction:column; gap:4px; margin-top:4px; width:100%;">${eventsHtml}</div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderAgendaView() {
+            const agenda = document.getElementById('agendaView');
+            agenda.innerHTML = '';
+
+            if (filteredSessions.length === 0) {
+                agenda.innerHTML = `
+                    <div class="empty-state-card">
+                        <div class="empty-illustration"><i class="fa-solid fa-calendar-xmark"></i></div>
+                        <h3 class="empty-title">No matching sessions</h3>
+                        <p class="empty-description">Try adjusting your filters or book a new session.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by date
+            filteredSessions.sort((a,b) => a.date - b.date);
+
+            filteredSessions.forEach(e => {
+                const timeStr = e.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const dateStr = e.date.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+                const partnerName = currentRole === 'student' ? e.mentor.name : e.student.name;
+
+                agenda.innerHTML += `
+                    <div class="agenda-list-row" onclick="openDetailsModal('${e.id}')">
+                        <div class="agenda-time-box">
+                            <span class="agenda-time">${timeStr}</span>
+                            <span class="agenda-date">${dateStr}</span>
+                        </div>
+                        <div class="agenda-details">
+                            <div class="agenda-title">${e.topic}</div>
+                            <div class="agenda-mentor"><i class="fa-solid fa-user-circle"></i> ${currentRole === 'student' ? 'Mentor' : 'Student'}: ${partnerName}</div>
+                        </div>
+                        <div>
+                            <span class="status-badge ${e.status}">${e.status}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function openDetailsModal(sessionId) {
+            const session = sessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            selectedSessionId = sessionId;
+            document.getElementById('modalTopic').textContent = session.topic;
+            
+            const btnCancel = document.getElementById('btnCancelSession');
+            if (session.status !== 'scheduled') {
+                btnCancel.style.display = 'none';
+            } else {
+                btnCancel.style.display = 'block';
+            }
+
+            const partnerLabel = currentRole === 'student' ? 'Mentor' : 'Student';
+            const partnerName = currentRole === 'student' ? session.mentor.name : session.student.name;
+
+            document.getElementById('modalBody').innerHTML = `
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div><strong>${partnerLabel}:</strong> ${partnerName}</div>
+                    <div><strong>Date & Time:</strong> ${session.date.toLocaleDateString()} at ${session.date.toLocaleTimeString()}</div>
+                    <div><strong>Status:</strong> <span class="status-badge ${session.status}">${session.status}</span></div>
+                    <div><strong>Notes / Description:</strong> ${session.notes || 'No description provided.'}</div>
+                </div>
+            `;
+
+            document.getElementById('detailsModal').style.display = 'flex';
+        }
+
+        function closeDetailsModal() {
+            document.getElementById('detailsModal').style.display = 'none';
+        }
+
+        async function cancelActiveSession() {
+            if (!selectedSessionId) return;
+            const confirmCancel = confirm('Are you sure you want to cancel this session?');
+            if (!confirmCancel) return;
+
+            if (selectedSessionId.startsWith('sess-mock-')) {
+                const sess = sessions.find(s => s.id === selectedSessionId);
+                if (sess) sess.status = 'cancelled';
+                closeDetailsModal();
+                filterCalendarData();
+                return;
+            }
+
+            try {
+                const response = await fetch(API_BASE + `/api/sessions/${selectedSessionId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: 'cancelled' }),
+                    credentials: 'include'
+                });
+                if (response.ok) {
+                    const sess = sessions.find(s => s.id === selectedSessionId);
+                    if (sess) sess.status = 'cancelled';
+                    closeDetailsModal();
+                    filterCalendarData();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

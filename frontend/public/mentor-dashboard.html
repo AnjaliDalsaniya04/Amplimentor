@@ -4,20 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentor Dashboard - Amplimentor</title>
-    <link rel="stylesheet" href="/style.css?v=3.5">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Google Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Dashboard Stylesheet -->
+    <link rel="stylesheet" href="/mentor-dashboard.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/config.js"></script>
+    <script src="/search-engine.js"></script>
 </head>
-<body style="margin: 0; background-color: #F8FAFC;">
+<body>
     <div class="dashboard-wrapper">
         
         <!-- Sidebar Navigation Drawer -->
         <aside class="dashboard-sidebar">
             <a href="/" class="sidebar-logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
                     <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
                     <defs>
@@ -31,38 +35,71 @@
             </a>
             
             <nav class="sidebar-nav">
-                <a href="/mentor-dashboard.html" class="sidebar-link active">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-                <a href="/my-students.html" class="sidebar-link">
-                    <i class="fas fa-user-graduate"></i> My Students
-                </a>
-                <a href="/sessions.html" class="sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> Sessions
-                </a>
-                <a href="/mentor-dashboard.html#availability" class="sidebar-link">
-                    <i class="fas fa-clock"></i> Availability
-                </a>
-                <a href="/mentor-dashboard.html#reviews" class="sidebar-link">
-                    <i class="fas fa-star"></i> Reviews
-                </a>
-                <a href="/chat.html" class="sidebar-link">
-                    <i class="fas fa-comment-dots"></i> Messages <span class="sidebar-badge" id="messageBadge">5</span>
-                </a>
-                <a href="/mentor-dashboard.html#earnings" class="sidebar-link">
-                    <i class="fas fa-wallet"></i> Earnings
-                </a>
-                <a href="/mentor/profile" class="sidebar-link">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-                <a href="/mentor-dashboard.html#settings" class="sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
+                <!-- Group 1: General -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Dashboard</span>
+                    <a href="/mentor-dashboard.html" class="sidebar-link active">
+                        <i data-lucide="layout-dashboard"></i> Dashboard
+                    </a>
+                </div>
+
+                <!-- Group 2: Teaching -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Teaching</span>
+                    <a href="/my-students.html" class="sidebar-link">
+                        <i data-lucide="users"></i> Students
+                    </a>
+                    <a href="/sessions.html" class="sidebar-link">
+                        <i data-lucide="calendar"></i> Sessions
+                    </a>
+                    <a href="/mentor-dashboard.html#availability" class="sidebar-link">
+                        <i data-lucide="clock"></i> Availability
+                    </a>
+                </div>
+
+                <!-- Group 3: Communication -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Communication</span>
+                    <a href="/chat.html" class="sidebar-link">
+                        <i data-lucide="message-square"></i> Messages <span class="sidebar-badge" id="messageBadge">5</span>
+                    </a>
+                    <a href="/mentor-dashboard.html#reviews" class="sidebar-link">
+                        <i data-lucide="star"></i> Reviews
+                    </a>
+                </div>
+
+                <!-- Group 4: Finance -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Finance</span>
+                    <a href="/finance.html" class="sidebar-link">
+                        <i data-lucide="wallet"></i> Earnings
+                    </a>
+                </div>
+
+                <!-- Group 5: Account -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Account</span>
+                    <a href="/mentor-public-profile.html" class="sidebar-link">
+                        <i data-lucide="globe"></i> Public Profile
+                    </a>
+                    <a href="/mentor-profile.html" class="sidebar-link">
+                        <i data-lucide="edit-3"></i> Edit Profile
+                    </a>
+                    <a href="/mentor-pricing.html" class="sidebar-link">
+                        <i data-lucide="credit-card"></i> Pricing
+                    </a>
+                    <a href="/mentor-settings.html" class="sidebar-link">
+                        <i data-lucide="settings"></i> Settings
+                    </a>
+                    <a href="/support.html" class="sidebar-link">
+                        <i data-lucide="headset"></i> Support Center
+                    </a>
+                </div>
             </nav>
             
             <div class="sidebar-footer">
                 <a href="/logout" class="sidebar-link logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i data-lucide="log-out"></i> Logout
                 </a>
             </div>
         </aside>
@@ -72,20 +109,20 @@
             <!-- Header bar -->
             <header class="dashboard-header">
                 <div class="header-search">
-                    <i class="fas fa-search"></i>
+                    <i data-lucide="search" class="header-search-icon"></i>
                     <input type="text" placeholder="Search students, sessions..." class="header-search-input" id="dashboardSearch">
                 </div>
                 
                 <div class="header-actions">
                     <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
-                        <i class="far fa-comment-dots"></i>
+                        <i data-lucide="message-square"></i>
                     </button>
-                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
-                        <i class="far fa-bell"></i>
+                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink" onclick="window.location.href='/notifications'">
+                        <i data-lucide="bell"></i>
                         <span class="badge" id="notificationCount" style="display: none;">3</span>
                     </button>
                     
-                    <a href="/mentor/profile" class="header-user-profile">
+                    <a href="/mentor-profile.html" class="header-user-profile">
                         <img src="/default-avatar.svg" alt="Mentor avatar" class="header-avatar" id="headerAvatar">
                         <div class="header-user-info">
                             <h4 class="header-user-name" id="mentorName">Anjali</h4>
@@ -98,450 +135,429 @@
             <!-- Inner Dashboard content scroll frame -->
             <div class="dashboard-content">
                 
-                <!-- Greet Title block -->
-                <div class="dashboard-title-section">
-                    <h1 id="greetingMsg">Welcome back, Anjali 👋</h1>
-                    <p>You're making a difference today.</p>
+                <!-- SECTION 1: Greeting -->
+                <div class="greeting-section animated-section">
+                    <div class="greeting-text-wrap">
+                        <h1 class="greeting-title" id="greetingMsg">Good Morning, Heli 👋</h1>
+                        <p class="greeting-subtitle" id="greetingSubText">Today you have 5 scheduled sessions.</p>
+                    </div>
+                    <button class="btn-secondary" onclick="window.location.href='/sessions.html'">
+                        <i data-lucide="calendar"></i> View Calendar
+                    </button>
                 </div>
 
-                <!-- 4 Metrics row -->
-                <section class="dashboard-stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Total Students</span>
-                            <h3 class="stat-value" id="statsStudents">128</h3>
+                <!-- SECTION 2: KPI Cards -->
+                <div class="kpi-grid animated-section delay-1">
+                    <!-- Total Students -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-title">Total Students</span>
+                            <h3 class="kpi-value" id="statsStudents">128</h3>
+                            <span class="kpi-trend up">
+                                <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i> +12%
+                            </span>
                         </div>
-                        <div class="stat-icon-wrapper blue">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Upcoming Sessions</span>
-                            <h3 class="stat-value" id="statsUpcoming">5</h3>
-                        </div>
-                        <div class="stat-icon-wrapper green">
-                            <i class="fas fa-calendar-alt"></i>
+                        <div class="kpi-icon-wrap blue">
+                            <i data-lucide="users"></i>
                         </div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Rating</span>
-                            <h3 class="stat-value" id="statsRating">4.8</h3>
+                    <!-- Upcoming Sessions -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-title">Upcoming Sessions</span>
+                            <h3 class="kpi-value" id="statsUpcoming">5</h3>
+                            <span class="kpi-trend neutral">Today</span>
                         </div>
-                        <div class="stat-icon-wrapper orange">
-                            <i class="fas fa-star"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Monthly Earnings</span>
-                            <h3 class="stat-value" id="statsEarnings">₹18,750</h3>
-                        </div>
-                        <div class="stat-icon-wrapper purple">
-                            <i class="fas fa-wallet"></i>
+                        <div class="kpi-icon-wrap green">
+                            <i data-lucide="video"></i>
                         </div>
                     </div>
-                </section>
+                    <!-- Average Rating -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-title">Average Rating</span>
+                            <h3 class="kpi-value" id="statsRating">4.8★</h3>
+                            <span class="kpi-trend neutral" style="color: var(--color-orange); background-color: var(--color-orange-light);">Top 5%</span>
+                        </div>
+                        <div class="kpi-icon-wrap orange">
+                            <i data-lucide="award"></i>
+                        </div>
+                    </div>
+                    <!-- Monthly Earnings -->
+                    <div class="kpi-card">
+                        <div class="kpi-info">
+                            <span class="kpi-title">Monthly Earnings</span>
+                            <h3 class="kpi-value" id="statsEarnings">₹18,750</h3>
+                            <span class="kpi-trend up">
+                                <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i> +15%
+                            </span>
+                        </div>
+                        <div class="kpi-icon-wrap purple">
+                            <i data-lucide="wallet"></i>
+                        </div>
+                    </div>
+                </div>
 
-                <!-- 2-column layout: Today's Schedule & Student Requests -->
-                <div class="dashboard-row-grid">
-                    <!-- Today's Schedule -->
-                    <div class="dashboard-card">
-                        <div class="card-header-row">
+                <!-- Row 1: Today's Schedule & Student Requests -->
+                <div class="dashboard-grid-row animated-section delay-2">
+                    <!-- SECTION 3: Today's Schedule -->
+                    <div class="premium-card">
+                        <div class="card-header">
                             <h3>Today's Schedule</h3>
-                            <a href="/sessions.html" class="view-all-link">View All</a>
                         </div>
-                        
-                        <div class="upcoming-sessions-list" id="todayScheduleList">
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">10:00 AM</span>
-                                    <span class="session-time-val">Rahul Verma</span>
+                        <div class="schedule-list" id="todayScheduleList">
+                            <!-- Class 1 -->
+                            <div class="schedule-item">
+                                <div class="schedule-info-left">
+                                    <div class="schedule-time-badge">10:00 AM</div>
+                                    <div class="schedule-student-details">
+                                        <span class="schedule-student-name">Rahul Verma</span>
+                                        <span class="schedule-subject-meta">NEET Biology</span>
+                                    </div>
                                 </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">NEET Biology</span>
-                                    <span class="session-subject-name">Grade 12 Student</span>
+                                <div class="schedule-actions-right">
+                                    <button class="btn-schedule-action" onclick="window.location.href='/sessions.html'">Join Session</button>
                                 </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
-                                </a>
                             </div>
-
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">11:30 AM</span>
-                                    <span class="session-time-val">Priya Singh</span>
+                            <!-- Class 2 -->
+                            <div class="schedule-item">
+                                <div class="schedule-info-left">
+                                    <div class="schedule-time-badge">11:30 AM</div>
+                                    <div class="schedule-student-details">
+                                        <span class="schedule-student-name">Priya Singh</span>
+                                        <span class="schedule-subject-meta">Grade 11</span>
+                                    </div>
                                 </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">NEET Biology</span>
-                                    <span class="session-subject-name">Grade 11 Student</span>
+                                <div class="schedule-actions-right">
+                                    <span class="status-badge upcoming">Upcoming</span>
                                 </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
-                                </a>
                             </div>
-
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">03:00 PM</span>
-                                    <span class="session-time-val">Aman Kumar</span>
+                            <!-- Class 3 -->
+                            <div class="schedule-item">
+                                <div class="schedule-info-left">
+                                    <div class="schedule-time-badge">03:00 PM</div>
+                                    <div class="schedule-student-details">
+                                        <span class="schedule-student-name">Aman Kumar</span>
+                                        <span class="schedule-subject-meta">Revision</span>
+                                    </div>
                                 </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">NEET Biology</span>
-                                    <span class="session-subject-name">Grade 12 Student</span>
+                                <div class="schedule-actions-right">
+                                    <button class="btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="window.location.href='/sessions.html'">Open Notes</button>
                                 </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
-                                </a>
                             </div>
-
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">05:00 PM</span>
-                                    <span class="session-time-val">Neha Patel</span>
-                                </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">NEET Biology</span>
-                                    <span class="session-subject-name">Grade 12 Student</span>
-                                </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
-                                </a>
-                            </div>
+                        </div>
+                        <div class="schedule-footer">
+                            <a href="/sessions.html" class="view-all-link">View Full Calendar <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
                         </div>
                     </div>
 
-                    <!-- Student Requests -->
-                    <div class="dashboard-card">
-                        <div class="card-header-row">
+                    <!-- SECTION 4: Student Requests -->
+                    <div class="premium-card">
+                        <div class="card-header">
                             <h3>Student Requests</h3>
-                            <a href="/mentor-dashboard.html#requests" class="view-all-link">View All</a>
                         </div>
-                        
                         <div class="requests-list" id="requestsContainer">
-                            <div class="request-item-card">
-                                <div class="req-student-profile">
-                                    <img src="/default-avatar.svg" class="req-student-avatar" alt="Student avatar">
-                                    <div class="req-student-info">
-                                        <h4 class="req-student-name">Karan Mehta</h4>
-                                        <p class="req-student-sub">NEET Biology • 24 May, 10:00 AM</p>
+                            <!-- Request 1 -->
+                            <div class="request-item" id="req-card-1">
+                                <div class="request-meta-top">
+                                    <div class="request-student-profile">
+                                        <img src="/default-avatar.svg" class="request-avatar" alt="Rahul avatar">
+                                        <span class="request-name">Rahul</span>
                                     </div>
+                                    <span class="request-type-badge">Pending</span>
                                 </div>
-                                <div class="req-actions-btns">
-                                    <button class="btn-action-accept">Accept</button>
-                                    <button class="btn-action-decline">Decline</button>
+                                <p class="request-msg">Requested Biology Session</p>
+                                <div class="request-actions">
+                                    <button class="btn-request-accept" onclick="handleRequestAction(1, 'accepted', 'req-card-1')">Accept</button>
+                                    <button class="btn-request-decline" onclick="handleRequestAction(1, 'rejected', 'req-card-1')">Decline</button>
                                 </div>
                             </div>
-
-                            <div class="request-item-card">
-                                <div class="req-student-profile">
-                                    <img src="/default-avatar.svg" class="req-student-avatar" alt="Student avatar">
-                                    <div class="req-student-info">
-                                        <h4 class="req-student-name">Sharanya Das</h4>
-                                        <p class="req-student-sub">NEET Biology • 25 May, 04:00 PM</p>
+                            <!-- Request 2 -->
+                            <div class="request-item" id="req-card-2">
+                                <div class="request-meta-top">
+                                    <div class="request-student-profile">
+                                        <img src="/priya_avatar.png" class="request-avatar" alt="Priya avatar" onerror="this.src='/default-avatar.svg'">
+                                        <span class="request-name">Priya</span>
                                     </div>
+                                    <span class="request-type-badge">Pending</span>
                                 </div>
-                                <div class="req-actions-btns">
-                                    <button class="btn-action-accept">Accept</button>
-                                    <button class="btn-action-decline">Decline</button>
+                                <p class="request-msg">Requested Chemistry Session</p>
+                                <div class="request-actions">
+                                    <button class="btn-request-accept" onclick="handleRequestAction(2, 'accepted', 'req-card-2')">Accept</button>
+                                    <button class="btn-request-decline" onclick="handleRequestAction(2, 'rejected', 'req-card-2')">Decline</button>
                                 </div>
                             </div>
-
-                            <div class="request-item-card">
-                                <div class="req-student-profile">
-                                    <img src="/default-avatar.svg" class="req-student-avatar" alt="Student avatar">
-                                    <div class="req-student-info">
-                                        <h4 class="req-student-name">Rohan Kapoor</h4>
-                                        <p class="req-student-sub">NEET Biology • 26 May, 09:00 PM</p>
-                                    </div>
-                                </div>
-                                <div class="req-actions-btns">
-                                    <button class="btn-action-accept">Accept</button>
-                                    <button class="btn-action-decline">Decline</button>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="request-footer">
+                            <a href="/sessions.html#requests" class="view-all-link">View All Requests <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Row 2 layout: My Students & Availability -->
-                <div class="dashboard-row-grid">
-                    <!-- My Students list table -->
-                    <div class="dashboard-card">
-                        <div class="card-header-row">
-                            <h3>My Students</h3>
-                            <a href="/my-students.html" class="view-all-link">View All</a>
+                <!-- Row 2: Performance Analytics & Recent Activity -->
+                <div class="dashboard-grid-row animated-section delay-3">
+                    <!-- SECTION 5: Performance Analytics -->
+                    <div class="premium-card">
+                        <div class="card-header">
+                            <h3>Performance Analytics</h3>
                         </div>
-                        
-                        <div class="dashboard-table-wrapper">
-                            <table class="dashboard-table">
-                                <thead>
-                                    <tr>
-                                        <th>Student</th>
-                                        <th>Subject</th>
-                                        <th>Progress</th>
-                                        <th>Last Session</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
-                                                <span class="table-student-name">Rahul Verma</span>
-                                            </div>
-                                        </td>
-                                        <td>NEET Biology</td>
-                                        <td>
-                                            <div class="table-progress-bar-wrap">
-                                                <div class="goal-progress-track" style="flex-grow: 1;">
-                                                    <div class="goal-progress-fill green" style="width: 75%;"></div>
-                                                </div>
-                                                <span class="table-progress-text">75%</span>
-                                            </div>
-                                        </td>
-                                        <td>22 May, 10:00 AM</td>
-                                        <td>
-                                            <button class="btn-action-view-eye" aria-label="View student history">
-                                                <i class="far fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
-                                                <span class="table-student-name">Priya Singh</span>
-                                            </div>
-                                        </td>
-                                        <td>NEET Biology</td>
-                                        <td>
-                                            <div class="table-progress-bar-wrap">
-                                                <div class="goal-progress-track" style="flex-grow: 1;">
-                                                    <div class="goal-progress-fill green" style="width: 60%;"></div>
-                                                </div>
-                                                <span class="table-progress-text">60%</span>
-                                            </div>
-                                        </td>
-                                        <td>20 May, 11:30 AM</td>
-                                        <td>
-                                            <button class="btn-action-view-eye" aria-label="View student history">
-                                                <i class="far fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
-                                                <span class="table-student-name">Aman Kumar</span>
-                                            </div>
-                                        </td>
-                                        <td>NEET Biology</td>
-                                        <td>
-                                            <div class="table-progress-bar-wrap">
-                                                <div class="goal-progress-track" style="flex-grow: 1;">
-                                                    <div class="goal-progress-fill green" style="width: 85%;"></div>
-                                                </div>
-                                                <span class="table-progress-text">85%</span>
-                                            </div>
-                                        </td>
-                                        <td>21 May, 03:00 PM</td>
-                                        <td>
-                                            <button class="btn-action-view-eye" aria-label="View student history">
-                                                <i class="far fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-
-                                    <tr>
-                                        <td>
-                                            <div class="table-student-cell">
-                                                <img src="/default-avatar.svg" class="table-student-avatar" alt="Avatar">
-                                                <span class="table-student-name">Neha Patel</span>
-                                            </div>
-                                        </td>
-                                        <td>NEET Biology</td>
-                                        <td>
-                                            <div class="table-progress-bar-wrap">
-                                                <div class="goal-progress-track" style="flex-grow: 1;">
-                                                    <div class="goal-progress-fill green" style="width: 50%;"></div>
-                                                </div>
-                                                <span class="table-progress-text">50%</span>
-                                            </div>
-                                        </td>
-                                        <td>19 May, 05:00 PM</td>
-                                        <td>
-                                            <button class="btn-action-view-eye" aria-label="View student history">
-                                                <i class="far fa-eye"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="analytics-mini-grid">
+                            <div class="analytics-mini-card">
+                                <div class="analytics-mini-header">
+                                    <span class="analytics-mini-lbl">Sessions</span>
+                                    <span class="analytics-mini-growth">+12%</span>
+                                </div>
+                                <span class="analytics-mini-val">32</span>
+                                <div class="analytics-sparkline">
+                                    <svg class="sparkline-svg" viewBox="0 0 100 30">
+                                        <path class="sparkline-path blue" d="M0,25 Q15,22 30,12 T60,20 T90,5 T100,8" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="analytics-mini-card">
+                                <div class="analytics-mini-header">
+                                    <span class="analytics-mini-lbl">Students</span>
+                                    <span class="analytics-mini-growth">+18%</span>
+                                </div>
+                                <span class="analytics-mini-val">28</span>
+                                <div class="analytics-sparkline">
+                                    <svg class="sparkline-svg" viewBox="0 0 100 30">
+                                        <path class="sparkline-path green" d="M0,28 Q20,20 40,24 T70,8 T90,14 T100,5" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="analytics-mini-card">
+                                <div class="analytics-mini-header">
+                                    <span class="analytics-mini-lbl">Rating</span>
+                                    <span class="analytics-mini-growth">+0.2</span>
+                                </div>
+                                <span class="analytics-mini-val">4.8</span>
+                                <div class="analytics-sparkline">
+                                    <svg class="sparkline-svg" viewBox="0 0 100 30">
+                                        <path class="sparkline-path purple" d="M0,15 Q25,18 50,12 T75,8 T100,2" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="analytics-mini-card">
+                                <div class="analytics-mini-header">
+                                    <span class="analytics-mini-lbl">Earnings</span>
+                                    <span class="analytics-mini-growth">+15%</span>
+                                </div>
+                                <span class="analytics-mini-val">₹18.7K</span>
+                                <div class="analytics-sparkline">
+                                    <svg class="sparkline-svg" viewBox="0 0 100 30">
+                                        <path class="sparkline-path blue" d="M0,20 Q20,18 40,10 T70,12 T90,3 T100,5" />
+                                    </svg>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Availability Status Toggle Card -->
-                    <div class="dashboard-card" id="availability">
-                        <div class="card-header-row">
+                    <!-- SECTION 6: Recent Activity -->
+                    <div class="premium-card activity-card">
+                        <div class="card-header">
+                            <h3>Recent Activity</h3>
+                        </div>
+                        <div class="activity-list" id="activityList">
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap green">
+                                    <i data-lucide="check-circle"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <span class="activity-text">✔ Session completed with Rahul</span>
+                                    <span class="activity-time">Today, 11:00 AM</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap orange">
+                                    <i data-lucide="star"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <span class="activity-text">⭐ New review received</span>
+                                    <span class="activity-time">2 hours ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap blue">
+                                    <i data-lucide="calendar"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <span class="activity-text">📅 Session booked</span>
+                                    <span class="activity-time">Yesterday</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap green">
+                                    <i data-lucide="indian-rupee"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <span class="activity-text">💰 Payment received</span>
+                                    <span class="activity-time">2 days ago</span>
+                                </div>
+                            </div>
+                            <div class="activity-item">
+                                <div class="activity-icon-wrap purple">
+                                    <i data-lucide="refresh-cw"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <span class="activity-text">🟢 Availability updated</span>
+                                    <span class="activity-time">3 days ago</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="activity-footer">
+                            <a href="/sessions.html#activity" class="view-all-link">View All Activity <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Availability & Earnings Summary -->
+                <div class="dashboard-grid-row animated-section delay-4">
+                    <!-- SECTION 7: Availability -->
+                    <div class="premium-card">
+                        <div class="card-header">
                             <h3>Availability</h3>
                         </div>
-                        <p style="font-size: 0.88rem; color: #64748B; margin: 0 0 16px 0;">Set your current availability status:</p>
+                        <div class="avail-today-badge">
+                            <span class="avail-today-title">Available Today</span>
+                            <span class="avail-today-times">
+                                <span>09:00–12:00</span>
+                                <span>•</span>
+                                <span>02:00–06:00</span>
+                            </span>
+                        </div>
                         
-                        <div class="availability-radio-group">
-                            <div class="availability-radio-card active" data-status="available">
-                                <div class="avail-status-indicator">
-                                    <span class="avail-status-dot green"></span>
-                                    <span>Available</span>
-                                </div>
-                                <i class="fas fa-check-circle availability-check-icon"></i>
+                        <div class="weekly-calendar">
+                            <div class="calendar-day active">
+                                <span class="calendar-day-name">Mon</span>
+                                <span class="calendar-day-date">29</span>
                             </div>
+                            <div class="calendar-day active">
+                                <span class="calendar-day-name">Tue</span>
+                                <span class="calendar-day-date">30</span>
+                            </div>
+                            <div class="calendar-day">
+                                <span class="calendar-day-name">Wed</span>
+                                <span class="calendar-day-date">01</span>
+                            </div>
+                            <div class="calendar-day active">
+                                <span class="calendar-day-name">Thu</span>
+                                <span class="calendar-day-date">02</span>
+                            </div>
+                            <div class="calendar-day">
+                                <span class="calendar-day-name">Fri</span>
+                                <span class="calendar-day-date">03</span>
+                            </div>
+                            <div class="calendar-day">
+                                <span class="calendar-day-name">Sat</span>
+                                <span class="calendar-day-date">04</span>
+                            </div>
+                            <div class="calendar-day">
+                                <span class="calendar-day-name">Sun</span>
+                                <span class="calendar-day-date">05</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-primary" onclick="window.location.href='/mentor-settings.html'">Edit Availability</button>
+                    </div>
 
-                            <div class="availability-radio-card" data-status="busy">
-                                <div class="avail-status-indicator">
-                                    <span class="avail-status-dot red"></span>
-                                    <span>Busy</span>
-                                </div>
-                                <i class="fas fa-check-circle availability-check-icon"></i>
+                    <!-- SECTION 8: Earnings Summary -->
+                    <div class="premium-card">
+                        <div class="card-header">
+                            <h3>Earnings Summary</h3>
+                        </div>
+                        <div class="earnings-grid">
+                            <div class="earnings-mini-card">
+                                <div class="earnings-lbl">Today's Earnings</div>
+                                <div class="earnings-val">₹1,200</div>
                             </div>
-
-                            <div class="availability-radio-card" data-status="away">
-                                <div class="avail-status-indicator">
-                                    <span class="avail-status-dot orange"></span>
-                                    <span>Away</span>
-                                </div>
-                                <i class="fas fa-check-circle availability-check-icon"></i>
+                            <div class="earnings-mini-card">
+                                <div class="earnings-lbl">This Week</div>
+                                <div class="earnings-val">₹8,700</div>
                             </div>
+                            <div class="earnings-mini-card">
+                                <div class="earnings-lbl">This Month</div>
+                                <div class="earnings-val">₹18,750</div>
+                            </div>
+                            <div class="earnings-mini-card">
+                                <div class="earnings-lbl">Pending Payout</div>
+                                <div class="earnings-val" style="color: var(--color-orange);">₹3,000</div>
+                            </div>
+                        </div>
+                        <div class="earnings-actions">
+                            <button class="btn-secondary" onclick="window.location.href='/payment-history.html'">View Earnings</button>
+                            <button class="btn-primary" onclick="alert('Withdrawal request submitted successfully!')">Withdraw</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- Row 3: Reviews & Performancesparkline charts -->
-                <div class="dashboard-row-grid">
-                    <!-- Latest Reviews -->
-                    <div class="dashboard-card" id="reviews">
-                        <div class="card-header-row">
-                            <h3>Latest Reviews</h3>
-                            <a href="/mentor-dashboard.html#reviews" class="view-all-link">View All</a>
+                <!-- Row 4: Latest Review & Quick Actions -->
+                <div class="dashboard-grid-row animated-section delay-4" style="margin-bottom: 8px;">
+                    <!-- SECTION 9: Latest Review -->
+                    <div class="premium-card">
+                        <div class="card-header">
+                            <h3>Latest Review</h3>
                         </div>
-                        
-                        <div class="reviews-list">
-                            <div class="review-item-card">
-                                <div class="review-avatar-wrap">
-                                    <img src="/default-avatar.svg" alt="Student avatar">
+                        <div class="latest-review-box">
+                            <div>
+                                <div class="review-stars-row">★★★★★</div>
+                                <h4 class="review-student-title-row">Rahul Verma</h4>
+                                <p class="review-quote-text">"Excellent teacher. Concepts are explained clearly."</p>
+                            </div>
+                            <div class="review-overall-rating-stats">
+                                <div class="review-score-box">
+                                    <span class="review-score-big">4.8</span>
+                                    <span class="review-score-lbl">★</span>
                                 </div>
-                                <div class="review-main-content">
-                                    <div class="review-stars">★★★★★</div>
-                                    <p class="review-text">"Excellent teaching! Concepts are very clear and easy to understand."</p>
-                                    <span class="review-meta">Rahul Verma • 2 days ago</span>
+                                <div style="font-size: 13px; color: var(--text-tertiary);">
+                                    Overall Rating • <strong>152 Reviews</strong>
                                 </div>
                             </div>
-
-                            <div class="review-item-card">
-                                <div class="review-avatar-wrap">
-                                    <img src="/default-avatar.svg" alt="Student avatar">
-                                </div>
-                                <div class="review-main-content">
-                                    <div class="review-stars">★★★★★</div>
-                                    <p class="review-text">"Madam is very supportive and explains every doubt patiently."</p>
-                                    <span class="review-meta">Priya Singh • 5 days ago</span>
-                                </div>
-                            </div>
+                            <button class="btn-secondary" style="align-self: flex-start;" onclick="window.location.href='#reviews'">View All Reviews →</button>
                         </div>
                     </div>
 
-                    <!-- Performance Overview sparklines -->
-                    <div class="dashboard-card" id="earnings">
-                        <div class="card-header-row">
-                            <h3>Performance Overview</h3>
-                            <select style="border: 1px solid #E2E8F0; border-radius: 8px; padding: 4px 8px; font-size: 0.8rem; font-weight: 600; color: #475569; outline: none; cursor: pointer;">
-                                <option>This Month</option>
-                                <option>Last Month</option>
-                            </select>
+                    <!-- SECTION 10: Quick Actions -->
+                    <div class="premium-card">
+                        <div class="card-header">
+                            <h3>Quick Actions</h3>
                         </div>
-                        
-                        <div class="performance-cards-row">
-                            <!-- Conducted -->
-                            <div class="performance-mini-card">
-                                <div class="perf-label">Sessions</div>
-                                <div class="perf-value-row">
-                                    <span class="perf-val">32</span>
-                                    <span class="perf-change green">+12%</span>
-                                </div>
-                                <svg class="sparkline-svg" viewBox="0 0 100 30">
-                                    <path class="sparkline-path blue" d="M0,25 Q15,22 30,12 T60,20 T90,5 T100,8" />
-                                </svg>
-                            </div>
-                            
-                            <!-- Helped -->
-                            <div class="performance-mini-card">
-                                <div class="perf-label">Students</div>
-                                <div class="perf-value-row">
-                                    <span class="perf-val">28</span>
-                                    <span class="perf-change green">+18%</span>
-                                </div>
-                                <svg class="sparkline-svg" viewBox="0 0 100 30">
-                                    <path class="sparkline-path green" d="M0,28 Q20,20 40,24 T70,8 T90,14 T100,5" />
-                                </svg>
-                            </div>
-
-                            <!-- Avg Rating -->
-                            <div class="performance-mini-card">
-                                <div class="perf-label">Avg. Rating</div>
-                                <div class="perf-value-row">
-                                    <span class="perf-val">4.8</span>
-                                    <span class="perf-change purple">+0.2</span>
-                                </div>
-                                <svg class="sparkline-svg" viewBox="0 0 100 30">
-                                    <path class="sparkline-path purple" d="M0,15 Q25,18 50,12 T75,8 T100,2" />
-                                </svg>
-                            </div>
+                        <div class="quick-actions-grid">
+                            <a href="/mentor-settings.html" class="quick-action-square-btn">
+                                <i data-lucide="plus-circle" style="color: var(--primary);"></i>
+                                <span class="quick-action-lbl">Add Availability</span>
+                            </a>
+                            <a href="/sessions.html" class="quick-action-square-btn">
+                                <i data-lucide="video" style="color: var(--color-green);"></i>
+                                <span class="quick-action-lbl">Manage Sessions</span>
+                            </a>
+                            <a href="/my-students.html" class="quick-action-square-btn">
+                                <i data-lucide="users" style="color: var(--color-purple);"></i>
+                                <span class="quick-action-lbl">My Students</span>
+                            </a>
+                            <a href="/chat.html" class="quick-action-square-btn">
+                                <i data-lucide="message-square" style="color: var(--color-orange);"></i>
+                                <span class="quick-action-lbl">Messages</span>
+                            </a>
+                            <a href="#reviews" class="quick-action-square-btn">
+                                <i data-lucide="star" style="color: var(--color-orange);"></i>
+                                <span class="quick-action-lbl">Reviews</span>
+                            </a>
+                            <a href="/mentor-pricing.html" class="quick-action-square-btn">
+                                <i data-lucide="credit-card" style="color: var(--color-red);"></i>
+                                <span class="quick-action-lbl">Pricing</span>
+                            </a>
+                            <a href="/mentor-profile.html" class="quick-action-square-btn">
+                                <i data-lucide="user" style="color: var(--primary);"></i>
+                                <span class="quick-action-lbl">Profile</span>
+                            </a>
+                            <a href="/sessions.html" class="quick-action-square-btn">
+                                <i data-lucide="calendar" style="color: var(--color-purple);"></i>
+                                <span class="quick-action-lbl">Calendar</span>
+                            </a>
                         </div>
                     </div>
                 </div>
-
-                <!-- Bottom section: Quick Actions -->
-                <section class="dashboard-card" style="background-color: transparent; border: none; padding: 0; box-shadow: none;">
-                    <div class="card-header-row" style="margin-bottom: 16px;">
-                        <h3>Quick Actions</h3>
-                    </div>
-                    
-                    <div class="quick-actions-row">
-                        <a href="/mentor-dashboard.html#availability" class="quick-action-btn-card">
-                            <div class="quick-action-icon green">
-                                <i class="fas fa-clock"></i>
-                            </div>
-                            <span class="quick-action-label">Add Availability</span>
-                        </a>
-                        <a href="/sessions.html" class="quick-action-btn-card">
-                            <div class="quick-action-icon blue">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <span class="quick-action-label">Manage Sessions</span>
-                        </a>
-                        <a href="/my-students.html" class="quick-action-btn-card">
-                            <div class="quick-action-icon purple">
-                                <i class="fas fa-users"></i>
-                            </div>
-                            <span class="quick-action-label">My Students</span>
-                        </a>
-                        <a href="/mentor/profile" class="quick-action-btn-card">
-                            <div class="quick-action-icon orange">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <span class="quick-action-label">View Profile</span>
-                        </a>
-                    </div>
-                </section>
 
             </div>
         </main>
@@ -557,16 +573,55 @@
 
     <!-- Page Controller Javascript -->
     <script>
+        // Global handler for Accept/Decline Student Requests without page refresh
+        async function handleRequestAction(requestId, actionStatus, elementId) {
+            try {
+                // Call actual backend API
+                await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + `/api/mentors/requests/${requestId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: actionStatus })
+                });
+            } catch (error) {
+                console.error("Error updating request via API:", error);
+            }
+            
+            // Regardless of API network success, dynamically remove request card with smooth animation
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.style.transition = 'all 0.3s ease';
+                element.style.opacity = '0';
+                element.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    element.remove();
+                    // If no requests are left, show a clean message
+                    const container = document.getElementById('requestsContainer');
+                    if (container && container.querySelectorAll('.request-item').length === 0) {
+                        container.innerHTML = `<div style="text-align: center; color: var(--text-tertiary); padding: 24px 0; font-size: 14px;">No pending student requests.</div>`;
+                    }
+                }, 300);
+            }
+            
+            console.log(`Student request ${requestId} status updated: ${actionStatus}`);
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             const mentorName = document.getElementById('mentorName');
             const greetingMsg = document.getElementById('greetingMsg');
             const headerAvatar = document.getElementById('headerAvatar');
+            const heroAvatar = document.getElementById('heroAvatar');
+            const heroProfileName = document.getElementById('heroProfileName');
             const notificationCount = document.getElementById('notificationCount');
             const notificationLink = document.getElementById('notificationLink');
             const notificationDropdown = document.getElementById('notificationDropdown');
             const notificationsContent = document.getElementById('notificationsContent');
             
             const availCards = document.querySelectorAll('.availability-radio-card');
+
+            // Render Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
 
             // Toggle Notification Dropdown
             notificationLink.addEventListener('click', (e) => {
@@ -600,10 +655,18 @@
                     const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/mentor/profile');
                     if (res.ok) {
                         const user = await res.json();
-                        mentorName.textContent = user.name || 'Anjali';
-                        greetingMsg.textContent = `Welcome back, ${user.name || 'Anjali'} 👋`;
+                        const displayName = user.name || 'Anjali';
+                        mentorName.textContent = displayName;
+                        if (heroProfileName) {
+                            heroProfileName.textContent = displayName;
+                        }
+                        greetingMsg.textContent = `Good Morning, ${displayName} 👋`;
                         if (user.photo) {
-                            headerAvatar.src = (typeof API_BASE !== 'undefined' ? API_BASE : '') + `/uploads/${user.photo}`;
+                            const photoSrc = (typeof API_BASE !== 'undefined' ? API_BASE : '') + `/uploads/${user.photo}`;
+                            headerAvatar.src = photoSrc;
+                            if (heroAvatar) {
+                                heroAvatar.src = photoSrc;
+                            }
                         }
                     }
                 } catch (e) {
@@ -647,9 +710,14 @@
             });
 
             // Initialize triggers
-            loadUserInfo();
+            loadUserInfo().then(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
             loadNotifications();
         });
     </script>
+    <script src="/navigation-loader.js"></script>
 </body>
 </html>

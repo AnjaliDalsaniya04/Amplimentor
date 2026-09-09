@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentor Public Portfolio - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Global style and Modal CSS used as full page rules -->
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/mentor-modal.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/config.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        /* Clean public top navigation bar */
+        .public-navbar {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #E2E8F0;
+            padding: 14px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .public-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #0F172A;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -0.03em;
+        }
+        .public-nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .btn-nav-back {
+            background-color: #F1F5F9;
+            color: #475569;
+            text-decoration: none;
+            font-size: 13.5px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-nav-back:hover {
+            background-color: #E2E8F0;
+            color: #0F172A;
+        }
+        /* Centered Profile Layout */
+        .public-profile-wrapper {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            animation: fadeIn 0.4s ease;
+        }
+        /* Standalone overrides to fit inside the full page cleanly */
+        .modal-hero-banner {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        .modal-content-layout {
+            padding: 0;
+            margin-top: 32px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Public Navigation Bar -->
+    <nav class="public-navbar">
+        <a href="/" class="public-logo">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#publicLogoGrad)"/>
+                <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
+                <defs>
+                    <linearGradient id="publicLogoGrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#3B82F6"/>
+                        <stop offset="1" stop-color="#4F46E5"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>Amplimentor</span>
+        </a>
+        
+        <div class="public-nav-right">
+            <a href="/mentors.html" class="btn-nav-back"><i data-lucide="arrow-left" style="width:14px; height:14px; vertical-align:text-top; margin-right:4px;"></i> Find Mentors</a>
+            <a href="/mentor/profile" class="btn-nav-back" id="backToEditBtn" style="display: none; background-color: var(--primary-light); color: var(--primary);"><i data-lucide="edit-3" style="width:14px; height:14px; vertical-align:text-top; margin-right:4px;"></i> Edit Profile</a>
+        </div>
+    </nav>
+
+    <!-- Public Profile Main Area -->
+    <div class="public-profile-wrapper">
+        <div id="publicProfileContent">
+            <!-- Dynamic portfolio content loads here -->
+            <div style="text-align: center; padding: 60px 0;">
+                <i data-lucide="loader-2" style="width: 48px; height: 48px; animation: spin 1s linear infinite; color: var(--primary);"></i>
+                <p style="color: var(--text-tertiary); margin-top: 12px;">Loading public portfolio...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Action Bar (Fixed on Mobile Viewports) -->
+    <div class="mobile-fixed-action-bar" id="mobileActionBar">
+        <div class="mobile-action-flex">
+            <button class="btn-mobile-secondary" onclick="window.location.href='/chat.html'">Message</button>
+            <button class="btn-mobile-primary" onclick="alert('Booking trigger simulation')">Book Session</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchPublicProfile();
+        });
+
+        const fetchPublicProfile = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mentorId = urlParams.get('id');
+
+            try {
+                // If url has mentor ID, load from mentors.json database (Student View)
+                if (mentorId) {
+                    const res = await fetch('/mentors.json');
+                    const mentorsList = await res.json();
+                    const mentor = mentorsList.find(m => m.id === parseInt(mentorId));
+                    if (mentor) {
+                        populatePublicProfile(mentor, false);
+                    } else {
+                        showError("Mentor portfolio not found in directory.");
+                    }
+                } else {
+                    // Else load logged-in mentor profile (Preview Mode)
+                    const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/mentor/profile');
+                    if (res.ok) {
+                        const mentor = await res.json();
+                        populatePublicProfile(mentor, true);
+                    } else {
+                        // Redirect to directory or show login prompt
+                        showError("Please login to preview your mentor profile portfolio.");
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+                showError("Failed to communicate with portfolio database.");
+            }
+        };
+
+        function showError(msg) {
+            document.getElementById('publicProfileContent').innerHTML = `
+                <div style="text-align:center; padding: 80px 24px; background:#FFFFFF; border-radius:16px; border:1px solid #E2E8F0;">
+                    <i data-lucide="alert-circle" style="width: 48px; height: 48px; color: #EF4444; margin-bottom:16px;"></i>
+                    <h3 style="font-size:20px; font-weight:700; color:#0F172A; margin:0 0 8px 0;">Portfolio Load Failed</h3>
+                    <p style="color:#64748B; font-size:14.5px; margin:0 0 24px 0;">${msg}</p>
+                    <a href="/mentors.html" class="btn-nav-back" style="background:var(--primary); color:#FFF;">Browse Directory</a>
+                </div>
+            `;
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        }
+
+        function populatePublicProfile(mentor, isPreviewMode) {
+            if (isPreviewMode) {
+                document.getElementById('backToEditBtn').style.display = 'inline-flex';
+            }
+
+            const escapeHtmlAttr = (str) => str ? str.replace(/"/g, '&quot;') : '';
+            const starsHtml = '★'.repeat(Math.round(mentor.rating || 4.8)) + '☆'.repeat(5 - Math.round(mentor.rating || 4.8));
+            
+            // Chips arrays
+            const subjectChips = [mentor.subject || 'Biology', mentor.specialization || 'NEET Biology', ...(mentor.expertiseAreas || mentor.skills || [])].filter(Boolean).map(item => `
+                <span class="custom-badge-pill">${item}</span>
+            `).join('');
+            const teachingSkills = ["Concept Building", "Revision Strategy", "Exam Planning", "Doubt Solving"];
+            const skillChips = teachingSkills.map(item => `
+                <span class="custom-badge-pill green">${item}</span>
+            `).join('');
+
+            const certificationsHtml = mentor.certifications && mentor.certifications.length > 0
+                ? mentor.certifications.map(cert => `
+                    <div class="cert-item-row">
+                        <div class="icon-box-round green">
+                            <i data-lucide="award" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="row-text-details">
+                            <span class="row-text-title">${cert}</span>
+                            <span class="row-text-desc">Verified Credential</span>
+                        </div>
+                    </div>
+                  `).join('')
+                : `
+                    <div class="cert-item-row">
+                        <div class="icon-box-round green">
+                            <i data-lucide="award" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="row-text-details">
+                            <span class="row-text-title">Verified Amplimentor Faculty</span>
+                            <span class="row-text-desc">Standard Educator</span>
+                        </div>
+                    </div>
+                  `;
+
+            const isBioLong = (mentor.bio || '').length > 200;
+            const shortBio = isBioLong ? mentor.bio.substring(0, 200) + '...' : (mentor.bio || '');
+
+            const reviews = [
+                { name: "Rahul Verma", rating: 5, date: "2 days ago", text: `"${mentor.name || 'Anjali'} explains Botany & Zoology concepts step-by-step. My board test percentages improved immediately."` },
+                { name: "Priya Singh", rating: 5, date: "5 days ago", text: `"The explanations are highly visual. Learning plant classification terms has never been this easy."` }
+            ];
+            const reviewsHtml = reviews.map(r => `
+                <div class="review-item-card">
+                    <div class="review-card-header">
+                        <div class="review-student-info">
+                            <div class="review-avatar-letters">${r.name.split(' ').map(n => n[0]).join('')}</div>
+                            <div class="review-student-name-col">
+                                <span class="review-student-name">${r.name}</span>
+                                <span class="review-student-subject">${mentor.specialization || 'NEET Biology'} Student</span>
+                            </div>
+                        </div>
+                        <div class="review-meta-right">
+                            <span class="review-stars">★★★★★</span>
+                            <span class="review-date-badge">${r.date}</span>
+                        </div>
+                    </div>
+                    <p class="review-body-text">${r.text}</p>
+                </div>
+            `).join('');
+
+            const contentHtml = `
+                <!-- Hero header banner -->
+                <div class="modal-hero-banner">
+                    <div class="modal-hero-flex">
+                        <div class="modal-hero-left">
+                            <div class="modal-hero-avatar-box">
+                                <img src="${mentor.photo ? (mentor.photo.startsWith('http') ? mentor.photo : ((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/uploads/' + mentor.photo)) : '/default-avatar.svg'}" alt="${mentor.name || 'Mentor'}">
+                            </div>
+                            <div class="modal-hero-meta">
+                                <span class="modal-hero-badge-verified">
+                                    <i data-lucide="check-circle-2" style="width: 12px; height: 12px; fill: currentColor; color: #FFF;"></i> Verified Mentor
+                                </span>
+                                <h2 class="modal-hero-name">${mentor.name || 'Mentor Name'}</h2>
+                                <div class="modal-hero-title-row">
+                                    ${mentor.role || mentor.designation || 'Senior Faculty'} • <span>${mentor.company || mentor.organization || 'Allen'}</span>
+                                </div>
+                                <div class="modal-hero-rating-row">
+                                    <span class="modal-hero-stars">${starsHtml}</span>
+                                    <span class="modal-hero-rating-text">${mentor.rating || 4.8} (${mentor.totalReviews || 152} Reviews)</span>
+                                </div>
+                                <p class="modal-hero-tagline">"Helping students score their potential through conceptual learning and custom strategies."</p>
+                            </div>
+                        </div>
+                        
+                        <div class="modal-hero-right-stats">
+                            <div class="modal-hero-stat-card">
+                                <div class="modal-hero-stat-icon-box">
+                                    <i data-lucide="users"></i>
+                                </div>
+                                <div class="modal-hero-stat-details">
+                                    <span class="modal-hero-stat-val">${mentor.studentsMentored || 1200}+</span>
+                                    <span class="modal-hero-stat-lbl">Students</span>
+                                </div>
+                            </div>
+                            <div class="modal-hero-stat-card">
+                                <div class="modal-hero-stat-icon-box">
+                                    <i data-lucide="clock"></i>
+                                </div>
+                                <div class="modal-hero-stat-details">
+                                    <span class="modal-hero-stat-val">${mentor.experienceYears || mentor.experience ? (mentor.experienceYears || mentor.experience).toString().replace(/[^0-9]/g, '') : '8'} Yrs</span>
+                                    <span class="modal-hero-stat-lbl">Experience</span>
+                                </div>
+                            </div>
+                            <div class="modal-hero-stat-card">
+                                <div class="modal-hero-stat-icon-box">
+                                    <i data-lucide="check-square"></i>
+                                </div>
+                                <div class="modal-hero-stat-details">
+                                    <span class="modal-hero-stat-val">1,800+</span>
+                                    <span class="modal-hero-stat-lbl">Sessions</span>
+                                </div>
+                            </div>
+                            <div class="modal-hero-stat-card">
+                                <div class="modal-hero-stat-icon-box">
+                                    <i data-lucide="trending-up"></i>
+                                </div>
+                                <div class="modal-hero-stat-details">
+                                    <span class="modal-hero-stat-val">98%</span>
+                                    <span class="modal-hero-stat-lbl">Satisfaction</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content split layouts -->
+                <div class="modal-content-layout">
+                    <div class="modal-main-sections">
+                        <!-- About -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="user"></i> About Mentor</h3>
+                            <p class="biography-text" data-short-text="${escapeHtmlAttr(shortBio)}" data-full-text="${escapeHtmlAttr(mentor.bio || '')}">${shortBio}</p>
+                            ${isBioLong ? `<button class="btn-biography-toggle" onclick="window.toggleBiographyText(this)">Read More <i data-lucide="chevron-down" style="width:14px; height:14px;"></i></button>` : ''}
+                        </div>
+
+                        <!-- Expertise -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="brain"></i> Expertise & Skills</h3>
+                            <div class="expertise-grid-split">
+                                <div class="expertise-item-card">
+                                    <h4 class="expertise-card-title">Subjects Covered</h4>
+                                    <div class="chip-group-wrap">
+                                        ${subjectChips}
+                                    </div>
+                                </div>
+                                <div class="expertise-item-card">
+                                    <h4 class="expertise-card-title">Teaching Methodologies</h4>
+                                    <div class="chip-group-wrap">
+                                        ${skillChips}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Experience timeline -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="briefcase"></i> Professional Timeline</h3>
+                            <div class="experience-vertical-timeline">
+                                <div class="timeline-card-node">
+                                    <span class="timeline-card-dot"></span>
+                                    <div class="timeline-card-details">
+                                        <span class="timeline-card-year">2024 - Present</span>
+                                        <span class="timeline-card-role">Senior Instructor Faculty</span>
+                                        <span class="timeline-card-institution">${mentor.company || mentor.organization || 'Allen'}</span>
+                                    </div>
+                                </div>
+                                <div class="timeline-card-node">
+                                    <span class="timeline-card-dot"></span>
+                                    <div class="timeline-card-details">
+                                        <span class="timeline-card-year">2021 - 2024</span>
+                                        <span class="timeline-card-role">Associate Science & Math Lead</span>
+                                        <span class="timeline-card-institution">National Prep School</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Education & Certifications -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="graduation-cap"></i> Education & Credentials</h3>
+                            <div class="edu-certs-split">
+                                <div class="edu-list">
+                                    <h4 class="expertise-card-title" style="margin-bottom: 12px;">Education</h4>
+                                    <div class="edu-item-row">
+                                        <div class="icon-box-round">
+                                            <i data-lucide="school" style="width: 16px; height: 16px;"></i>
+                                        </div>
+                                        <div class="row-text-details">
+                                            <span class="row-text-title">${mentor.education || 'M.Sc Biotech'}</span>
+                                            <span class="row-text-desc">Graduated Degree</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="certs-list">
+                                    <h4 class="expertise-card-title" style="margin-bottom: 12px;">Certifications</h4>
+                                    ${certificationsHtml}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Availability Grid -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="calendar"></i> Available Slots</h3>
+                            <div class="slots-day-container">
+                                <span class="slots-day-lbl">Today</span>
+                                <div class="slots-badges-row">
+                                    <button class="slot-time-badge" onclick="alert('Session booking request triggered')">10:00 AM</button>
+                                    <button class="slot-time-badge" onclick="alert('Session booking request triggered')">03:00 PM</button>
+                                    <button class="slot-time-badge" onclick="alert('Session booking request triggered')">06:30 PM</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Reviews -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="message-square"></i> Student Reviews</h3>
+                            <div class="reviews-grid-row">
+                                ${reviewsHtml}
+                            </div>
+                        </div>
+
+                        <!-- FAQs -->
+                        <div class="modal-section-card">
+                            <h3 class="modal-section-title"><i data-lucide="help-circle"></i> Frequently Asked Questions</h3>
+                            <div class="faq-accordion-group">
+                                <div class="faq-accordion-item">
+                                    <button class="faq-accordion-trigger" onclick="toggleAccordion(this)">
+                                        <span>How are mentoring sessions conducted?</span>
+                                        <i data-lucide="chevron-down" class="faq-accordion-icon"></i>
+                                    </button>
+                                    <div class="faq-accordion-content">
+                                        <div class="faq-content-inner">
+                                            Live video sessions are conducted 1-on-1 on our secure video chat workspace. You can join directly from your dashboard's Sessions page when it is scheduled.
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="faq-accordion-item">
+                                    <button class="faq-accordion-trigger" onclick="toggleAccordion(this)">
+                                        <span>Do you provide study notes?</span>
+                                        <i data-lucide="chevron-down" class="faq-accordion-icon"></i>
+                                    </button>
+                                    <div class="faq-accordion-content">
+                                        <div class="faq-content-inner">
+                                            Yes, study resources, session notes, and customized assignments are uploaded and shared on your portal directly after each scheduled class ends.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="modal-sidebar-card-wrap">
+                        <div class="modal-booking-sticky-card">
+                            <div class="booking-card-header">
+                                <span class="booking-status-indicator">
+                                    <span class="booking-status-dot"></span> Available Now
+                                </span>
+                            </div>
+                            <div class="booking-pricing-row">
+                                <span class="booking-currency">₹</span>
+                                <span class="booking-price-val">${mentor.sessionPrice ? mentor.sessionPrice.replace(/[^0-9]/g, '') : '399'}</span>
+                                <span class="booking-price-period">/session</span>
+                            </div>
+                            <div class="booking-details-list">
+                                <div class="booking-detail-item">
+                                    <span class="booking-detail-lbl"><i data-lucide="hourglass"></i> Duration</span>
+                                    <span class="booking-detail-val">60 Min</span>
+                                </div>
+                                <div class="booking-detail-item">
+                                    <span class="booking-detail-lbl"><i data-lucide="video"></i> Mode</span>
+                                    <span class="booking-detail-val">Online 1:1</span>
+                                </div>
+                                <div class="booking-detail-item">
+                                    <span class="booking-detail-lbl"><i data-lucide="zap"></i> Response Time</span>
+                                    <span class="booking-detail-val">${mentor.responseTime || 'Within 1 hour'}</span>
+                                </div>
+                            </div>
+                            <button class="btn-booking-primary" onclick="alert('Session booking request triggered')">Book Live Session</button>
+                            <button class="btn-booking-secondary" onclick="window.location.href='/chat.html'">Message Mentor</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('publicProfileContent').innerHTML = contentHtml;
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        window.toggleBiographyText = (button) => {
+            const p = button.previousElementSibling;
+            const isExpanded = p.classList.contains('expanded');
+            if (isExpanded) {
+                p.classList.remove('expanded');
+                p.textContent = p.getAttribute('data-short-text');
+                button.innerHTML = `Read More <i data-lucide="chevron-down" style="width:14px; height:14px;"></i>`;
+            } else {
+                p.classList.add('expanded');
+                p.textContent = p.getAttribute('data-full-text');
+                button.innerHTML = `Read Less <i data-lucide="chevron-up" style="width:14px; height:14px;"></i>`;
+            }
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        };
+
+        window.toggleAccordion = (button) => {
+            const item = button.closest('.faq-accordion-item');
+            const content = item.querySelector('.faq-accordion-content');
+            const isActive = item.classList.contains('active');
+            
+            const group = button.closest('.faq-accordion-group');
+            group.querySelectorAll('.faq-accordion-item').forEach(i => {
+                i.classList.remove('active');
+                i.querySelector('.faq-accordion-content').style.maxHeight = null;
+            });
+            
+            if (!isActive) {
+                item.classList.add('active');
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        };
+    </script>
+</body>
+</html>
