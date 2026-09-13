@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignments Console - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <script src="/uploader-helper.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Core structure layout */
+        .assignments-grid-container {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 32px;
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .assignments-grid-container.full {
+            grid-template-columns: 1fr;
+        }
+
+        .list-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .list-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        /* Assignment Card */
+        .assignment-row-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 18px; /* Card gap: 18px */
+            display: grid;
+            grid-template-columns: 80px 2fr 1fr 1fr 120px 40px;
+            gap: 20px; /* Gap between columns: 20px */
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-sizing: border-box;
+            height: 90px; /* Card height: 90px */
+            width: 100%;
+        }
+        .assignment-row-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(15,23,42,0.03);
+        }
+        .subject-badge-box {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background-color: #EFF6FF;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 auto;
+        }
+        .assignment-title-col {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+        .info-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .info-subject {
+            font-size: 12px;
+            color: #64748B;
+            font-weight: 600;
+            margin: 0;
+        }
+        .assignment-due-col {
+            min-width: 0;
+        }
+        .assignment-marks-col {
+            min-width: 0;
+        }
+        .status-badge {
+            display: inline-block;
+            width: 100px;
+            text-align: center;
+            box-sizing: border-box;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+        }
+        .status-badge.pending { background-color: #FEF3C7; color: #92400E; }
+        .status-badge.submitted { background-color: #DBEAFE; color: #1E40AF; }
+        .status-badge.graded { background-color: #D1FAE5; color: #065F46; }
+
+        /* Side form panels */
+        .side-action-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+            align-self: start;
+        }
+        .form-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .form-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 13.5px;
+            outline: none;
+            margin-bottom: 14px;
+            transition: all 0.2s;
+        }
+        .form-input:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+        .btn-action-primary {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
+            border: none;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .btn-action-primary:hover {
+            background-color: #2563EB;
+        }
+
+        @media (max-width: 1024px) {
+            .assignments-grid-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .assignment-row-card {
+                height: auto !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+                padding: 16px !important;
+            }
+            .assignment-main-info {
+                width: 100% !important;
+                align-items: flex-start !important;
+            }
+            .assignment-details-row {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 8px !important;
+            }
+            .info-title {
+                white-space: normal !important;
+                min-width: 0 !important;
+            }
+            .assignment-actions-row {
+                width: 100% !important;
+                justify-content: space-between !important;
+                border-top: 1px solid #F1F5F9 !important;
+                padding-top: 12px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Nav bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li id="dynamicNavLink"><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Filled by JS -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main grid panel -->
+    <div class="assignments-grid-container" id="gridContainer">
+        
+        <!-- Left Side: List -->
+        <main class="assignments-list-panel">
+            <div class="app-filter-bar">
+                <div class="app-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="asgSearchInput" placeholder="Search assignments..." class="app-search-input" oninput="filterAssignmentsList()">
+                </div>
+                <div class="filter-bar-group">
+                    <span id="assignmentCountLabel" style="font-size:13px; font-weight:700; color:#64748B;">Showing 3 assignments</span>
+                </div>
+            </div>
+
+            <!-- List box -->
+            <div id="assignmentsListContainer">
+                <!-- Filled by JS -->
+            </div>
+        </main>
+
+        <!-- Right Side: Details / Creation Panel -->
+        <aside class="side-action-panel" id="sideActionPanel">
+            <!-- Load dynamic side content -->
+        </aside>
+    </div>
+
+    <!-- Rating details / submit Modal dialog -->
+    <div class="dialog-overlay" id="submitSolutionModal">
+        <div class="dialog-box">
+            <div class="dialog-header">
+                <h3 class="dialog-title">Submit Homework Solution</h3>
+                <button class="btn-dialog-close" onclick="closeSubmitModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="dialog-body">
+                <label class="form-label">Notes for Mentor</label>
+                <textarea class="form-input" id="submitNotes" placeholder="Write any notes or descriptions..." style="height:80px; resize:none;"></textarea>
+                
+                <label class="form-label">Solution PDF File</label>
+                <div id="solutionFileUploader"></div>
+            </div>
+            <div class="dialog-footer">
+                <button class="btn-dialog-action secondary" onclick="closeSubmitModal()">Cancel</button>
+                <button class="btn-dialog-action primary" onclick="submitActiveSolution()">Submit solution</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let assignments = [];
+        let activeAssignmentId = null;
+        let uploadedAttachmentSim = null;
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+
+                    const brand = document.getElementById('brandLink');
+                    const dynLink = document.getElementById('dynamicNavLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard.html';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dynLink.innerHTML = '<a href="/my-students.html">My Students</a>';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard.html';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dynLink.innerHTML = '<a href="/student/mentors">Find Mentors</a>';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student-settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    // Seeding mock assignments database
+                    seedMockAssignments();
+                } else {
+                    seedMockAssignments();
+                }
+            } catch (err) {
+                console.error(err);
+                seedMockAssignments();
+            }
+        });
+
+        function seedMockAssignments() {
+            assignments = [
+                {
+                    id: 'asg-1',
+                    title: 'Genetics Mendelian inheritance worksheets',
+                    subject: 'Biology',
+                    dueDate: 'Tomorrow, 5:00 PM',
+                    marks: 50,
+                    status: 'pending',
+                    desc: 'Answer all review questions regarding Punnett squares probability math.',
+                    remarks: '',
+                    pointsEarned: null,
+                    rubric: 'Accuracy of Crosses: 30pts, Explanations clarity: 20pts',
+                    attachment: 'Genetics_Crosses_Worksheet.pdf'
+                },
+                {
+                    id: 'asg-2',
+                    title: 'Electromagnetic Field derivations',
+                    subject: 'Physics',
+                    dueDate: 'Expired (Submitted)',
+                    marks: 100,
+                    status: 'submitted',
+                    desc: 'Derive Gauss law and express electric fields inside a hollow metal sphere.',
+                    remarks: 'Awaiting grading review.',
+                    pointsEarned: null,
+                    rubric: 'Derivation accuracy: 60pts, Diagram clarity: 40pts',
+                    attachment: 'Electrostatics_Field_Notes.pdf'
+                },
+                {
+                    id: 'asg-3',
+                    title: 'Organic Chemistry Alkane mechanisms',
+                    subject: 'Chemistry',
+                    dueDate: 'Graded (June 28)',
+                    marks: 100,
+                    status: 'graded',
+                    desc: 'Show step-by-step free radical halogenation of methane.',
+                    remarks: 'Perfect mechanisms drawing. Very detailed!',
+                    pointsEarned: 95,
+                    rubric: 'Reaction steps correctness: 50pts, Mechanism arrows mapping: 50pts',
+                    attachment: 'Alkanes_Halogenation_Sheet.pdf'
+                }
+            ];
+
+            renderAssignmentsList();
+            renderSidePanel();
+        }
+
+        function renderAssignmentsList() {
+            const container = document.getElementById('assignmentsListContainer');
+            container.innerHTML = '';
+
+            document.getElementById('assignmentCountLabel').textContent = `Showing ${assignments.length} assignments`;
+
+            assignments.forEach(asg => {
+                const subChar = asg.subject.charAt(0);
+                
+                // Select active status text
+                let badgeClass = 'pending';
+                if (asg.status === 'submitted') badgeClass = 'submitted';
+                else if (asg.status === 'graded') badgeClass = 'graded';
+
+                container.innerHTML += `
+                    <div class="assignment-row-card" onclick="selectAssignment('${asg.id}')">
+                        <div class="subject-badge-box">${subChar}</div>
+                        
+                        <div class="assignment-title-col">
+                            <h3 class="info-title">${asg.title}</h3>
+                            <span class="info-subject">${asg.subject}</span>
+                        </div>
+                        
+                        <div class="assignment-due-col">
+                            <span style="font-size:12px; color:#64748B; display:block;">Due Date</span>
+                            <strong style="font-size:13px; color:#1E293B; font-weight:600; display:block; margin-top:2px;">${asg.dueDate}</strong>
+                        </div>
+                        
+                        <div class="assignment-marks-col">
+                            <span style="font-size:12px; color:#64748B; display:block;">Marks</span>
+                            <strong style="font-size:13px; color:#1E293B; font-weight:600; display:block; margin-top:2px;">${asg.marks} Marks</strong>
+                        </div>
+                        
+                        <div>
+                            <span class="status-badge ${badgeClass}">${asg.status}</span>
+                        </div>
+                        
+                        <i class="fa-solid fa-chevron-right" style="color:#94A3B8;"></i>
+                    </div>
+                `;
+            });
+
+            // Default to first item details
+            if (assignments.length > 0 && !activeAssignmentId) {
+                selectAssignment(assignments[0].id);
+            }
+        }
+
+        function selectAssignment(id) {
+            activeAssignmentId = id;
+            renderSidePanel();
+        }
+
+        function renderSidePanel() {
+            const panel = document.getElementById('sideActionPanel');
+            const asg = assignments.find(a => a.id === activeAssignmentId);
+
+            if (!asg) {
+                panel.innerHTML = `<div style="text-align:center; color:#64748B;">Select an assignment to view details.</div>`;
+                return;
+            }
+
+            if (currentRole === 'student') {
+                let actionMarkup = '';
+                if (asg.status === 'pending') {
+                    actionMarkup = `<button class="btn-action-primary" onclick="openSubmitModal()"><i class="fa-solid fa-upload"></i> Submit Solution</button>`;
+                } else if (asg.status === 'submitted') {
+                    actionMarkup = `<div style="text-align:center; color:#3B82F6; font-size:13px; font-weight:700;"><i class="fa-solid fa-spinner fa-spin"></i> Submission under review</div>`;
+                } else if (asg.status === 'graded') {
+                    actionMarkup = `
+                        <div style="background-color:#F0FDF4; border:1.5px solid #10B981; padding:12px; border-radius:8px;">
+                            <strong style="color:#065F46; font-size:14px;"><i class="fa-solid fa-square-poll-vertical"></i> Graded: ${asg.pointsEarned}/${asg.marks} points</strong>
+                            <p style="margin:6px 0 0 0; font-size:12.5px; color:#047857;"><strong>Mentor feedback:</strong> ${asg.remarks || 'Perfect!'}</p>
+                        </div>
+                    `;
+                }
+
+                panel.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <div>
+                            <span class="form-label">${asg.subject} Assignment</span>
+                            <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:4px 0 0 0;">${asg.title}</h3>
+                        </div>
+                        <p style="font-size:13px; color:#475569; line-height:1.5; margin:0;">${asg.desc}</p>
+                        
+                        ${asg.attachment ? `
+                            <div style="background-color:#F8FAFC; border:1px solid #E2E8F0; padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-size:12.5px; color:#475569; font-weight:700;"><i class="fa-solid fa-paperclip" style="color:var(--primary); margin-right:6px;"></i> ${asg.attachment}</span>
+                                <a href="#" onclick="event.preventDefault(); alert('Downloading homework attachment...')" style="color:var(--primary); font-size:14px;"><i class="fa-solid fa-download"></i></a>
+                            </div>
+                        ` : ''}
+
+                        ${asg.rubric ? `
+                            <div style="background-color:#EFF6FF; border:1px solid #BFDBFE; padding:12px; border-radius:8px;">
+                                <span class="form-label" style="color:#1E40AF; margin-bottom:4px;">Evaluation Rubric</span>
+                                <div style="font-size:12px; color:#1E40AF; font-weight:600; line-height:1.4;">${asg.rubric}</div>
+                            </div>
+                        ` : ''}
+
+                        <div style="border-top:1px solid var(--border); padding-top:16px;">
+                            ${actionMarkup}
+                        </div>
+                    </div>
+                `;
+            } else {
+                // Mentor panel: Create or review assignments
+                panel.innerHTML = `
+                    <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:0 0 16px 0;">Create New Assignment</h3>
+                    
+                    <label class="form-label">Subject</label>
+                    <input type="text" placeholder="Biology" class="form-input" id="newAsgSubject">
+
+                    <label class="form-label">Title</label>
+                    <input type="text" placeholder="Cell anatomy quiz worksheet" class="form-input" id="newAsgTitle">
+
+                    <label class="form-label">Description / Instructions</label>
+                    <textarea class="form-input" placeholder="Explain tasks clearly..." id="newAsgDesc" style="height:80px; resize:none;"></textarea>
+
+                    <label class="form-label">Points / Max Marks</label>
+                    <input type="number" value="100" class="form-input" id="newAsgMarks">
+
+                    <label class="form-label">Due Date</label>
+                    <input type="text" placeholder="July 10, 5:00 PM" class="form-input" id="newAsgDueDate">
+
+                    <label class="form-label">Rubric Criteria (e.g. Content: 50, Accuracy: 50)</label>
+                    <input type="text" placeholder="Concept explanation: 50, Diagrams: 50" class="form-input" id="newAsgRubric">
+
+                    <label class="form-label">Upload Reference Attachment</label>
+                    <button class="btn-action-primary" style="background-color:#64748B; margin-bottom:14px;" onclick="simulateAddAttachment()"><i class="fa-solid fa-paperclip"></i> Upload Attachment</button>
+                    <div id="newAsgAttachmentLabel" style="font-size:11.5px; color:#10B981; margin-bottom:14px; font-weight:700;"></div>
+
+                    <button class="btn-action-primary" onclick="createAssignment()">Publish Assignment</button>
+                `;
+            }
+        }
+
+        function simulateAddAttachment() {
+            uploadedAttachmentSim = 'NCERT_Genetics_Handout.pdf';
+            document.getElementById('newAsgAttachmentLabel').textContent = `✓ Selected: ${uploadedAttachmentSim}`;
+            window.toast.success("Attachment Uploaded");
+        }
+
+        // Mentor creation triggers
+        function createAssignment() {
+            const sub = document.getElementById('newAsgSubject').value;
+            const title = document.getElementById('newAsgTitle').value;
+            const desc = document.getElementById('newAsgDesc').value;
+            const marks = document.getElementById('newAsgMarks').value;
+            const due = document.getElementById('newAsgDueDate').value;
+            const rubric = document.getElementById('newAsgRubric').value;
+
+            if (!sub || !title || !desc) {
+                window.toast.warning("Inputs missing", "Please fill all form values.");
+                return;
+            }
+
+            assignments.push({
+                id: `asg-${Date.now()}`,
+                title,
+                subject: sub,
+                dueDate: due || 'Next week',
+                marks: parseInt(marks, 10) || 100,
+                status: 'pending',
+                desc,
+                remarks: '',
+                pointsEarned: null,
+                rubric: rubric || 'No criteria specified',
+                attachment: uploadedAttachmentSim
+            });
+
+            // reset form fields
+            document.getElementById('newAsgSubject').value = '';
+            document.getElementById('newAsgTitle').value = '';
+            document.getElementById('newAsgDesc').value = '';
+            document.getElementById('newAsgDueDate').value = '';
+            document.getElementById('newAsgRubric').value = '';
+            document.getElementById('newAsgAttachmentLabel').textContent = '';
+            uploadedAttachmentSim = null;
+
+            window.toast.success("Assignment Published", `${title} is now active.`);
+            renderAssignmentsList();
+        }
+
+        // Student solution submit modal
+        function openSubmitModal() {
+            document.getElementById('submitSolutionModal').style.display = 'flex';
+            setTimeout(() => {
+                new ReusableUploader('solutionFileUploader', {
+                    accept: '.pdf,image/*',
+                    maxSizeMb: 5
+                });
+            }, 50);
+        }
+        function closeSubmitModal() {
+            document.getElementById('submitSolutionModal').style.display = 'none';
+        }
+
+        function submitActiveSolution() {
+            const notes = document.getElementById('submitNotes').value;
+            const activeAsg = assignments.find(a => a.id === activeAssignmentId);
+
+            if (activeAsg) {
+                activeAsg.status = 'submitted';
+                activeAsg.dueDate = 'Expired (Submitted)';
+                activeAsg.remarks = notes || 'Submitted successfully';
+            }
+
+            document.getElementById('submitNotes').value = '';
+            closeSubmitModal();
+            window.toast.success("Solution Uploaded", "Homework submitted successfully.");
+            renderAssignmentsList();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

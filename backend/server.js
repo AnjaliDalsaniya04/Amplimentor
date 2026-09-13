@@ -43,6 +43,26 @@ app.get("/register",          (req, res) => res.sendFile(path.join(__dirname, ".
 app.get("/student-dashboard", (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/student-dashboard.html")));
 app.get("/mentor-dashboard",  (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentor-dashboard.html")));
 app.get("/mentors",           (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentors.html")));
+app.get("/student/profile",   (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/student-profile.html")));
+app.get("/mentor/profile",    (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentor-profile.html")));
+app.get("/mentor/public-profile", (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentor-public-profile.html")));
+app.get("/mentor/settings",   (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentor-settings.html")));
+app.get("/student/settings",  (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/student-settings.html")));
+app.get("/notifications",     (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/notifications.html")));
+app.get("/calendar",          (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/calendar.html")));
+app.get("/error",             (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/error.html")));
+app.get("/session-workspace", (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/session-workspace.html")));
+app.get("/booking-wizard",    (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/booking-wizard.html")));
+app.get("/assignments",       (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/assignments.html")));
+app.get("/quiz",              (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/quiz.html")));
+app.get("/study-resources",   (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/study-resources.html")));
+app.get("/learning-progress", (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/learning-progress.html")));
+app.get("/learning-goals",    (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/learning-goals.html")));
+app.get("/whiteboard",        (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/whiteboard.html")));
+app.get("/finance",           (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/finance.html")));
+app.get("/support",           (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/support.html")));
+app.get("/mentor-messages",   (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/mentor-messages.html")));
+app.get("/student-messages",  (req, res) => res.sendFile(path.join(__dirname, "../frontend/public/student-messages.html")));
 
 // ── Legacy URL aliases (backward compat with frontend) ───────
 const mentorsRouter  = require("./routes/mentors");

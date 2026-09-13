@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Session Workspace - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #0F172A; /* Dark premium cinematic workspace backdrop */
+            color: #F8FAFC;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .workspace-layout {
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            height: calc(100vh - 64px);
+        }
+
+        /* Top Navbar for Workspace (Dark Theme spec) */
+        .workspace-nav {
+            height: 64px;
+            background-color: #1E293B;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            box-sizing: border-box;
+        }
+        .workspace-logo {
+            font-weight: 800;
+            font-size: 18px;
+            color: #3B82F6;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .recording-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background-color: #EF444420;
+            color: #EF4444;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11.5px;
+            font-weight: 700;
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { opacity: 0.7; }
+            50% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        .timer-badge {
+            background-color: #334155;
+            border: 1px solid #475569;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: #F8FAFC;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Main Video Screen Area */
+        .main-call-screen {
+            padding: 24px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
+        .video-canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            height: 420px;
+            position: relative;
+        }
+        .video-card {
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .video-avatar-backdrop {
+            text-align: center;
+        }
+        .video-avatar-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #334155;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: #94A3B8;
+            border: 3px solid #475569;
+            margin-bottom: 12px;
+        }
+        .video-label-tag {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            background-color: rgba(15, 23, 42, 0.75);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Call Controls Panel */
+        .call-controls-row {
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .control-btns-flex {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .btn-control-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: #334155;
+            border: 1px solid #475569;
+            color: #F8FAFC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        .btn-control-circle:hover {
+            background-color: #475569;
+        }
+        .btn-control-circle.active {
+            background-color: #EF4444;
+            border-color: #EF4444;
+        }
+        .btn-end-session {
+            background-color: #EF4444;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13.5px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        /* Tabs and side-panel container */
+        .workspace-side-panel {
+            background-color: #1E293B;
+            border-left: 1px solid #334155;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .workspace-tabs-header {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border-bottom: 1px solid #334155;
+        }
+        .workspace-tab-btn {
+            background: transparent;
+            border: none;
+            color: #94A3B8;
+            padding: 14px 0;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .workspace-tab-btn.active {
+            color: #3B82F6;
+            border-bottom: 3px solid #3B82F6;
+            background-color: #33415520;
+        }
+
+        .workspace-tab-content-frame {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            color: #E2E8F0;
+        }
+
+        .chat-input-bar {
+            border-top: 1px solid #334155;
+            padding: 12px;
+            background-color: #0F172A;
+            display: flex;
+            gap: 8px;
+        }
+        .chat-input-field {
+            flex-grow: 1;
+            background-color: #1E293B;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 8px 12px;
+            color: white;
+            outline: none;
+            font-size: 13.5px;
+        }
+
+        /* Form styling inside panel */
+        .panel-label {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94A3B8;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .panel-input {
+            width: 100%;
+            background-color: #0F172A;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: white;
+            font-size: 13px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .btn-panel-action {
+            width: 100%;
+            background-color: #3B82F6;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        /* Whiteboard modal frame */
+        .whiteboard-overlay-frame {
+            display: none;
+            position: fixed;
+            top: 64px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 64px);
+            background: #F8FAFC;
+            z-index: 10000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Workspace top nav bar -->
+    <header class="workspace-nav">
+        <a href="/sessions.html" class="workspace-logo">
+            <i class="fa-solid fa-arrow-left"></i> Session Workspace
+        </a>
+        <div style="display:flex; align-items:center; gap:16px;">
+            <div class="recording-indicator">
+                <i class="fa-solid fa-circle" style="font-size: 8px; animation: pulse-border 1.5s infinite;"></i> LIVE RECORDING
+            </div>
+            <div class="timer-badge">
+                <i class="fa-solid fa-clock-rotate-left"></i> <span id="countdownTimer">45:00</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Workspace core screen layouts -->
+    <div class="workspace-layout">
+        
+        <!-- Video screen and bottom tool controls -->
+        <main class="main-call-screen">
+            <div class="video-canvas-grid">
+                <!-- Card 1: Mentor -->
+                <div class="video-card" id="mentorVideoCard">
+                    <div class="video-avatar-backdrop">
+                        <div class="video-avatar-circle" id="mentorVideoAvatar"><i class="fa-solid fa-user-tie"></i></div>
+                        <div style="font-weight: 700;" id="mentorVideoLabel">Anjali Patel</div>
+                        <span style="font-size:11px; color:#64748B;">Broadcasting (Simulation)</span>
+                    </div>
+                    <div class="video-label-tag">Mentor (Host)</div>
+                </div>
+
+                <!-- Card 2: Student -->
+                <div class="video-card" id="studentVideoCard">
+                    <div class="video-avatar-backdrop">
+                        <div class="video-avatar-circle" id="studentVideoAvatar"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div style="font-weight: 700;" id="studentVideoLabel">Rahul Verma</div>
+                        <span style="font-size:11px; color:#64748B;">Mic Muted</span>
+                    </div>
+                    <div class="video-label-tag">Student</div>
+                </div>
+            </div>
+
+            <!-- Controls row -->
+            <div class="call-controls-row">
+                <div class="control-btns-flex">
+                    <button class="btn-control-circle" id="btnMute" onclick="toggleMute()"><i class="fa-solid fa-microphone"></i></button>
+                    <button class="btn-control-circle" id="btnCam" onclick="toggleCam()"><i class="fa-solid fa-video"></i></button>
+                    <button class="btn-control-circle" id="btnShare" onclick="toggleShare()"><i class="fa-solid fa-desktop"></i></button>
+                    <button class="btn-control-circle" onclick="openWhiteboard()"><i class="fa-solid fa-palette"></i></button>
+                </div>
+                <div>
+                    <button class="btn-end-session" id="btnEndCall" onclick="endCallClick()">End Call</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Side Panel Tabs / Interactions -->
+        <aside class="workspace-side-panel">
+            <div class="workspace-tabs-header">
+                <button class="workspace-tab-btn active" id="tabChat" onclick="switchWorkspacePanel('chat')">Call Chat</button>
+                <button class="workspace-tab-btn" id="tabNotes" onclick="switchWorkspacePanel('notes')">Shared Notes</button>
+                <button class="workspace-tab-btn" id="tabActions" onclick="switchWorkspacePanel('actions')">Actions</button>
+                <button class="workspace-tab-btn" id="tabAI" onclick="switchWorkspacePanel('ai')">AI Study</button>
+            </div>
+
+            <!-- Tab content frame -->
+            <div class="workspace-tab-content-frame" id="workspacePanelBody">
+                <!-- Filled dynamically based on tab and role -->
+            </div>
+
+            <!-- Optional Call Chat Bottom Input -->
+            <div class="chat-input-bar" id="chatInputBar">
+                <input type="text" placeholder="Type a message to call..." class="chat-input-field" id="callChatMsg" onkeypress="handleChatKey(event)">
+                <button class="btn-control-circle" style="width:36px; height:36px; font-size:12px; background:var(--primary);" onclick="sendCallChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Whiteboard embedded page view overlay -->
+    <div class="whiteboard-overlay-frame" id="whiteboardFrame">
+        <div style="height:48px; background:#1E293B; display:flex; align-items:center; justify-content:space-between; padding:0 20px; color:white;">
+            <span style="font-weight:700;"><i class="fa-solid fa-palette"></i> Shared Digital Drawing Canvas</span>
+            <button class="btn-dialog-action danger" style="padding:4px 12px; font-size:12px;" onclick="closeWhiteboard()">Close Canvas</button>
+        </div>
+        <iframe src="/whiteboard.html" style="width:100%; height:calc(100% - 48px); border:none;"></iframe>
+    </div>
+
+    <!-- Rating modal popup for Student -->
+    <div class="dialog-overlay" id="ratingModal">
+        <div class="dialog-box" style="background:#1E293B; border-color:#334155; color:white;">
+            <div class="dialog-header">
+                <h3 class="dialog-title" style="color:white;">Rate Live Session</h3>
+            </div>
+            <div class="dialog-body" style="color:#E2E8F0;">
+                <p>Please share feedback on your mentoring session with Anjali Patel.</p>
+                <div style="display:flex; gap:8px; font-size:24px; color:#F59E0B; margin: 16px 0; justify-content:center; cursor:pointer;">
+                    <i class="fa-regular fa-star" onclick="setRatingVal(1, this)"></i>
+                    <i class="fa-regular fa-star" onclick="setRatingVal(2, this)"></i>
+                    <i class="fa-regular fa-star" onclick="setRatingVal(3, this)"></i>
+                    <i class="fa-regular fa-star" onclick="setRatingVal(4, this)"></i>
+                    <i class="fa-regular fa-star" onclick="setRatingVal(5, this)"></i>
+                </div>
+                <textarea class="panel-input" placeholder="What went well or what could be improved?" style="height:80px; margin-top:8px;"></textarea>
+            </div>
+            <div class="dialog-footer">
+                <button class="btn-dialog-action primary" onclick="submitRating()">Submit Review</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Prep Meeting screen overlay -->
+    <div class="dialog-overlay" id="prepMeetingOverlay" style="display: flex; align-items: center; justify-content: center; background-color: #0F172A; z-index: 20000; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;">
+        <div class="dialog-box" style="background: #1E293B; border-color: #334155; color: white; width: 90%; max-width: 500px; text-align: center; border-radius: 16px; padding: 32px;">
+            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Mentoring Session Prep Screen</h2>
+            <p style="font-size: 13px; color: #94A3B8; margin-bottom: 24px;">Confirm your video and audio feeds configuration before entering the workspace.</p>
+            
+            <div style="background: #0F172A; height: 180px; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 24px; border: 1px solid #334155;">
+                <i class="fa-solid fa-video" style="font-size: 40px; color: #3B82F6;"></i>
+                <div style="font-size: 13.5px; margin-left: 12px; text-align: left;">
+                    <div style="font-weight: 700;">Live Camera Feed starting...</div>
+                    <div style="font-size: 11.5px; color: #64748B;">Ready to connect</div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 16px; justify-content: center; margin-bottom: 24px;">
+                <button class="btn-control-circle" id="prepMute" onclick="toggleMute()"><i class="fa-solid fa-microphone"></i></button>
+                <button class="btn-control-circle" id="prepCam" onclick="toggleCam()"><i class="fa-solid fa-video"></i></button>
+            </div>
+
+            <button class="btn-panel-action" style="font-size: 14px; padding: 12px;" onclick="joinWorkspaceMeeting()">Join Session Workspace</button>
+        </div>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let currentPanel = 'chat';
+        let isMuted = false;
+        let isCamOff = false;
+        let isSharing = false;
+        let ratingValue = 5;
+
+        // Active chat message queue
+        let chatMessages = [
+            { sender: 'Anjali Patel', text: 'Hello Rahul, ready to start Genetics revision?', time: '10:02 AM' },
+            { sender: 'Rahul Verma', text: 'Yes ma\'am, I ready.', time: '10:02 AM' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Get user profile role
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+
+                    // Customize labels based on role
+                    if (currentRole === 'mentor') {
+                        document.getElementById('mentorVideoLabel').textContent = `${profile.name} (You)`;
+                        document.getElementById('studentVideoLabel').textContent = 'Rahul Verma';
+                        
+                        // Seed mentor avatars
+                        if (profile.photo) {
+                            document.getElementById('mentorVideoAvatar').innerHTML = `<img src="${API_BASE}/uploads/${profile.photo}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                        }
+                    } else {
+                        document.getElementById('studentVideoLabel').textContent = `${profile.name} (You)`;
+                        document.getElementById('mentorVideoLabel').textContent = 'Anjali Patel';
+
+                        if (profile.photo) {
+                            document.getElementById('studentVideoAvatar').innerHTML = `<img src="${API_BASE}/uploads/${profile.photo}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+
+            // Start Session Timer
+            startTimer(45 * 60);
+
+            // Render current panel
+            switchWorkspacePanel('chat');
+        });
+
+        // Countdown timer loop
+        function startTimer(duration) {
+            let timer = duration, minutes, seconds;
+            const display = document.getElementById('countdownTimer');
+
+            const interval = setInterval(() => {
+                minutes = parseInt(timer / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = minutes + ":" + seconds;
+
+                if (--timer < 0) {
+                    clearInterval(interval);
+                    display.textContent = "00:00";
+                    if (window.toast) window.toast.warning("Time Expired", "The session time has run out.");
+                }
+            }, 1000);
+        }
+
+        // Panel Switcher
+        function switchWorkspacePanel(panel) {
+            currentPanel = panel;
+            document.querySelectorAll('.workspace-tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (panel === 'chat') document.getElementById('tabChat').classList.add('active');
+            if (panel === 'notes') document.getElementById('tabNotes').classList.add('active');
+            if (panel === 'actions') document.getElementById('tabActions').classList.add('active');
+            if (panel === 'ai') document.getElementById('tabAI').classList.add('active');
+
+            const body = document.getElementById('workspacePanelBody');
+            const chatInputBar = document.getElementById('chatInputBar');
+
+            if (panel === 'chat') {
+                chatInputBar.style.display = 'flex';
+                renderChatPanel(body);
+            } else if (panel === 'notes') {
+                chatInputBar.style.display = 'none';
+                renderNotesPanel(body);
+            } else if (panel === 'actions') {
+                chatInputBar.style.display = 'none';
+                renderActionsPanel(body);
+            } else if (panel === 'ai') {
+                chatInputBar.style.display = 'none';
+                renderAIPanel(body);
+            }
+        }
+
+        // AI Assistant chat history
+        let aiMessages = [
+            { sender: 'AI', text: 'Hello! I am your AI Study Assistant. I can help summarize notes, generate quick practice quizzes, explain genetics definitions, or format revision schedules. Ask me anything!', time: '10:05 AM' }
+        ];
+
+        function renderAIPanel(body) {
+            body.innerHTML = `
+                <div style="font-weight: 700; font-size: 13.5px; border-bottom: 1px solid #334155; padding-bottom: 8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span><i class="fa-solid fa-robot" style="color:#8B5CF6;"></i> AI Study Assistant</span>
+                    <button style="background:transparent; border:none; color:#3B82F6; font-size:11px; cursor:pointer;" onclick="runAIQuickAction('Summary')">Summarize Notes</button>
+                </div>
+
+                <div style="flex-grow: 1; display:flex; flex-direction:column; gap:12px; overflow-y:auto; max-height: 240px;" id="aiMsgContainer">
+                    ${aiMessages.map(msg => `
+                        <div style="background-color: #33415540; padding: 10px; border-radius: 8px; border: 1px solid #334155;">
+                            <strong style="font-size:11.5px; color:#8B5CF6;">${msg.sender}</strong>
+                            <div style="font-size:12.5px; color:#E2E8F0; margin-top:4px; white-space: pre-line;">${msg.text}</div>
+                        </div>
+                    `).join('')}
+                </div>
+
+                <div style="border-top:1px solid #334155; padding-top:12px; display:flex; flex-direction:column; gap:8px;">
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:11px;">
+                        <button style="padding:6px; background:#334155; border:none; border-radius:4px; color:white; cursor:pointer;" onclick="runAIQuickAction('Explain')">Explain Topic</button>
+                        <button style="padding:6px; background:#334155; border:none; border-radius:4px; color:white; cursor:pointer;" onclick="runAIQuickAction('Quiz')">Generate Quiz</button>
+                        <button style="padding:6px; background:#334155; border:none; border-radius:4px; color:white; cursor:pointer;" onclick="runAIQuickAction('Plan')">Study Plan</button>
+                        <button style="padding:6px; background:#334155; border:none; border-radius:4px; color:white; cursor:pointer;" onclick="runAIQuickAction('Help')">Homework Help</button>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:4px;">
+                        <input type="text" placeholder="Ask AI anything..." class="chat-input-field" id="aiQueryField" onkeypress="handleAIKey(event)">
+                        <button class="btn-control-circle" style="width:36px; height:36px; font-size:11px; background:#8B5CF6;" onclick="askAI()"><i class="fa-solid fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            `;
+            setTimeout(() => {
+                const con = document.getElementById('aiMsgContainer');
+                if (con) con.scrollTop = con.scrollHeight;
+            }, 50);
+        }
+
+        function handleAIKey(e) {
+            if (e.key === 'Enter') askAI();
+        }
+
+        function askAI() {
+            const field = document.getElementById('aiQueryField');
+            if (field.value.trim() === '') return;
+
+            const text = field.value;
+            aiMessages.push({ sender: 'Student', text, time: 'Just now' });
+            field.value = '';
+            renderAIPanel(document.getElementById('workspacePanelBody'));
+
+            setTimeout(() => {
+                aiMessages.push({
+                    sender: 'AI',
+                    text: `Based on current session notes, here is the quick explanation regarding "${text}":\nMendel's experiments on Pisum sativum (peas) demonstrated how phenotypic traits are transmitted. Let me know if you would like me to generate a 2-question quiz regarding this topic!`,
+                    time: 'Just now'
+                });
+                renderAIPanel(document.getElementById('workspacePanelBody'));
+                window.toast.success("AI Response Generated");
+            }, 1200);
+        }
+
+        function runAIQuickAction(action) {
+            let aiText = '';
+            if (action === 'Summary') {
+                aiText = `**Session Summary Sheet**:\nGregor Mendel used pea plant genetics to track hybridization statistics. He developed laws on dominance, segregation, and independent assortment. We worked on calculating alleles traits probability distributions using Punnett squares.`;
+            } else if (action === 'Explain') {
+                aiText = `**Punnett Square probability calculations**:\nA grid representing genetic cross-combinations. If crossed heterozygous yellow peas (Yy x Yy):\n- YY: 25% (dominant yellow)\n- Yy: 50% (heterozygous yellow)\n- yy: 25% (recessive green)`;
+            } else if (action === 'Quiz') {
+                aiText = `**AI-Generated Practice Questions**:\nQ1: What is the phenotypic ratio of a dihybrid cross?\nQ2: State the definition of alleles segregations.\n\n*Try answering these to earn +50 XP streak rewards!*`;
+            } else if (action === 'Plan') {
+                aiText = `**7-Day Study Revision Goals**:\n- Day 1-2: Memorize Mendel cross traits and write definitions.\n- Day 3-4: Solve 5 numerical problems sheet.\n- Day 5: Complete online practice quiz tests.\n- Day 6-7: Attempt mock test question papers.`;
+            } else if (action === 'Help') {
+                aiText = `**Homework Hints (Genetics Sheet)**:\nFocus on identifying homozygous vs heterozygous traits. Remember, recessive traits (like green color) only express when homozygous (yy).`;
+            }
+
+            aiMessages.push({ sender: 'AI', text: aiText, time: 'Just now' });
+            renderAIPanel(document.getElementById('workspacePanelBody'));
+            window.toast.success(`AI ${action} Created`);
+        }
+
+        function joinWorkspaceMeeting() {
+            document.getElementById('prepMeetingOverlay').style.display = 'none';
+            window.toast.success("Meeting Joined", "Connected to live session video stream.");
+        }
+
+        function assignWorkspaceQuiz() {
+            window.toast.success("Quiz Assigned", "Practice test shared with the student successfully.");
+        }
+
+        function renderChatPanel(body) {
+            body.innerHTML = `
+                <div style="font-weight: 700; font-size: 14px; border-bottom: 1px solid #334155; padding-bottom: 8px;">In-Call Messages</div>
+                <div style="flex-grow: 1; display:flex; flex-direction:column; gap:12px; overflow-y:auto;" id="chatMsgContainer">
+                    ${chatMessages.map(msg => `
+                        <div style="background-color: #33415540; padding: 10px; border-radius: 8px; border: 1px solid #334155;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                                <strong style="font-size:12px; color:#3B82F6;">${msg.sender}</strong>
+                                <span style="font-size:10px; color:#94A3B8;">${msg.time}</span>
+                            </div>
+                            <div style="font-size:13px; color:#E2E8F0;">${msg.text}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            setTimeout(() => {
+                const con = document.getElementById('chatMsgContainer');
+                if (con) con.scrollTop = con.scrollHeight;
+            }, 50);
+        }
+
+        function handleChatKey(e) {
+            if (e.key === 'Enter') {
+                sendCallChatMessage();
+            }
+        }
+
+        function sendCallChatMessage() {
+            const input = document.getElementById('callChatMsg');
+            if (input.value.trim() === '') return;
+
+            const name = currentRole === 'mentor' ? 'Anjali Patel' : 'Rahul Verma';
+            chatMessages.push({
+                sender: name,
+                text: input.value,
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+            });
+
+            input.value = '';
+            renderChatPanel(document.getElementById('workspacePanelBody'));
+        }
+
+        function renderNotesPanel(body) {
+            body.innerHTML = `
+                <div>
+                    <label class="panel-label">Collaborative Shared Notes</label>
+                    <textarea class="panel-input" style="height: 180px; font-family: monospace; font-size: 12.5px; line-height: 1.5; resize:none;" oninput="syncNotesText(this.value)" id="sharedNotesArea">Genetics: Mendel's Laws of Inheritance.
+1. Law of Dominance
+2. Law of Segregation
+3. Law of Independent Assortment.</textarea>
+                </div>
+                ${currentRole === 'mentor' ? `
+                    <div style="border-top:1px solid #334155; padding-top:16px;">
+                        <label class="panel-label">Private Instructor Remarks</label>
+                        <textarea class="panel-input" style="height: 120px; font-family:inherit; resize:none;" placeholder="Private observations regarding student performance..."></textarea>
+                    </div>
+                ` : `
+                    <div style="background-color: #1E3A8A20; border: 1px solid #1E3A8A; padding: 12px; border-radius: 8px; font-size:12.5px;">
+                        <strong>Mentor Remarks:</strong>
+                        <p style="margin:4px 0 0 0; color:#93C5FD;">Excellent progress. Needs further focus on Punnett square probability calculations.</p>
+                    </div>
+                `}
+            `;
+        }
+
+        function syncNotesText(val) {
+            // Simulated real-time sync placeholder
+        }
+
+        function renderActionsPanel(body) {
+            if (currentRole === 'mentor') {
+                body.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <!-- Student Profile -->
+                        <div style="background:#0F172A; padding:12px; border-radius:8px; border:1px solid #334155;">
+                            <strong style="font-size:13.5px;">Student profile: Rahul Verma</strong>
+                            <div style="font-size:11.5px; color:#94A3B8; margin-top:4px;">Grade 12 • JEE/NEET Tracks</div>
+                        </div>
+
+                        <!-- Attendance checkboxes -->
+                        <div>
+                            <label class="panel-label">Log Attendance</label>
+                            <div style="display:flex; gap:12px; margin-top:6px;">
+                                <label><input type="radio" name="attendance" value="present" checked> Present</label>
+                                <label><input type="radio" name="attendance" value="late"> Late</label>
+                                <label><input type="radio" name="attendance" value="absent"> Absent</label>
+                            </div>
+                        </div>
+
+                        <!-- Actions Form -->
+                        <div style="border-top:1px solid #334155; padding-top:16px; display:flex; flex-direction:column; gap:12px;">
+                            <div>
+                                <label class="panel-label">Assign Quick Homework</label>
+                                <input type="text" placeholder="Title: genetics worksheet" class="panel-input" id="hwTitle" style="margin-bottom:8px;">
+                                <button class="btn-panel-action" onclick="assignWorkspaceHW()">Assign Homework</button>
+                            </div>
+
+                            <div style="border-top:1px solid #334155; padding-top:12px;">
+                                <label class="panel-label">Assign Course Quiz</label>
+                                <button class="btn-panel-action" style="background-color:#8B5CF6;" onclick="assignWorkspaceQuiz()"><i class="fa-solid fa-circle-question"></i> Quick Quiz</button>
+                            </div>
+
+                            <div style="border-top:1px solid #334155; padding-top:12px;">
+                                <label class="panel-label">Attach Resource PDF</label>
+                                <button class="btn-panel-action" style="background-color:#10B981;" onclick="uploadResourceClick()"><i class="fa-solid fa-cloud-arrow-up"></i> Upload Material</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                body.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:16px;">
+                        <!-- Active Homework status -->
+                        <div style="background:#0F172A; padding:12px; border-radius:8px; border:1px solid #334155;">
+                            <span style="font-size:11px; font-weight:700; color:#EF4444;">ACTIVE ASSIGNMENT</span>
+                            <div style="font-weight:700; font-size:13.5px; margin-top:4px;">Genetics Worksheet PDF</div>
+                            <span style="font-size:11px; color:#94A3B8;">Due: Tomorrow</span>
+                            <button class="btn-panel-action" style="margin-top:10px; background:#10B981;" onclick="window.location.href='/assignments.html'">Submit Solution</button>
+                        </div>
+
+                        <!-- Shared Resource downloads -->
+                        <div>
+                            <label class="panel-label">Shared Material</label>
+                            <div style="background:#33415540; padding:10px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-size:12.5px;"><i class="fa-solid fa-file-pdf" style="color:#EF4444;"></i> NCERT Cell Biology.pdf</span>
+                                <a href="#" onclick="event.preventDefault(); alert('Downloading...')" style="color:#3B82F6; font-size:14px;"><i class="fa-solid fa-download"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Action simulations
+        function assignWorkspaceHW() {
+            const title = document.getElementById('hwTitle').value;
+            if (title.trim() === '') return;
+            window.toast.success("Homework Assigned", `${title} has been shared with the student.`);
+            document.getElementById('hwTitle').value = '';
+        }
+
+        function uploadResourceClick() {
+            alert('File Upload dialog simulation. Shared textbook files successfully!');
+            window.toast.success("Resource uploaded", "Shared reference materials with the student.");
+        }
+
+        function endCallClick() {
+            const confirmEnd = confirm('Are you sure you want to end the session?');
+            if (confirmEnd) {
+                if (currentRole === 'student') {
+                    // Open Review Modal for student
+                    document.getElementById('ratingModal').style.display = 'flex';
+                } else {
+                    window.toast.success("Session Completed", "Attendance logged and session saved successfully.");
+                    setTimeout(() => window.location.href = '/sessions.html', 1500);
+                }
+            }
+        }
+
+        // Student Review Modal
+        function setRatingVal(val, elem) {
+            ratingValue = val;
+            const stars = elem.parentElement.querySelectorAll('i');
+            stars.forEach((star, index) => {
+                if (index < val) {
+                    star.className = 'fa-solid fa-star';
+                } else {
+                    star.className = 'fa-regular fa-star';
+                }
+            });
+        }
+
+        function submitRating() {
+            document.getElementById('ratingModal').style.display = 'none';
+            window.toast.success("Feedback Submitted", "Thank you for rating the session!");
+            setTimeout(() => window.location.href = '/sessions.html', 1500);
+        }
+
+        // Call status toggles
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('btnMute');
+            btn.classList.toggle('active', isMuted);
+            btn.innerHTML = isMuted ? '<i class="fa-solid fa-microphone-slash"></i>' : '<i class="fa-solid fa-microphone"></i>';
+            window.toast.info(isMuted ? "Microphone muted" : "Microphone active");
+        }
+
+        function toggleCam() {
+            isCamOff = !isCamOff;
+            const btn = document.getElementById('btnCam');
+            btn.classList.toggle('active', isCamOff);
+            btn.innerHTML = isCamOff ? '<i class="fa-solid fa-video-slash"></i>' : '<i class="fa-solid fa-video"></i>';
+            
+            const targetAvatar = currentRole === 'mentor' ? 'mentorVideoAvatar' : 'studentVideoAvatar';
+            const avatarBox = document.getElementById(targetAvatar);
+            if (isCamOff) {
+                avatarBox.style.backgroundColor = '#7F1D1D';
+                window.toast.info("Camera feeds stopped");
+            } else {
+                avatarBox.style.backgroundColor = '#334155';
+                window.toast.info("Camera feeds active");
+            }
+        }
+
+        function toggleShare() {
+            isSharing = !isSharing;
+            const btn = document.getElementById('btnShare');
+            btn.classList.toggle('active', isSharing);
+            window.toast.success(isSharing ? "Screen sharing started" : "Screen sharing stopped");
+        }
+
+        // Open whiteboard canvas overlay
+        function openWhiteboard() {
+            document.getElementById('whiteboardFrame').style.display = 'block';
+        }
+        function closeWhiteboard() {
+            document.getElementById('whiteboardFrame').style.display = 'none';
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,981 @@
+/* ==========================================================================
+   Mentor Profile Modal Custom Stylesheet
+   ========================================================================== */
+
+/* --- Modal Width Override --- */
+.profile-modal-container {
+    max-width: 1200px !important;
+    width: 95% !important;
+    max-height: 90vh !important;
+    border-radius: 24px !important;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1E293B;
+}
+
+.modal-scroll-content {
+    padding: 0 !important;
+    overflow-y: auto !important;
+    height: 100%;
+}
+
+/* --- Hero Header Block --- */
+.modal-hero-banner {
+    background: linear-gradient(135deg, #EFF6FF 0%, #DBEAFE 100%);
+    padding: 40px 32px;
+    border-bottom: 1px solid #E2E8F0;
+}
+
+.modal-hero-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 32px;
+}
+
+.modal-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex: 1;
+}
+
+.modal-hero-avatar-box {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.modal-hero-avatar-box img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #FFFFFF;
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.1);
+}
+
+.modal-hero-badge-verified {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background-color: #D1FAE5;
+    color: #065F46;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+}
+
+.modal-hero-name {
+    font-size: 34px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    margin: 4px 0 6px 0;
+}
+
+.modal-hero-title-row {
+    font-size: 16px;
+    font-weight: 600;
+    color: #475569;
+    margin-bottom: 4px;
+}
+
+.modal-hero-title-row span {
+    color: #1E3A8A;
+}
+
+.modal-hero-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.modal-hero-stars {
+    color: #F59E0B;
+    font-size: 16px;
+    letter-spacing: 1px;
+}
+
+.modal-hero-rating-text {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #64748B;
+}
+
+.modal-hero-tagline {
+    font-size: 14.5px;
+    font-style: italic;
+    color: #475569;
+    margin-top: 10px;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+/* Stats metrics blocks (Hero Right) */
+.modal-hero-right-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 380px;
+    flex-shrink: 0;
+}
+
+.modal-hero-stat-card {
+    background: #FFFFFF;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+    border-radius: 16px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(15, 23, 42, 0.02);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.modal-hero-stat-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background-color: #EFF6FF;
+    color: #3B82F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.modal-hero-stat-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-hero-stat-val {
+    font-size: 18px;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1.2;
+}
+
+.modal-hero-stat-lbl {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 1px;
+}
+
+/* --- Content Two-Column Grid --- */
+.modal-content-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 32px;
+    padding: 32px;
+    background-color: #F8FAFC;
+}
+
+.modal-main-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+.modal-section-card {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+}
+
+.modal-section-title {
+    font-size: 26px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 1px solid #F1F5F9;
+    padding-bottom: 14px;
+}
+
+.modal-section-title svg {
+    color: #3B82F6;
+    width: 22px;
+    height: 22px;
+}
+
+/* --- Sticky Booking Card --- */
+.modal-sidebar-card-wrap {
+    position: sticky;
+    top: 24px;
+    height: fit-content;
+}
+
+.modal-booking-sticky-card {
+    background-color: #FFFFFF;
+    border: 1.5px solid #DBEAFE;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(59, 130, 246, 0.05);
+}
+
+.booking-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.booking-status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #ECFDF5;
+    color: #047857;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 14px;
+}
+
+.booking-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10B981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.booking-pricing-row {
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 16px;
+}
+
+.booking-currency {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0F172A;
+    margin-right: 2px;
+}
+
+.booking-price-val {
+    font-size: 34px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.03em;
+}
+
+.booking-price-period {
+    font-size: 14px;
+    color: #64748B;
+    font-weight: 500;
+    margin-left: 4px;
+}
+
+.booking-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid #F1F5F9;
+    border-bottom: 1px solid #F1F5F9;
+    padding: 16px 0;
+    margin-bottom: 20px;
+}
+
+.booking-detail-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13.5px;
+}
+
+.booking-detail-lbl {
+    color: #64748B;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.booking-detail-lbl svg {
+    width: 14px;
+    height: 14px;
+    color: #94A3B8;
+}
+
+.booking-detail-val {
+    color: #0F172A;
+    font-weight: 700;
+}
+
+.booking-next-slot-banner {
+    background-color: #EFF6FF;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.next-slot-title {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #2563EB;
+    letter-spacing: 0.05em;
+}
+
+.next-slot-val {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E3A8A;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.next-slot-val svg {
+    width: 14px;
+    height: 14px;
+}
+
+.btn-booking-primary {
+    width: 100%;
+    background-color: #357AE8;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+    transition: all 0.2s;
+    margin-bottom: 10px;
+}
+.btn-booking-primary:hover {
+    background-color: #2b62ba;
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.3);
+}
+
+.btn-booking-secondary {
+    width: 100%;
+    background-color: #FFFFFF;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 14px;
+    border: 1px solid #D1D5DB;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-booking-secondary:hover {
+    background-color: #F9FAFB;
+    color: #1F2937;
+    border-color: #9CA3AF;
+}
+
+/* --- Biography Paragraph --- */
+.biography-text {
+    font-size: 15px;
+    line-height: 1.7;
+    color: #475569;
+    font-weight: 500;
+}
+
+.btn-biography-toggle {
+    background: transparent;
+    border: none;
+    color: #3B82F6;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* --- Grouped Expertise Cards --- */
+.expertise-grid-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.expertise-item-card {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.expertise-card-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 12px;
+}
+
+.chip-group-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.custom-badge-pill {
+    background-color: #EFF6FF;
+    color: #2563EB;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+.custom-badge-pill.green {
+    background-color: #ECFDF5;
+    color: #059669;
+}
+
+/* --- Teaching timeline --- */
+.experience-vertical-timeline {
+    position: relative;
+    padding-left: 28px;
+    display: flex;
+    flex-direction: column;
+}
+
+.experience-vertical-timeline::before {
+    content: '';
+    position: absolute;
+    top: 6px;
+    left: 7px;
+    bottom: 6px;
+    width: 2px;
+    background-color: #E2E8F0;
+}
+
+.timeline-card-node {
+    position: relative;
+    padding-bottom: 24px;
+}
+.timeline-card-node:last-child {
+    padding-bottom: 0;
+}
+
+.timeline-card-dot {
+    position: absolute;
+    top: 5px;
+    left: -28px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: 4px solid #3B82F6;
+    z-index: 5;
+}
+
+.timeline-card-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.timeline-card-year {
+    font-size: 12px;
+    font-weight: 700;
+    color: #3B82F6;
+}
+
+.timeline-card-role {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-top: 2px;
+}
+
+.timeline-card-institution {
+    font-size: 13px;
+    color: #64748B;
+    font-weight: 600;
+    margin-top: 1px;
+}
+
+/* --- Education vs Certifications grid --- */
+.edu-certs-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.edu-list, .certs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.edu-item-row, .cert-item-row {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.icon-box-round {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #EFF6FF;
+    color: #3B82F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.icon-box-round.green {
+    background-color: #ECFDF5;
+    color: #10B981;
+}
+
+.row-text-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.row-text-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #0F172A;
+}
+
+.row-text-desc {
+    font-size: 12px;
+    color: #64748B;
+    font-weight: 600;
+    margin-top: 1px;
+}
+
+/* --- Student Reviews Section --- */
+.reviews-grid-row {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.review-item-card {
+    border: 1px solid #F1F5F9;
+    background-color: #FAFAFA;
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.review-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-student-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.review-avatar-letters {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: #DBEAFE;
+    color: #2563EB;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.review-student-name-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.review-student-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #1E293B;
+}
+
+.review-student-subject {
+    font-size: 11px;
+    color: #94A3B8;
+    font-weight: 600;
+}
+
+.review-meta-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.review-stars {
+    color: #F59E0B;
+    font-size: 12px;
+}
+
+.review-date-badge {
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 1px;
+}
+
+.review-body-text {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #475569;
+    font-style: italic;
+    font-weight: 500;
+}
+
+.btn-review-view-all {
+    display: block;
+    width: fit-content;
+    margin: 20px auto 0 auto;
+    background-color: transparent;
+    border: 1px solid #D1D5DB;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-review-view-all:hover {
+    background-color: #F9FAFB;
+    border-color: #9CA3AF;
+}
+
+/* --- Availability Cards --- */
+.slots-day-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.slots-day-container:last-child {
+    margin-bottom: 0;
+}
+
+.slots-day-lbl {
+    font-size: 13px;
+    font-weight: 700;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.slots-badges-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.slot-time-badge {
+    background-color: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    color: #374151;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.slot-time-badge:hover {
+    border-color: #3B82F6;
+    color: #3B82F6;
+    background-color: #EFF6FF;
+}
+
+/* --- Achievements Grid --- */
+.achievements-badges-flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.achievement-badge-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #FDF2F8;
+    color: #BE185D;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(190, 24, 93, 0.05);
+}
+
+.achievement-badge-card.orange {
+    background-color: #FFFBEB;
+    color: #B45309;
+}
+
+.achievement-badge-card.blue {
+    background-color: #EFF6FF;
+    color: #1D4ED8;
+}
+
+/* --- FAQ Accordion --- */
+.faq-accordion-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq-accordion-item {
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+.faq-accordion-trigger {
+    width: 100%;
+    padding: 16px 20px;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #0F172A;
+    text-align: left;
+}
+
+.faq-accordion-icon {
+    font-size: 16px;
+    transition: transform 0.2s;
+    color: #64748B;
+}
+
+.faq-accordion-item.active .faq-accordion-icon {
+    transform: rotate(180deg);
+}
+
+.faq-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    background-color: #F8FAFC;
+    border-top: 0 solid #E2E8F0;
+}
+
+.faq-accordion-item.active .faq-accordion-content {
+    border-top-width: 1px;
+}
+
+.faq-content-inner {
+    padding: 16px 20px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #475569;
+    font-weight: 500;
+}
+
+/* --- Similar Mentors Column --- */
+.similar-mentors-carousel-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.similar-mentor-card-item {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.similar-mentor-photo {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #E2E8F0;
+}
+
+.similar-mentor-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 2px;
+}
+
+.similar-mentor-sub {
+    font-size: 11.5px;
+    color: #64748B;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.similar-mentor-rating {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #B45309;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.btn-similar-mentor-view {
+    width: 100%;
+    background-color: #EFF6FF;
+    color: #2563EB;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 6px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.btn-similar-mentor-view:hover {
+    background-color: #DBEAFE;
+}
+
+/* --- Fixed Mobile Action Bar --- */
+.mobile-fixed-action-bar {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #FFFFFF;
+    border-top: 1px solid #E2E8F0;
+    padding: 12px 20px;
+    z-index: 100;
+    box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.05);
+}
+
+.mobile-action-flex {
+    display: grid;
+    grid-template-columns: 48px 1fr 1fr;
+    gap: 12px;
+}
+
+.btn-mobile-icon-close {
+    background-color: #F1F5F9;
+    border: none;
+    border-radius: 10px;
+    color: #475569;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-mobile-secondary {
+    background-color: #FFFFFF;
+    color: #475569;
+    border: 1px solid #D1D5DB;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-mobile-primary {
+    background-color: #357AE8;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.15);
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 1200px) {
+    .modal-hero-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    .modal-hero-right-stats {
+        width: 100%;
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+@media (max-width: 992px) {
+    .modal-content-layout {
+        grid-template-columns: 1fr;
+        padding: 24px;
+        gap: 24px;
+    }
+    .modal-sidebar-card-wrap {
+        position: static;
+        width: 100%;
+        order: -1; /* Push sticky booking card above the details grids on tablet */
+    }
+    .modal-hero-right-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-hero-banner {
+        padding: 24px 20px;
+    }
+    .modal-hero-left {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .modal-hero-name {
+        font-size: 26px;
+    }
+    .modal-content-layout {
+        padding: 20px 16px 80px 16px; /* Extra padding bottom for mobile action bar */
+    }
+    .expertise-grid-split, .edu-certs-split, .similar-mentors-carousel-row {
+        grid-template-columns: 1fr;
+    }
+    .modal-section-card {
+        padding: 20px;
+    }
+    .modal-sidebar-card-wrap {
+        display: none; /* Hide default sidebar booking card on mobile */
+    }
+    .mobile-fixed-action-bar {
+        display: block; /* Show fixed action bar at bottom of modal viewport */
+    }
+    .profile-modal-container {
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+    }
+}

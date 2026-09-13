@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Center - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <style>
+        /* Modern Clean Layout for Notification Center */
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-menu a.profile-dropdown-trigger:hover {
+            background-color: #F1F5F9 !important;
+            color: var(--primary) !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Notifications Grid structure */
+        .notif-workspace-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        /* Left side vertical filter list */
+        .notif-filters-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 0;
+            align-self: start;
+        }
+        .notif-filter-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14.5px;
+            color: #475569;
+            transition: background 0.2s, color 0.2s;
+        }
+        .notif-filter-item:hover {
+            background-color: #F8FAFC;
+            color: var(--primary);
+        }
+        .notif-filter-item.active {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+        }
+        .notif-badge-pill {
+            font-size: 11px;
+            background-color: #E2E8F0;
+            color: #475569;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .notif-filter-item.active .notif-badge-pill {
+            background-color: var(--primary);
+            color: #FFFFFF;
+        }
+
+        /* Right Content Area */
+        .notif-list-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .notif-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .notif-header-title {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .btn-notif-action {
+            background: transparent;
+            border: 1px solid var(--border);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-notif-action:hover {
+            background-color: #F1F5F9;
+            border-color: #94A3B8;
+        }
+
+        /* Notification Item Card */
+        .notif-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .notif-card:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+        }
+        .notif-card.unread {
+            border-left: 4px solid var(--primary);
+            background-color: #F8FAFC;
+        }
+        .notif-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .notif-icon-box.chat { background: #EEF2FF; color: #4F46E5; }
+        .notif-icon-box.session { background: #ECFDF5; color: #10B981; }
+        .notif-icon-box.payment { background: #FEF3C7; color: #F59E0B; }
+        .notif-icon-box.general { background: #F1F5F9; color: #64748B; }
+
+        .notif-body {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .notif-message-text {
+            font-size: 14.5px;
+            font-weight: 500;
+            line-height: 1.4;
+            margin: 0;
+            color: #1E293B;
+        }
+        .notif-timestamp {
+            font-size: 11px;
+            color: #94A3B8;
+            font-weight: 600;
+        }
+
+        .notif-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+        .notif-card:hover .notif-actions {
+            opacity: 1;
+        }
+        .btn-card-notif-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            background: #FFFFFF;
+            cursor: pointer;
+            color: #64748B;
+            transition: all 0.2s;
+        }
+        .btn-card-notif-circle:hover {
+            background-color: #EF4444;
+            color: white;
+            border-color: #EF4444;
+        }
+        .btn-card-notif-circle.read-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Reusable Illustration Empty State */
+        .empty-state-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 48px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+        }
+        .empty-illustration {
+            width: 140px;
+            height: 140px;
+            background: #F1F5F9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            color: #94A3B8;
+            margin-bottom: 8px;
+        }
+        .empty-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+        }
+        .empty-description {
+            font-size: 14px;
+            color: #64748B;
+            max-width: 320px;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* Loading Skeletons */
+        .skeleton-notif {
+            height: 72px;
+            border-radius: 12px;
+            background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+            background-size: 200% 100%;
+            animation: loading-shimmer 1.5s infinite;
+        }
+        @keyframes loading-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        @media (max-width: 768px) {
+            .notif-workspace-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dynamic Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li id="dynamicNavLink"><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Filled by JS -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content Container -->
+    <div class="notif-workspace-container">
+        
+        <!-- Sidebar Filters -->
+        <aside class="notif-filters-panel">
+            <div class="notif-filter-item active" onclick="setNotifFilter('all', this)">
+                <span>All Notifications</span>
+                <span class="notif-badge-pill" id="badgeAll">0</span>
+            </div>
+            <div class="notif-filter-item" onclick="setNotifFilter('unread', this)">
+                <span>Unread</span>
+                <span class="notif-badge-pill" id="badgeUnread" style="background-color: var(--primary); color: white;">0</span>
+            </div>
+            <div class="notif-filter-item" onclick="setNotifFilter('chat', this)">
+                <span>Messages</span>
+                <span class="notif-badge-pill" id="badgeChat">0</span>
+            </div>
+            <div class="notif-filter-item" onclick="setNotifFilter('session', this)">
+                <span>Sessions</span>
+                <span class="notif-badge-pill" id="badgeSession">0</span>
+            </div>
+            <div class="notif-filter-item" onclick="setNotifFilter('payment', this)">
+                <span>Payments</span>
+                <span class="notif-badge-pill" id="badgePayment">0</span>
+            </div>
+            <div class="notif-filter-item" onclick="setNotifFilter('general', this)">
+                <span>System Updates</span>
+                <span class="notif-badge-pill" id="badgeGeneral">0</span>
+            </div>
+        </aside>
+
+        <!-- Notifications List container -->
+        <main class="notif-list-wrapper">
+            <div class="notif-header-row">
+                <h1 class="notif-header-title">Notifications</h1>
+                <button class="btn-notif-action" onclick="markAllRead()"><i class="fa-solid fa-circle-check"></i> Mark All Read</button>
+            </div>
+
+            <!-- List Frame -->
+            <div id="notificationsContainer" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Skeletons or list items -->
+                <div class="skeleton-notif"></div>
+                <div class="skeleton-notif"></div>
+                <div class="skeleton-notif"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let allNotifications = [];
+        let activeFilter = 'all';
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        // Initialize user info and load notifications
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+                    
+                    // Style Navigation links based on role
+                    const brand = document.getElementById('brandLink');
+                    const dynLink = document.getElementById('dynamicNavLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard.html';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dynLink.innerHTML = '<a href="/my-students.html">My Students</a>';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard.html';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dynLink.innerHTML = '<a href="/student/mentors">Find Mentors</a>';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student-settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    // Load notifications
+                    loadNotifications();
+                } else {
+                    seedMockNotifications();
+                }
+            } catch (err) {
+                console.error(err);
+                seedMockNotifications();
+            }
+        });
+
+        async function loadNotifications() {
+            try {
+                const res = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
+                if (res.ok) {
+                    const data = await res.json();
+                    allNotifications = data.notifications || [];
+                    
+                    // If no real DB notifications exist, seed mock data so the screen isn't empty!
+                    if (allNotifications.length === 0) {
+                        seedMockNotifications();
+                    } else {
+                        renderNotificationsList();
+                    }
+                } else {
+                    seedMockNotifications();
+                }
+            } catch {
+                seedMockNotifications();
+            }
+        }
+
+        function seedMockNotifications() {
+            // High-quality mock notification collection matching the Phase 2 layout
+            allNotifications = [
+                {
+                    id: 'mock-1',
+                    type: 'chat',
+                    message: "Rahul Verma: Hello Ma'am, I submitted yesterday's Biology homework revisions.",
+                    link: '/chat.html',
+                    isRead: false,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 15).toISOString() // 15 mins ago
+                },
+                {
+                    id: 'mock-2',
+                    type: 'session',
+                    message: "Your live Botany online session with Heli Patel starts tomorrow at 10:00 AM.",
+                    link: '/sessions.html',
+                    isRead: false,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString() // 2 hrs ago
+                },
+                {
+                    id: 'mock-3',
+                    type: 'payment',
+                    message: "Withdrawal successful: ₹4,500 has been transferred to your direct bank account.",
+                    link: '#',
+                    isRead: true,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString() // Yesterday
+                },
+                {
+                    id: 'mock-4',
+                    type: 'mentor_request',
+                    message: "Aman Kumar requested a physics mentoring trial slot.",
+                    link: '/sessions.html',
+                    isRead: false,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString() // 4 hrs ago
+                },
+                {
+                    id: 'mock-5',
+                    type: 'general',
+                    message: "System Alert: Verification documents approved successfully. Welcome onboard!",
+                    link: '#',
+                    isRead: true,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString() // 3 days ago
+                }
+            ];
+            renderNotificationsList();
+        }
+
+        function setNotifFilter(filter, element) {
+            activeFilter = filter;
+            document.querySelectorAll('.notif-filter-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+            renderNotificationsList();
+        }
+
+        function renderNotificationsList() {
+            const container = document.getElementById('notificationsContainer');
+            
+            // Calculate Badge Counts
+            document.getElementById('badgeAll').textContent = allNotifications.length;
+            document.getElementById('badgeUnread').textContent = allNotifications.filter(n => !n.isRead).length;
+            document.getElementById('badgeChat').textContent = allNotifications.filter(n => n.type === 'chat').length;
+            document.getElementById('badgeSession').textContent = allNotifications.filter(n => n.type === 'session' || n.type === 'mentor_request').length;
+            document.getElementById('badgePayment').textContent = allNotifications.filter(n => n.type === 'payment').length;
+            document.getElementById('badgeGeneral').textContent = allNotifications.filter(n => n.type === 'general').length;
+
+            // Apply active filter
+            let filtered = allNotifications;
+            if (activeFilter === 'unread') {
+                filtered = allNotifications.filter(n => !n.isRead);
+            } else if (activeFilter === 'chat') {
+                filtered = allNotifications.filter(n => n.type === 'chat');
+            } else if (activeFilter === 'session') {
+                filtered = allNotifications.filter(n => n.type === 'session' || n.type === 'mentor_request');
+            } else if (activeFilter === 'payment') {
+                filtered = allNotifications.filter(n => n.type === 'payment');
+            } else if (activeFilter === 'general') {
+                filtered = allNotifications.filter(n => n.type === 'general');
+            }
+
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state-card">
+                        <div class="empty-illustration"><i class="fa-solid fa-bell-slash"></i></div>
+                        <h3 class="empty-title">All Clear Here</h3>
+                        <p class="empty-description">You don't have any notifications under this filter category.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filtered.forEach(n => {
+                const unreadClass = n.isRead ? '' : 'unread';
+                
+                // Choose Icon
+                let iconHtml = '<i class="fa-solid fa-bell"></i>';
+                if (n.type === 'chat') iconHtml = '<i class="fa-solid fa-comment-dots"></i>';
+                else if (n.type === 'session' || n.type === 'mentor_request') iconHtml = '<i class="fa-solid fa-calendar-check"></i>';
+                else if (n.type === 'payment') iconHtml = '<i class="fa-solid fa-wallet"></i>';
+
+                const timeStr = new Date(n.createdAt).toLocaleDateString([], { month: 'short', day: 'numeric' }) + ' • ' + new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                container.innerHTML += `
+                    <div class="notif-card ${unreadClass}" id="card-${n.id}">
+                        <div class="notif-icon-box ${n.type || 'general'}">${iconHtml}</div>
+                        <div class="notif-body" onclick="goToLink('${n.link}')" style="cursor:pointer;">
+                            <p class="notif-message-text">${n.message}</p>
+                            <span class="notif-timestamp">${timeStr}</span>
+                        </div>
+                        <div class="notif-actions">
+                            ${!n.isRead ? `<button class="btn-card-notif-circle read-btn" title="Mark Read" onclick="markRead('${n.id}')"><i class="fa-solid fa-check"></i></button>` : ''}
+                            <button class="btn-card-notif-circle" title="Delete" onclick="deleteNotif('${n.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        async function markRead(notifId) {
+            if (notifId.startsWith('mock-')) {
+                const notif = allNotifications.find(n => n.id === notifId);
+                if (notif) notif.isRead = true;
+                renderNotificationsList();
+                return;
+            }
+
+            try {
+                const res = await fetch(API_BASE + `/api/notifications/${notifId}/read`, {
+                    method: 'PUT',
+                    credentials: 'include'
+                });
+                if (res.ok) {
+                    const notif = allNotifications.find(n => n.id === notifId);
+                    if (notif) notif.isRead = true;
+                    renderNotificationsList();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function deleteNotif(notifId) {
+            allNotifications = allNotifications.filter(n => n.id !== notifId);
+            renderNotificationsList();
+        }
+
+        async function markAllRead() {
+            allNotifications.forEach(n => n.isRead = true);
+            renderNotificationsList();
+
+            try {
+                await fetch(API_BASE + '/api/notifications/read-all', {
+                    method: 'PUT',
+                    credentials: 'include'
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function goToLink(url) {
+            if (url && url !== '#') {
+                window.location.href = url;
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

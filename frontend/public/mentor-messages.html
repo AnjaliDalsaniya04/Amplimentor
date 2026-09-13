@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Students Workspace Console - Mentor - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Original Navbar styling baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <!-- Redesigned Mentor Chat CRM style -->
+    <link rel="stylesheet" href="/mentor-chat.css">
+    <script src="/config.js"></script>
+    <style>
+        /* Profile Dropdown styling */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-menu a.profile-dropdown-trigger:hover {
+            background-color: #F1F5F9 !important;
+            color: var(--accent) !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--accent) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/mentor-dashboard.html" class="nav-brand">Amplimentor Workspace</a>
+            <ul class="nav-menu">
+                <li><a href="/my-students.html" id="mentorsLink">My Students</a></li>
+                <li><a href="/chat.html" class="active">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu">
+                        <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                        <a href="#" onclick="event.preventDefault(); alert('Opening Settings...');"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="#" onclick="event.preventDefault(); alert('Opening Help & Support...');"><i class="fa-solid fa-circle-question"></i> Help</a>
+                        <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Three-Column Redesigned CRM Chat Workspace -->
+    <div class="premium-chat-workspace" id="chatWorkspace">
+        
+        <!-- COLUMN 1: LEFT SIDEBAR (My Students Grouped lists) -->
+        <aside class="chat-left-sidebar">
+            <div class="sidebar-title-row">
+                <h2>💬 My Students</h2>
+            </div>
+            
+            <div class="search-filter-section">
+                <!-- Search bar -->
+                <div class="search-input-wrap">
+                    <i class="fa-solid fa-magnifying-glass search-input-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search students or messages..." class="search-convo-input" oninput="filterConversations()">
+                </div>
+                <!-- Filter Pills -->
+                <div class="unread-filter-row">
+                    <button class="filter-pill active" id="filterAllBtn" onclick="setUnreadFilter(false)">All Students</button>
+                    <button class="filter-pill" id="filterUnreadBtn" onclick="setUnreadFilter(true)">Unread</button>
+                </div>
+            </div>
+            
+            <!-- Conversation lists grouped -->
+            <div class="conversations-scrollable-container" id="conversationList">
+                <div class="empty-state" style="padding: 24px; text-align: center;">You don't have any student conversations yet.</div>
+            </div>
+        </aside>
+
+        <!-- COLUMN 2: CENTER TIMELINE CONVERSATION -->
+        <main class="chat-center-main">
+            <!-- Header bar -->
+            <header class="center-chat-header">
+                <div class="header-partner-info" id="chatHeaderInfo">
+                    <button class="btn-back-sidebar" onclick="closeActiveChatOnMobile()" title="Back to Directory">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--text-secondary);">Select a student to open conversation.</div>
+                </div>
+                <!-- In-conversation search bar -->
+                <div class="convo-search-wrap" id="convoSearchWrap" style="display: none; margin-left: auto; margin-right: 16px; position: relative;">
+                    <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; color: var(--text-secondary);"></i>
+                    <input type="text" id="convoSearchInput" placeholder="Search messages..." style="border: 1px solid var(--border-color); border-radius: 20px; padding: 4px 10px 4px 28px; font-size: 12px; width: 150px; outline: none; background:#F8FAFC;" oninput="filterConvoMessages()">
+                </div>
+                <div class="header-actions" id="headerActionsBlock" style="display: none;">
+                    <button class="btn-chat-action" onclick="alert('Initiating audio call conference...');" title="Call Student">
+                        <i class="fa-solid fa-phone"></i> Call
+                    </button>
+                    <button class="btn-chat-action" onclick="alert('Initiating screen share video call...');" title="Video Session">
+                        <i class="fa-solid fa-video"></i> Video
+                    </button>
+                    <button class="btn-chat-action" onclick="toggleRightPanel()" title="Student Metrics">
+                        <i class="fa-solid fa-circle-info"></i> Info
+                    </button>
+                </div>
+            </header>
+
+            <!-- Messages Timeline -->
+            <div class="chat-messages-container" id="messages">
+                <div class="welcome-empty-state" id="msgEmpty" style="margin: auto; text-align: center;">
+                    <div class="welcome-title">👋 Welcome to your Teaching Workspace</div>
+                    <p class="welcome-desc">Manage student communication, homework, and mentoring from one place.</p>
+                    <a href="/my-students.html" class="btn-system-card-action" style="max-width:180px; margin:0 auto; text-align:center;">View Students</a>
+                </div>
+            </div>
+
+            <!-- Input area with CRM Quick Toolbar -->
+            <div class="chat-input-bar">
+                <div class="input-quick-actions-toolbar">
+                    <button type="button" class="btn-quick-toolbar-action" onclick="alert('Opening homework assignment...');"><i class="fa-solid fa-file-signature"></i> Assign Homework</button>
+                    <button type="button" class="btn-quick-toolbar-action" onclick="alert('Uploading notes worksheet...');"><i class="fa-solid fa-file-arrow-up"></i> Upload Notes</button>
+                    <button type="button" class="btn-quick-toolbar-action" onclick="alert('Redirecting to sessions scheduling...');"><i class="fa-solid fa-calendar-plus"></i> Schedule Session</button>
+                    <button type="button" class="btn-quick-toolbar-action" onclick="alert('Generating Google Meet classroom link...');"><i class="fa-solid fa-link"></i> Share Meeting Link</button>
+                    <button type="button" class="btn-quick-toolbar-action" onclick="downloadConversationLog()"><i class="fa-solid fa-file-export"></i> Export Conversation</button>
+                    <button type="button" class="btn-quick-toolbar-action" onclick="alert('Creating student review quiz...');"><i class="fa-solid fa-square-poll-horizontal"></i> Create Quiz</button>
+                </div>
+                <form class="chat-input-row" id="chatForm" autocomplete="off" onsubmit="handleMessageSubmit(event)">
+                    <input type="file" id="fileInput" style="display: none;" onchange="handleFileInputChange()">
+                    <button type="button" class="btn-input-accessory" style="padding: 4px;" onclick="document.getElementById('fileInput').click()" title="Attach file"><i class="fa-solid fa-paperclip"></i></button>
+                    <button type="button" class="btn-input-accessory" style="padding: 4px;" onclick="insertEmoji('👍')" title="Thumbs up"><i class="fa-regular fa-thumbs-up"></i></button>
+                    
+                    <textarea id="messageInput" placeholder="Type message to student..." class="chat-input-field" rows="1" onkeydown="handleInputKeydown(event)" oninput="handleInputTyping()"></textarea>
+                    
+                    <button type="submit" class="btn-send-message" title="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+                </form>
+            </div>
+        </main>
+
+        <!-- COLUMN 3: RIGHT PANEL (Student Profile Management Console) -->
+        <aside class="chat-right-panel" id="chatRightPanel">
+            <div style="padding: 24px; text-align: center; color: var(--text-secondary);" id="rightPanelEmpty">
+                <i class="fa-solid fa-graduation-cap" style="font-size: 32px; display:block; margin-bottom:8px; opacity:0.5; color: var(--accent);"></i>
+                Select a conversation to view profile, upcoming sessions, shared files, and activity.
+            </div>
+            
+            <div id="rightPanelContent" style="display: none;">
+                <header class="panel-header">
+                    <img src="/default-avatar.png" class="panel-avatar" id="panelAvatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                    <h3 class="panel-name" id="panelName">Rahul Verma</h3>
+                    <p class="panel-sub" id="panelRole">Grade 12 Student</p>
+                </header>
+
+                <!-- Student profile stats -->
+                <section class="panel-section">
+                    <div class="panel-section-title">Student Profile</div>
+                    <div class="profile-metrics-grid">
+                        <div class="metric-card">
+                            <span class="metric-lbl">Goal Standard</span>
+                            <span class="metric-val">JEE Mains</span>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-lbl">Attendance</span>
+                            <span class="metric-val">95%</span>
+                        </div>
+                        <div class="metric-card" style="grid-column: span 2;">
+                            <span class="metric-lbl">Homework Completeness</span>
+                            <span class="metric-val">6 Completed / 2 Pending</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- syllabus track progress bar -->
+                <section class="panel-section">
+                    <div class="panel-section-title">Learning Syllabus Completion</div>
+                    <div style="background-color:#F8FAFC; border:1.5px solid var(--border-color); padding:10px; border-radius:8px;">
+                        <span class="metric-lbl">Physics Optics Core unit</span>
+                        <span class="metric-val" style="font-size:12px;">78% completed</span>
+                        <div class="bar-chart-track" style="margin-top:6px; height:6px;">
+                            <div class="bar-chart-fill" style="width:78%;"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Attendance logs -->
+                <section class="panel-section">
+                    <div class="panel-section-title">Upcoming & Last session</div>
+                    <div style="display:flex; flex-direction:column; gap:6px;">
+                        <div class="metric-card" style="text-align:left;">
+                            <span class="metric-lbl">Last Completed class</span>
+                            <span style="font-size:11.5px; font-weight:700;">22 May • Optics derivation exercise</span>
+                        </div>
+                        <div class="metric-card" style="text-align:left; background-color:#EEF2FF; border-color:#DDD6FE;">
+                            <span class="metric-lbl" style="color:var(--accent);">Next active slot</span>
+                            <span style="font-size:11.5px; font-weight:700; color:var(--text-primary);">📅 24 May • 10:00 AM Class</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mock Performance Chart CBSE scores -->
+                <section class="panel-section">
+                    <div class="panel-section-title">CBSE Performance Chart</div>
+                    <div class="performance-chart-box">
+                        <div class="bar-chart-row">
+                            <span class="bar-chart-lbl">Botany</span>
+                            <div class="bar-chart-track"><div class="bar-chart-fill" style="width: 85%;"></div></div>
+                            <span style="font-size:9.5px; font-weight:700;">85%</span>
+                        </div>
+                        <div class="bar-chart-row">
+                            <span class="bar-chart-lbl">Physics</span>
+                            <div class="bar-chart-track"><div class="bar-chart-fill" style="width: 72%; background-color: var(--warning);"></div></div>
+                            <span style="font-size:9.5px; font-weight:700;">72%</span>
+                        </div>
+                        <div class="bar-chart-row">
+                            <span class="bar-chart-lbl">Maths</span>
+                            <div class="bar-chart-track"><div class="bar-chart-fill" style="width: 90%; background-color: var(--success);"></div></div>
+                            <span style="font-size:9.5px; font-weight:700;">90%</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Shared solutions downloads -->
+                <details open>
+                    <summary>Assigned Homework Solutions</summary>
+                    <div class="details-collapse-content" id="panelFilesList">
+                        <a href="#" class="btn-panel-action" style="flex-direction:row; background:#fff; text-align:left; justify-content:flex-start; gap:8px;" onclick="event.preventDefault(); alert('Downloading worksheet...');">
+                            <i class="fa-solid fa-file-pdf"></i> Chapter_12_Worksheet.pdf (820 KB)
+                        </a>
+                    </div>
+                </details>
+
+                <!-- Teacher quick actions panel -->
+                <section class="panel-section">
+                    <div class="panel-section-title">Teacher Actions</div>
+                    <div class="quick-actions-panel-grid">
+                        <button class="btn-panel-action" onclick="alert('Creating homework assignment quiz...');"><i class="fa-solid fa-file-signature"></i><span>Assign Homework</span></button>
+                        <a href="/sessions.html" class="btn-panel-action"><i class="fa-solid fa-calendar-plus"></i><span>Schedule Session</span></a>
+                        <button class="btn-panel-action" onclick="alert('Marking attendance...');"><i class="fa-solid fa-clipboard-user"></i><span>Mark Attendance</span></button>
+                        <button class="btn-panel-action" onclick="alert('Opening private notebook...');"><i class="fa-solid fa-book-open"></i><span>Open Notes</span></button>
+                        <button class="btn-panel-action" onclick="alert('Opening student analytics portal...');" style="grid-column: span 2; background-color:var(--accent); color:white;"><i class="fa-solid fa-chart-pie" style="color:white;"></i><span>Student Analytics</span></button>
+                    </div>
+                </section>
+            </div>
+        </aside>
+    </div>
+
+    <!-- UI Toast Alerts -->
+    <div class="toast success" id="toastMessage">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastText">Action successful!</span>
+    </div>
+
+    <!-- Redesigned Chat Controller script -->
+    <script>
+        let currentChatId = null;
+        let currentUserId = null;
+        let currentParticipantName = null;
+        let pollingInterval = null;
+        let lastMessageTimestamp = null;
+        let allConversations = [];
+        let filterUnreadOnly = false;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.querySelectorAll('.logout-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/logout', { method: 'POST', credentials: 'include' })
+                        .then(() => { window.location.href = '/login.html'; })
+                        .catch(() => { window.location.href = '/login.html'; });
+                });
+            });
+
+            await loadUserInfo();
+            await Promise.all([
+                loadConversations(),
+                loadNotifications()
+            ]);
+
+            const notificationLink = document.getElementById('notificationLink');
+            notificationLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                const dropdown = document.getElementById('notificationDropdown');
+                dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('notificationDropdown');
+                const notificationItem = document.querySelector('.notification-item');
+                if (dropdown && notificationItem && !notificationItem.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toastMessage');
+            const toastText = document.getElementById('toastText');
+            toast.className = `toast ${type} show`;
+            toastText.textContent = message;
+            const icon = toast.querySelector('i');
+            icon.className = type === 'success' ? 'fa-solid fa-circle-check' : 'fa-solid fa-circle-exclamation';
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        function filterConvoMessages() {
+            const query = document.getElementById('convoSearchInput').value.toLowerCase().trim();
+            const messageRows = document.querySelectorAll('.chat-messages-container .message-row');
+            messageRows.forEach(row => {
+                const text = row.querySelector('.msg-text')?.textContent.toLowerCase() || '';
+                if (text.includes(query)) {
+                    row.style.display = 'flex';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        function downloadConversationLog() {
+            if (!currentChatId || !currentParticipantName) {
+                alert('No conversation selected to export.');
+                return;
+            }
+            showToast('Exporting conversation...');
+            const element = document.createElement('a');
+            const file = new Blob([`Amplimentor Messages Export\nStudent: ${currentParticipantName}\nDate: ${new Date().toLocaleDateString()}\n\n[09:10 AM] Rahul: Hello Ma'am, I completed yesterday's Botany homework.\n[09:12 AM] Mentor: Great, upload the worksheet here.\n[09:20 AM] Mentor: Looks good. Question 5 needs improvement.`], {type: 'text/plain'});
+            element.href = URL.createObjectURL(file);
+            element.download = `conversation_log_${currentParticipantName.replace(/\s+/g, '_')}.txt`;
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        async function loadUserInfo() {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentUserId = profile.id;
+                    if (profile.role !== 'mentor') {
+                        window.location.replace('/student-chat.html');
+                    }
+                    // Update navigation name/avatar
+                    document.getElementById('navName').textContent = profile.name;
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+                } else {
+                    currentUserId = currentUserId || 'mentor-1';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function loadConversations(activeChatId) {
+            try {
+                const response = await fetch(API_BASE + '/api/chats', { credentials: 'include' });
+                if (response.ok) {
+                    allConversations = await response.json();
+                    renderConversations(allConversations, activeChatId);
+                } else {
+                    document.getElementById('conversationList').innerHTML = '<div style="padding:24px; color:var(--danger); text-align:center;">Failed to load students list.</div>';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderConversations(conversations, activeChatId) {
+            const list = document.getElementById('conversationList');
+            if (conversations.length === 0) {
+                list.innerHTML = '<div class="empty-state" style="padding:24px;">No students assigned yet.</div>';
+                return;
+            }
+
+            let listToDisplay = conversations;
+            if (filterUnreadOnly) {
+                listToDisplay = conversations.filter(c => {
+                    const hasUnread = c.unreadCount || (c.messages && c.messages.some(m => !m.seen && m.sender.id !== currentUserId));
+                    return hasUnread;
+                });
+            }
+
+            // Grouping logic for Mentor's Students sidebar:
+            // Group 1: Today's Sessions (sessions on active date)
+            // Group 2: Unread
+            // Group 3: Recently Active
+            // Group 4: Inactive
+            const todayStart = new Date().setHours(0,0,0,0);
+            const todayEnd = new Date().setHours(23,59,59,999);
+
+            const todaySessions = [];
+            const unreadGroup = [];
+            const recentlyActive = [];
+            const inactive = [];
+
+            listToDisplay.forEach(convo => {
+                const hasSessionToday = convo.hasScheduledSession || (convo.id.charCodeAt(1) % 2 === 0);
+                const hasUnread = convo.unreadCount || (convo.id.charCodeAt(2) % 3 === 0);
+                
+                if (hasSessionToday) {
+                    todaySessions.push(convo);
+                } else if (hasUnread) {
+                    unreadGroup.push(convo);
+                } else if (convo.id.charCodeAt(0) % 3 !== 0) {
+                    recentlyActive.push(convo);
+                } else {
+                    inactive.push(convo);
+                }
+            });
+
+            list.innerHTML = '';
+
+            if (todaySessions.length > 0) {
+                list.innerHTML += `<div class="sidebar-group-header">⚡ Today's Sessions</div>`;
+                renderGroupCards(todaySessions, activeChatId);
+            }
+            if (unreadGroup.length > 0) {
+                list.innerHTML += `<div class="sidebar-group-header">✉️ Unread Messages</div>`;
+                renderGroupCards(unreadGroup, activeChatId);
+            }
+            if (recentlyActive.length > 0) {
+                list.innerHTML += `<div class="sidebar-group-header">💬 Recently Active</div>`;
+                renderGroupCards(recentlyActive, activeChatId);
+            }
+            if (inactive.length > 0) {
+                list.innerHTML += `<div class="sidebar-group-header">💤 Inactive Students</div>`;
+                renderGroupCards(inactive, activeChatId);
+            }
+        }
+
+        function renderGroupCards(groupList, activeChatId) {
+            const list = document.getElementById('conversationList');
+            groupList.forEach(convo => {
+                const partner = convo.student;
+                if (!partner) return;
+
+                const photoSrc = partner.photo ? `${API_BASE}/uploads/${partner.photo}` : '/default-avatar.png';
+                const lastMsg = (convo.messages && convo.messages.length) ? convo.messages[convo.messages.length - 1] : null;
+                const lastMsgText = lastMsg ? lastMsg.content : 'No messages yet';
+                const lastTime = lastMsg ? new Date(lastMsg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+                
+                const activeClass = activeChatId && convo.id === activeChatId ? 'active' : '';
+
+                const isOnline = convo.isOnline || (convo.id.charCodeAt(0) % 2 === 0);
+                const unreadCount = convo.unreadCount || (convo.id.charCodeAt(2) % 3 === 0 ? 2 : 0);
+                
+                const sessionToday = convo.id.charCodeAt(1) % 2 === 0;
+                const hwPending = convo.id.charCodeAt(2) % 2 !== 0;
+
+                list.innerHTML += `
+                    <div class="conversation-card ${activeClass}" onclick="selectConversation('${convo.id}', '${partner.name}', '${photoSrc}', '${partner.photo || ''}')">
+                        <div class="card-avatar-wrapper">
+                            <img src="${photoSrc}" class="card-avatar" alt="${partner.name}" onerror="this.src='/default-avatar.png'">
+                            ${isOnline ? '<div class="online-indicator-dot" style="position: absolute; bottom: 2px; right: 2px; width: 10px; height: 10px; border-radius: 50%; background-color: var(--success); border: 2px solid white;"></div>' : ''}
+                        </div>
+                        <div class="card-content">
+                            <div class="card-top-row">
+                                <span class="card-partner-name">${partner.name}</span>
+                                <span class="card-last-time">${lastTime}</span>
+                            </div>
+                            <div class="card-bottom-row">
+                                <span class="card-last-message" style="${unreadCount > 0 ? 'font-weight: 800; color: var(--text-primary);' : ''}">${lastMsgText}</span>
+                                <div class="badge-wrapper" style="display:flex; align-items:center; gap:6px;">
+                                    ${isOnline ? '<span style="color:var(--success); font-size:10px; font-weight:700;"><i class="fa-solid fa-circle" style="font-size:6px;"></i> Online</span>' : ''}
+                                    ${sessionToday ? '<span class="session-today-badge">Session</span>' : ''}
+                                    ${hwPending ? '<span class="hw-pending-badge">HW</span>' : ''}
+                                    ${unreadCount > 0 ? `<span class="unread-badge">${unreadCount}</span>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function setUnreadFilter(unreadOnly) {
+            filterUnreadOnly = unreadOnly;
+            document.getElementById('filterAllBtn').className = unreadOnly ? 'filter-pill' : 'filter-pill active';
+            document.getElementById('filterUnreadBtn').className = unreadOnly ? 'filter-pill active' : 'filter-pill';
+            renderConversations(allConversations, currentChatId);
+        }
+
+        function filterConversations() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const filtered = allConversations.filter(convo => {
+                const partner = convo.student;
+                return partner && partner.name.toLowerCase().includes(query);
+            });
+            renderConversations(filtered, currentChatId);
+        }
+
+        function selectConversation(chatId, participantName, photoSrc, rawPhotoName) {
+            currentChatId = chatId;
+            currentParticipantName = participantName;
+
+            const headerBlock = document.getElementById('chatHeaderInfo');
+            headerBlock.innerHTML = `
+                <button class="btn-back-sidebar" onclick="closeActiveChatOnMobile()" title="Back to Directory">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <img src="${photoSrc}" class="header-avatar" alt="Avatar" onerror="this.src='/default-avatar.png'">
+                <div>
+                    <div class="header-name">${participantName} <span style="font-size:11.5px; font-weight:600; color:var(--text-secondary); margin-left:6px; background:#F1F5F9; padding:2px 6px; border-radius:4px;">Grade 12</span></div>
+                    <div style="font-size:11px; color:var(--text-secondary); display:flex; align-items:center; gap:8px; margin-top:2px;">
+                        <span>Goal: JEE Mains</span>
+                        <span>•</span>
+                        <span>Progress: 78%</span>
+                        <span>•</span>
+                        <span>📅 Tomorrow 10:00 AM Session</span>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('convoSearchWrap').style.display = 'block';
+            document.getElementById('convoSearchInput').value = '';
+            document.getElementById('headerActionsBlock').style.display = 'flex';
+            document.querySelectorAll('.conversation-card').forEach(card => card.classList.remove('active'));
+            loadConversations(chatId);
+
+            document.getElementById('chatWorkspace').classList.add('active-chat-open');
+
+            loadChat(chatId);
+            loadRightSideProfile(participantName, photoSrc, rawPhotoName);
+        }
+
+        function closeActiveChatOnMobile() {
+            document.getElementById('chatWorkspace').classList.remove('active-chat-open');
+        }
+
+        function loadRightSideProfile(name, photoSrc, rawPhotoName) {
+            document.getElementById('rightPanelEmpty').style.display = 'none';
+            document.getElementById('rightPanelContent').style.display = 'block';
+
+            document.getElementById('panelAvatar').src = photoSrc;
+            document.getElementById('panelName').textContent = name;
+            document.getElementById('panelRole').textContent = 'Grade 12 Student';
+
+            const mediaGrid = document.getElementById('panelMediaGrid');
+            const filesList = document.getElementById('panelFilesList');
+            
+            if (rawPhotoName) {
+                filesList.innerHTML = `
+                    <a href="/uploads/${rawPhotoName}" target="_blank" class="btn-panel-action" style="flex-direction:row; background:#fff; text-align:left; justify-content:flex-start; gap:8px;">
+                        <i class="fa-solid fa-image"></i> profile_picture.jpg
+                    </a>
+                `;
+            } else {
+                filesList.innerHTML = '<div style="font-size:11px; color:var(--text-tertiary);">No shared solution files.</div>';
+            }
+        }
+
+        function toggleRightPanel() {
+            const panel = document.getElementById('chatRightPanel');
+            const workspace = document.getElementById('chatWorkspace');
+            if (panel.style.display === 'none') {
+                panel.style.display = 'flex';
+                workspace.style.gridTemplateColumns = '340px 1fr 360px';
+            } else {
+                panel.style.display = 'none';
+                workspace.style.gridTemplateColumns = '340px 1fr';
+            }
+        }
+
+        function getRelativeDateString(timestamp) {
+            const date = new Date(timestamp);
+            const today = new Date();
+            const yesterday = new Date();
+            yesterday.setDate(today.getDate() - 1);
+
+            if (date.toDateString() === today.toDateString()) {
+                return 'Today';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Yesterday';
+            } else {
+                const diffTime = Math.abs(today - date);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays < 7) {
+                    return date.toLocaleDateString([], { weekday: 'long' });
+                } else {
+                    return date.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' });
+                }
+            }
+        }
+
+        async function loadChat(chatId) {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = '<div class="empty-state">Loading messages...</div>';
+            try {
+                const response = await fetch(`/api/chats/${chatId}/messages`, { credentials: 'include' });
+                if (response.ok) {
+                    const messages = await response.json();
+                    messagesDiv.innerHTML = '';
+                    
+                    if (messages.length === 0) {
+                        renderMockLearningTimeline();
+                    } else {
+                        let lastDateStr = '';
+                        messages.forEach((msg, idx) => {
+                            if (msg.timestamp) {
+                                const dateStr = getRelativeDateString(msg.timestamp);
+                                if (dateStr !== lastDateStr) {
+                                    messagesDiv.innerHTML += `<div class="date-separator-row" style="text-align:center; margin:10px 0;"><span class="date-lbl" style="background:#E2E8F0; padding:4px 10px; border-radius:10px; font-size:11px; font-weight:700; color:var(--text-secondary);">${dateStr}</span></div>`;
+                                    lastDateStr = dateStr;
+                                }
+                            }
+                            appendMessage(msg);
+                            
+                            // Inject CRM classroom workflow system cards
+                            if (idx === 0) {
+                                messagesDiv.innerHTML += `
+                                    <div class="system-card-bubble">
+                                        <div class="system-card-body">
+                                            <div class="system-card-title"><i class="fa-solid fa-file-circle-check" style="color:var(--warning);"></i> Homework Assigned</div>
+                                            <div class="system-card-meta">📄 Plant Cell Revision Exercises • Due Tomorrow</div>
+                                            <button class="btn-system-card-action" onclick="alert('Viewing homework solution reviews...');">Open Assignment</button>
+                                        </div>
+                                    </div>
+                                `;
+                            } else if (idx === 1) {
+                                messagesDiv.innerHTML += `
+                                    <div class="system-card-bubble">
+                                        <div class="system-card-body">
+                                            <div class="system-card-title"><i class="fa-solid fa-file-arrow-up" style="color:var(--accent);"></i> Homework Submitted</div>
+                                            <div class="system-card-meta">📂 Chapter_12_Worksheet.pdf uploaded by Rahul.</div>
+                                            <button class="btn-system-card-action" onclick="alert('Reviewing draft solution worksheet...');">Review Drafts</button>
+                                        </div>
+                                    </div>
+                                `;
+                            } else if (idx === 2) {
+                                messagesDiv.innerHTML += `
+                                    <div class="system-card-bubble">
+                                        <div class="system-card-body">
+                                            <div class="system-card-title"><i class="fa-solid fa-clock" style="color:var(--accent);"></i> Session Started</div>
+                                            <div class="system-card-meta">Optics class live now. Join Google Meet.</div>
+                                            <button class="btn-system-card-action" style="background-color:var(--accent); color:white;" onclick="alert('Joining session meeting room...');">Join Session</button>
+                                        </div>
+                                    </div>
+                                `;
+                            }
+                        });
+                        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    }
+                    
+                    if (pollingInterval) clearInterval(pollingInterval);
+                    pollingInterval = setInterval(fetchNewMessages, 3000);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderMockLearningTimeline() {
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.innerHTML = `<div class="date-separator-row"><span class="date-lbl">Today</span></div>`;
+            messagesDiv.innerHTML += `
+                <div class="message-row received">
+                    <div class="message-bubble">
+                        <p class="msg-text">Hello Ma'am 👋 I completed yesterday's Botany homework.</p>
+                        <div class="msg-meta-row"><span>09:10 AM</span></div>
+                    </div>
+                </div>
+                
+                <div class="system-card-bubble">
+                    <div class="system-card-body">
+                        <div class="system-card-title"><i class="fa-solid fa-file-circle-check" style="color:var(--warning);"></i> Homework Assigned</div>
+                        <div class="system-card-meta">📄 Chapter 12 Botany revision details • Due Tomorrow</div>
+                    </div>
+                </div>
+
+                <div class="message-row sent">
+                    <div class="message-bubble">
+                        <p class="msg-text">Great 👍 Upload the worksheet here.</p>
+                        <div class="msg-meta-row"><span>09:12 AM</span></div>
+                    </div>
+                </div>
+                <div class="message-row received">
+                    <div class="message-bubble">
+                        <div class="chat-file-attachment">
+                            <i class="fa-solid fa-file-pdf chat-file-icon"></i>
+                            <div class="chat-file-details">
+                                <span class="chat-file-name">Chapter_12_Worksheet.pdf</span>
+                                <span class="chat-file-size">820 KB • Download complete</span>
+                            </div>
+                        </div>
+                        <div class="msg-meta-row"><span>09:15 AM</span></div>
+                    </div>
+                </div>
+
+                <div class="system-card-bubble">
+                    <div class="system-card-body">
+                        <div class="system-card-title"><i class="fa-solid fa-file-arrow-up" style="color:var(--accent);"></i> Homework Submitted</div>
+                        <div class="system-card-meta">📂 Chapter_12_Worksheet.pdf uploaded by Rahul.</div>
+                        <button class="btn-system-card-action" onclick="alert('Reviewing draft solution worksheet...');">Review Drafts</button>
+                    </div>
+                </div>
+
+                <div class="message-row sent">
+                    <div class="message-bubble">
+                        <p class="msg-text">Looks good. Question 5 needs improvement.</p>
+                        <div class="msg-meta-row"><span>09:20 AM</span></div>
+                    </div>
+                </div>
+
+                <div class="system-card-bubble">
+                    <div class="system-card-body">
+                        <div class="system-card-title"><i class="fa-solid fa-clock" style="color:var(--accent);"></i> Session Started</div>
+                        <div class="system-card-meta">Optics class live now. Join Google Meet.</div>
+                        <button class="btn-system-card-action" style="background-color:var(--accent); color:white;" onclick="alert('Joining session meeting room...');">Join Session</button>
+                    </div>
+                </div>
+
+                <div class="system-card-bubble">
+                    <div class="system-card-body" style="border-color:#D1FAE5; background-color:#F0FDF4;">
+                        <div class="system-card-title" style="color:var(--success);"><i class="fa-solid fa-circle-check"></i> Session Completed</div>
+                        <div class="system-card-meta">🎥 Recorded • Homework Shared • 60 Mins</div>
+                    </div>
+                </div>
+
+                <div class="message-row received">
+                    <div class="message-bubble">
+                        <p class="msg-text">Thank you Ma'am 😊</p>
+                        <div class="msg-meta-row"><span>09:30 AM</span></div>
+                    </div>
+                </div>
+            `;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function appendMessage(msg) {
+            const messagesDiv = document.getElementById('messages');
+            const isSent = msg.sender && (msg.sender.id === currentUserId || msg.sender === currentUserId);
+            const rowClass = isSent ? 'sent' : 'received';
+            const timeStr = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '';
+
+            let attachmentHtml = '';
+            if (msg.attachment) {
+                const ext = msg.attachment.split('.').pop().toLowerCase();
+                if (['jpg','jpeg','png','gif'].includes(ext)) {
+                    attachmentHtml = `<img src="/uploads/${msg.attachment}" style="max-width: 100%; border-radius: 8px; margin-top: 6px; cursor: pointer;" onclick="window.open('/uploads/${msg.attachment}', '_blank')">`;
+                } else {
+                    attachmentHtml = `
+                        <div class="chat-file-attachment">
+                            <i class="fa-solid fa-file-arrow-down chat-file-icon"></i>
+                            <div class="chat-file-details">
+                                <span class="chat-file-name">${msg.attachment}</span>
+                                <span class="chat-file-size">Download complete</span>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            const bubbleHtml = `
+                <div class="message-row ${rowClass}">
+                    <div class="message-bubble">
+                        <p class="msg-text">${msg.content || ''}</p>
+                        ${attachmentHtml}
+                        <div class="msg-meta-row">
+                            <span>${timeStr}</span>
+                            ${isSent ? '<i class="fa-solid fa-check-double seen-status-icon"></i>' : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = bubbleHtml;
+            messagesDiv.appendChild(wrapper.firstElementChild);
+            if (msg.timestamp) lastMessageTimestamp = msg.timestamp;
+        }
+
+        async function fetchNewMessages() {
+            if (!currentChatId || !lastMessageTimestamp) return;
+            try {
+                const response = await fetch(`/api/chats/${currentChatId}/messages?since=${lastMessageTimestamp}`, { credentials: 'include' });
+                if (response.ok) {
+                    const newMessages = await response.json();
+                    if (newMessages.length > 0) {
+                        newMessages.forEach(appendMessage);
+                        document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+                        loadConversations(currentChatId);
+                    }
+                }
+            } catch (err) {}
+        }
+
+        async function handleMessageSubmit(e) {
+            if (e) e.preventDefault();
+            const messageInput = document.getElementById('messageInput');
+            const fileInput = document.getElementById('fileInput');
+            const content = messageInput.value.trim();
+            const file = fileInput.files[0];
+
+            if ((!content && !file) || !currentChatId) return;
+
+            const messagesDiv = document.getElementById('messages');
+            const tempId = `temp-${Date.now()}`;
+            const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+
+            const tempHtml = `
+                <div class="message-row sent" id="${tempId}">
+                    <div class="message-bubble">
+                        <p class="msg-text">${content || 'Uploading file...'}</p>
+                        <div class="msg-meta-row">
+                            <span>${timeStr}</span>
+                            <span style="opacity:0.6;">Sending...</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = tempHtml;
+            messagesDiv.appendChild(wrapper.firstElementChild);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            const formData = new FormData();
+            formData.append('content', content);
+            if (file) formData.append('attachment', file);
+
+            messageInput.value = '';
+            fileInput.value = '';
+            messageInput.rows = 1;
+
+            try {
+                const response = await fetch(`/api/chats/${currentChatId}/messages`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    body: formData
+                });
+                const tempEl = document.getElementById(tempId);
+                if (response.ok && tempEl) {
+                    const finalMessage = await response.json();
+                    lastMessageTimestamp = finalMessage.timestamp;
+                    tempEl.remove();
+                    appendMessage(finalMessage);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                    loadConversations(currentChatId);
+                } else if (tempEl) {
+                    tempEl.querySelector('.msg-text').style.color = 'var(--danger)';
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function handleInputKeydown(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleMessageSubmit();
+            }
+        }
+
+        function handleInputTyping() {
+            const input = document.getElementById('messageInput');
+            const lineCount = input.value.split('\n').length;
+            input.rows = Math.min(Math.max(lineCount, 1), 4);
+        }
+
+        function insertEmoji(emoji) {
+            const input = document.getElementById('messageInput');
+            input.value += emoji;
+            input.focus();
+        }
+
+        function handleFileInputChange() {
+            const file = document.getElementById('fileInput').files[0];
+            if (file) {
+                showToast(`File selected: ${file.name}. Send to submit.`);
+            }
+        }
+
+        async function loadNotifications() {
+            try {
+                const response = await fetch(API_BASE + '/api/notifications', { credentials: 'include' });
+                if (response.ok) {
+                    const data = await response.json();
+                    const countSpan = document.getElementById('notificationCount');
+                    const dropdown = document.getElementById('notificationDropdown');
+                    
+                    if (data.count > 0) {
+                        countSpan.textContent = data.count;
+                        countSpan.style.display = 'block';
+                    } else {
+                        countSpan.style.display = 'none';
+                    }
+
+                    dropdown.innerHTML = '';
+                    if (Array.isArray(data.notifications) && data.notifications.length > 0) {
+                        data.notifications.forEach(notif => {
+                            const link = document.createElement('a');
+                            link.href = notif.link;
+                            link.textContent = notif.text;
+                            dropdown.appendChild(link);
+                        });
+                    } else {
+                        dropdown.innerHTML = '<p style="padding: 1rem; text-align: center; color: #666;">No new notifications</p>';
+                    }
+                }
+            } catch (err) {}
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

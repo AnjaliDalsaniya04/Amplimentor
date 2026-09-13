@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Dashboard - Amplimentor</title>
-    <link rel="stylesheet" href="/style.css?v=3.5">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <!-- Google Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Premium Dashboard Stylesheet -->
+    <link rel="stylesheet" href="/student-dashboard.css">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="/config.js"></script>
+    <script src="/search-engine.js"></script>
 </head>
-<body style="margin: 0; background-color: #F8FAFC;">
+<body>
     <div class="dashboard-wrapper">
         
         <!-- Sidebar Navigation Drawer -->
         <aside class="dashboard-sidebar">
             <a href="/" class="sidebar-logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L2 22H6L8.5 16.5H15.5L18 22H22L12 2Z" fill="url(#sidebarLogoGrad)"/>
                     <path d="M9.5 14H14.5L12 8.5L9.5 14Z" fill="#fff"/>
                     <defs>
@@ -32,41 +35,65 @@
             </a>
             
             <nav class="sidebar-nav">
-                <a href="/student-dashboard.html" class="sidebar-link active">
-                    <i class="fas fa-th-large"></i> Dashboard
-                </a>
-                <a href="/mentors.html" class="sidebar-link">
-                    <i class="fas fa-search"></i> Find Mentors
-                </a>
-                <a href="/sessions.html" class="sidebar-link">
-                    <i class="fas fa-calendar-alt"></i> My Sessions
-                </a>
-                <a href="/student-dashboard.html#bookings" class="sidebar-link">
-                    <i class="fas fa-list-ul"></i> My Bookings
-                </a>
-                <a href="/chat.html" class="sidebar-link">
-                    <i class="fas fa-comment-dots"></i> Messages <span class="sidebar-badge" id="messageBadge">3</span>
-                </a>
-                <a href="/student-dashboard.html#goals" class="sidebar-link">
-                    <i class="fas fa-bullseye"></i> Study Goals
-                </a>
-                <a href="/student-dashboard.html#saved" class="sidebar-link">
-                    <i class="fas fa-heart"></i> Saved Mentors
-                </a>
-                <a href="/student-dashboard.html#payments" class="sidebar-link">
-                    <i class="fas fa-credit-card"></i> Payments
-                </a>
-                <a href="/student/profile" class="sidebar-link">
-                    <i class="fas fa-user"></i> Profile
-                </a>
-                <a href="/student-dashboard.html#settings" class="sidebar-link">
-                    <i class="fas fa-cog"></i> Settings
-                </a>
+                <!-- Group 1: Dashboard -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Dashboard</span>
+                    <a href="/student-dashboard.html" class="sidebar-link active">
+                        <i data-lucide="layout-dashboard"></i> Dashboard
+                    </a>
+                </div>
+
+                <!-- Group 2: Learning -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Learning</span>
+                    <a href="/mentors.html" class="sidebar-link">
+                        <i data-lucide="search"></i> Find Mentor
+                    </a>
+                    <a href="/sessions.html" class="sidebar-link">
+                        <i data-lucide="video"></i> My Sessions
+                    </a>
+                    <a href="/student-dashboard.html#bookings" class="sidebar-link">
+                        <i data-lucide="calendar"></i> Bookings
+                    </a>
+                </div>
+
+                <!-- Group 3: Progress -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Progress</span>
+                    <a href="/student-dashboard.html#goals" class="sidebar-link">
+                        <i data-lucide="award"></i> Study Goals
+                    </a>
+                    <a href="/my-mentors.html" class="sidebar-link">
+                        <i data-lucide="users"></i> My Mentors
+                    </a>
+                </div>
+
+                <!-- Group 4: Finance -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Payments</span>
+                    <a href="/finance.html" class="sidebar-link">
+                        <i data-lucide="credit-card"></i> Payments
+                    </a>
+                </div>
+
+                <!-- Group 5: Account -->
+                <div class="sidebar-group">
+                    <span class="sidebar-group-title">Account</span>
+                    <a href="/student/profile" class="sidebar-link">
+                        <i data-lucide="user"></i> Profile
+                    </a>
+                    <a href="/student-dashboard.html#settings" class="sidebar-link">
+                        <i data-lucide="settings"></i> Settings
+                    </a>
+                    <a href="/support.html" class="sidebar-link">
+                        <i data-lucide="headset"></i> Support Center
+                    </a>
+                </div>
             </nav>
             
             <div class="sidebar-footer">
                 <a href="/logout" class="sidebar-link logout-btn">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i data-lucide="log-out"></i> Logout
                 </a>
             </div>
         </aside>
@@ -76,16 +103,16 @@
             <!-- Header bar -->
             <header class="dashboard-header">
                 <div class="header-search">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search mentors, subjects..." class="header-search-input" id="dashboardSearch">
+                    <i data-lucide="search" class="header-search-icon"></i>
+                    <input type="text" placeholder="Search mentors, subjects, sessions..." class="header-search-input" id="dashboardSearch">
                 </div>
                 
                 <div class="header-actions">
                     <button class="header-icon-btn" aria-label="Open messages" onclick="window.location.href='/chat.html'">
-                        <i class="far fa-comment-dots"></i>
+                        <i data-lucide="message-square"></i>
                     </button>
-                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink">
-                        <i class="far fa-bell"></i>
+                    <button class="header-icon-btn" aria-label="Notifications" id="notificationLink" onclick="window.location.href='/notifications'">
+                        <i data-lucide="bell"></i>
                         <span class="badge" id="notificationCount" style="display: none;"></span>
                     </button>
                     
@@ -102,290 +129,457 @@
             <!-- Inner Dashboard content scroll frame -->
             <div class="dashboard-content">
                 
-                <!-- Greet Title block -->
-                <div class="dashboard-title-section">
-                    <h1 id="greetingMsg">Good Evening, Rahul 👋</h1>
-                    <p>Keep learning. Keep growing.</p>
-                </div>
+                <!-- 1. Welcome Hero Section -->
+                <section class="welcome-hero-grid animated-section">
+                    <div class="welcome-hero-left">
+                        <h1 id="greetingMsg" class="greeting-large">Good Evening, Rahul 👋</h1>
+                        <p class="greeting-subtitle">You have 1 session today, 3 upcoming sessions, and 78% learning progress.</p>
+                        <span class="greeting-motto">Keep learning. You're getting closer to your goal every day.</span>
+                    </div>
+                    
+                    <div class="welcome-hero-right">
+                        <div class="student-summary-card">
+                            <div class="summary-metric-row">
+                                <div class="summary-metric-icon orange">
+                                    <i data-lucide="zap" style="fill: currentColor;"></i>
+                                </div>
+                                <div class="summary-metric-details">
+                                    <span class="summary-metric-lbl">Streak</span>
+                                    <span class="summary-metric-val">🔥 15 Day Streak</span>
+                                </div>
+                            </div>
+                            
+                            <div class="summary-metric-row">
+                                <div class="summary-metric-icon purple">
+                                    <i data-lucide="book-open"></i>
+                                </div>
+                                <div class="summary-metric-details">
+                                    <span class="summary-metric-lbl">Active Goal</span>
+                                    <span class="summary-metric-val">📚 JEE Preparation</span>
+                                </div>
+                            </div>
 
-                <!-- 4 Metrics row -->
-                <section class="dashboard-stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Active Sessions</span>
-                            <h3 class="stat-value" id="statsActive">2</h3>
-                        </div>
-                        <div class="stat-icon-wrapper blue">
-                            <i class="fas fa-calendar-check"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Upcoming Sessions</span>
-                            <h3 class="stat-value" id="statsUpcoming">3</h3>
-                        </div>
-                        <div class="stat-icon-wrapper green">
-                            <i class="fas fa-calendar-plus"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Saved Mentors</span>
-                            <h3 class="stat-value" id="statsSaved">7</h3>
-                        </div>
-                        <div class="stat-icon-wrapper red">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <span class="stat-label">Learning Progress</span>
-                            <h3 class="stat-value" id="statsProgress">78%</h3>
-                        </div>
-                        <div class="stat-icon-wrapper purple">
-                            <i class="fas fa-chart-line"></i>
+                            <div class="summary-metric-row">
+                                <div class="summary-metric-icon blue">
+                                    <i data-lucide="target"></i>
+                                </div>
+                                <div class="summary-metric-details">
+                                    <span class="summary-metric-lbl">Progress</span>
+                                    <span class="summary-metric-val">🎯 78% Progress</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                <!-- 2-column layout: My Mentor & Upcoming Sessions -->
-                <div class="dashboard-row-grid">
-                    <!-- My Mentor Card -->
-                    <div class="dashboard-card">
-                        <div class="card-header-row">
-                            <h3>My Mentor</h3>
+                <!-- 2. Overview Cards Section -->
+                <section class="stats-cards-grid animated-section delay-1">
+                    <!-- Active Sessions -->
+                    <div class="stat-card-premium">
+                        <div class="stat-card-details">
+                            <span class="stat-card-title">Active Sessions</span>
+                            <h3 class="stat-card-value" id="statsActive">2</h3>
+                            <span class="stat-card-trend up">
+                                <i data-lucide="check-circle" style="width: 14px; height: 14px;"></i> In Progress
+                            </span>
                         </div>
-                        
-                        <div class="my-mentor-profile">
-                            <div class="my-mentor-photo-wrap">
-                                <img src="/uploads/priya_avatar_1782563537528.png" id="myMentorPhoto" alt="Mentor portrait" onerror="this.src='/default-avatar.svg'">
-                            </div>
-                            <div class="my-mentor-info">
-                                <div class="my-mentor-name-row">
-                                    <h4 id="myMentorName">Anjali Patel</h4>
-                                    <span class="status-indicator-badge available" id="myMentorStatus">🟢 Available</span>
-                                </div>
-                                <p class="my-mentor-specialty" id="myMentorSpecialty">NEET Biology Mentor</p>
-                                <p class="my-mentor-org" id="myMentorOrg">🏫 Aakash BYJU'S</p>
-                            </div>
-                        </div>
-                        
-                        <div class="my-mentor-next-session">
-                            <div class="next-session-title">Next Session</div>
-                            <div class="next-session-time" id="myMentorNextTime">24 May, 2025 • 10:00 AM</div>
-                        </div>
-                        
-                        <div class="my-mentor-actions">
-                            <a href="/chat.html" class="btn-message">Message</a>
-                            <a href="/mentors.html" class="btn-profile" id="myMentorProfileLink">View Profile</a>
+                        <div class="stat-card-icon-wrap blue">
+                            <i data-lucide="video"></i>
                         </div>
                     </div>
 
-                    <!-- Upcoming Sessions card list -->
-                    <div class="dashboard-card">
-                        <div class="card-header-row">
-                            <h3>Upcoming Sessions</h3>
-                            <a href="/sessions.html" class="view-all-link">View All</a>
+                    <!-- Upcoming Sessions -->
+                    <div class="stat-card-premium">
+                        <div class="stat-card-details">
+                            <span class="stat-card-title">Upcoming Sessions</span>
+                            <h3 class="stat-card-value" id="statsUpcoming">3</h3>
+                            <span class="stat-card-trend neutral">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i> Next Tomorrow
+                            </span>
+                        </div>
+                        <div class="stat-card-icon-wrap green">
+                            <i data-lucide="calendar-plus"></i>
+                        </div>
+                    </div>
+
+                    <!-- Saved Mentors -->
+                    <div class="stat-card-premium">
+                        <div class="stat-card-details">
+                            <span class="stat-card-title">Saved Mentors</span>
+                            <h3 class="stat-card-value" id="statsSaved">7</h3>
+                            <span class="stat-card-trend up">
+                                <i data-lucide="heart" style="width: 14px; height: 14px; fill: currentColor;"></i> 2 Available
+                            </span>
+                        </div>
+                        <div class="stat-card-icon-wrap red">
+                            <i data-lucide="heart"></i>
+                        </div>
+                    </div>
+
+                    <!-- Learning Progress -->
+                    <div class="stat-card-premium">
+                        <div class="stat-card-details">
+                            <span class="stat-card-title">Learning Progress</span>
+                            <h3 class="stat-card-value" id="statsProgress">78%</h3>
+                            <span class="stat-card-trend up">
+                                <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i> +3% This Week
+                            </span>
+                        </div>
+                        <div class="stat-card-icon-wrap purple">
+                            <i data-lucide="line-chart"></i>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Row 3 Split: My Mentor & Upcoming Sessions -->
+                <div class="two-column-split animated-section delay-2">
+                    <!-- 3. My Mentor -->
+                    <div class="premium-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="section-header">
+                            <h2>My Mentor</h2>
                         </div>
                         
-                        <div class="upcoming-sessions-list" id="upcomingSessionsList">
-                            <!-- Populated dynamically / static mockup fallback -->
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">24 May, 2025</span>
-                                    <span class="session-time-val">10:00 AM</span>
+                        <div class="mentor-premium-card">
+                            <div class="mentor-profile-header-row">
+                                <div class="mentor-large-photo-wrap">
+                                    <img src="/uploads/priya_avatar_1782563537528.png" id="myMentorPhoto" class="mentor-large-photo" alt="Mentor portrait" onerror="this.src='/default-avatar.svg'">
+                                    <span class="mentor-status-badge available" id="myMentorStatus">🟢 Available</span>
                                 </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">Anjali Patel</span>
-                                    <span class="session-subject-name">NEET Biology</span>
+                                <div class="mentor-main-details">
+                                    <div class="mentor-name-row">
+                                        <h4 class="mentor-name-lbl" id="myMentorName">Anjali Patel</h4>
+                                        <span class="mentor-rating-chip">⭐ 4.8</span>
+                                    </div>
+                                    <p class="mentor-specialty-lbl" id="myMentorSpecialty">NEET Biology Mentor</p>
+                                    <p class="mentor-org-lbl" id="myMentorOrg">🏫 Aakash BYJU'S</p>
                                 </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
+                            </div>
+                            
+                            <div class="mentor-session-bar">
+                                <span class="mentor-session-title">Next Session</span>
+                                <span class="mentor-session-time" id="myMentorNextTime">
+                                    <i data-lucide="calendar" style="width: 16px; height: 16px;"></i> 24 May, 2025 • 10:00 AM
+                                </span>
+                            </div>
+                            
+                            <div class="mentor-action-buttons-row">
+                                <a href="/chat.html" class="btn-mentor-msg">
+                                    <i data-lucide="message-square" style="width: 14px; height: 14px;"></i> Message
+                                </a>
+                                <a href="/mentors.html" class="btn-mentor-profile" id="myMentorProfileLink">
+                                    <i data-lucide="user" style="width: 14px; height: 14px;"></i> Profile
+                                </a>
+                                <a href="/mentors.html" class="btn-mentor-book">
+                                    <i data-lucide="calendar-plus" style="width: 14px; height: 14px;"></i> Book Session
                                 </a>
                             </div>
+                        </div>
+                    </div>
 
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">26 May, 2025</span>
-                                    <span class="session-time-val">04:00 PM</span>
+                    <!-- 4. Upcoming Sessions -->
+                    <div class="premium-card" style="display: flex; flex-direction: column;">
+                        <div class="section-header">
+                            <h2>Upcoming Sessions</h2>
+                            <a href="/sessions.html" class="view-all-link">View All <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
+                        </div>
+                        
+                        <div class="sessions-cards-list" id="upcomingSessionsList">
+                            <!-- Session Card 1 -->
+                            <div class="session-card-item">
+                                <div class="session-card-left">
+                                    <div class="session-time-badge">
+                                        <span class="session-date-val">24 May, 2025</span>
+                                        <span class="session-time-val">10:00 AM</span>
+                                    </div>
+                                    <img src="/default-avatar.svg" class="session-mentor-avatar" alt="Mentor portrait">
+                                    <div class="session-details">
+                                        <span class="session-subject">NEET Biology</span>
+                                        <span class="session-mentor-meta">Anjali Patel • 1 hr • Countdown: 1 day</span>
+                                    </div>
                                 </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">Priya Mehta</span>
-                                    <span class="session-subject-name">CBSE Physics</span>
+                                <div class="session-card-right">
+                                    <span class="status-badge upcoming">Upcoming</span>
+                                    <a href="/sessions.html" class="btn-join-session" aria-label="Join video session">
+                                        <i data-lucide="video"></i> Join
+                                    </a>
                                 </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
-                                </a>
                             </div>
 
-                            <div class="upcoming-session-row">
-                                <div class="session-date-time">
-                                    <span class="session-date-val">28 May, 2025</span>
-                                    <span class="session-time-val">06:00 PM</span>
+                            <!-- Session Card 2 -->
+                            <div class="session-card-item">
+                                <div class="session-card-left">
+                                    <div class="session-time-badge">
+                                        <span class="session-date-val">26 May, 2025</span>
+                                        <span class="session-time-val">04:00 PM</span>
+                                    </div>
+                                    <img src="/default-avatar.svg" class="session-mentor-avatar" alt="Mentor portrait">
+                                    <div class="session-details">
+                                        <span class="session-subject">CBSE Physics</span>
+                                        <span class="session-mentor-meta">Priya Mehta • 1 hr • Countdown: 3 days</span>
+                                    </div>
                                 </div>
-                                <div class="session-mentor-subject">
-                                    <span class="session-mentor-name">Rahul Sharma</span>
-                                    <span class="session-subject-name">JEE Mathematics</span>
+                                <div class="session-card-right">
+                                    <span class="status-badge upcoming">Upcoming</span>
+                                    <a href="/sessions.html" class="btn-join-session" aria-label="Join video session">
+                                        <i data-lucide="video"></i> Join
+                                    </a>
                                 </div>
-                                <span class="session-status-badge">Upcoming</span>
-                                <a href="/sessions.html" class="btn-video-join" aria-label="Join video session">
-                                    <i class="fas fa-video"></i>
-                                </a>
+                            </div>
+
+                            <!-- Session Card 3 -->
+                            <div class="session-card-item">
+                                <div class="session-card-left">
+                                    <div class="session-time-badge">
+                                        <span class="session-date-val">28 May, 2025</span>
+                                        <span class="session-time-val">06:00 PM</span>
+                                    </div>
+                                    <img src="/default-avatar.svg" class="session-mentor-avatar" alt="Mentor portrait">
+                                    <div class="session-details">
+                                        <span class="session-subject">JEE Mathematics</span>
+                                        <span class="session-mentor-meta">Rahul Sharma • 1 hr • Countdown: 5 days</span>
+                                    </div>
+                                </div>
+                                <div class="session-card-right">
+                                    <span class="status-badge upcoming">Upcoming</span>
+                                    <a href="/sessions.html" class="btn-join-session" aria-label="Join video session">
+                                        <i data-lucide="video"></i> Join
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Recommended Mentors slider section -->
-                <section class="dashboard-card" style="position: relative;">
-                    <div class="card-header-row">
-                        <h3>Recommended Mentors for You</h3>
-                        <a href="/mentors.html" class="view-all-link">View All</a>
+                <!-- 5. Recommended Mentors (Horizontal Slider) -->
+                <section class="premium-card animated-section delay-3" style="position: relative;">
+                    <div class="section-header" style="margin-bottom: 24px;">
+                        <h2>Recommended Mentors for You</h2>
+                        <a href="/mentors.html" class="view-all-link">View All <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
                     </div>
                     
                     <div class="recommended-slider-container">
                         <button class="slider-arrow-btn left" id="slideLeftBtn" aria-label="Slide Left">
-                            <i class="fas fa-chevron-left"></i>
+                            <i data-lucide="chevron-left"></i>
                         </button>
                         
                         <div class="slider-cards-row" id="recommendedMentorsSlider">
-                            <!-- Populates dynamically from mentors database -->
+                            <!-- Dynamic rendering slot -->
                         </div>
                         
                         <button class="slider-arrow-btn right" id="slideRightBtn" aria-label="Slide Right">
-                            <i class="fas fa-chevron-right"></i>
+                            <i data-lucide="chevron-right"></i>
                         </button>
                     </div>
                 </section>
 
-                <!-- Row 3 columns: Goals & Activities -->
-                <div class="dashboard-row-grid">
-                    <!-- Learning Goals Progress -->
-                    <div class="dashboard-card" id="goals">
-                        <div class="card-header-row">
-                            <h3>Learning Goals</h3>
-                            <a href="/student-dashboard.html#goals" class="view-all-link">View All</a>
+                <!-- Row 4 Split: Learning Goals & Recent Activity -->
+                <div class="two-column-split animated-section delay-4">
+                    <!-- 6. Learning Goals -->
+                    <div class="premium-card" id="goals" style="display: flex; flex-direction: column;">
+                        <div class="section-header">
+                            <h2>Learning Goals</h2>
+                            <a href="/student-dashboard.html#goals" class="view-all-link">View All <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i></a>
                         </div>
                         
-                        <div class="goals-list">
-                            <div class="goal-item">
-                                <div class="goal-header">
-                                    <span>JEE Preparation</span>
-                                    <span>75%</span>
+                        <div class="goals-cards-list">
+                            <!-- Goal 1 -->
+                            <div class="goal-card-item">
+                                <div class="goal-card-header">
+                                    <div class="goal-title-wrapper">
+                                        <div class="goal-subject-icon blue">
+                                            <i data-lucide="award"></i>
+                                        </div>
+                                        <span class="goal-card-title">JEE Preparation</span>
+                                    </div>
+                                    <span class="goal-percentage">75%</span>
                                 </div>
-                                <div class="goal-progress-track">
-                                    <div class="goal-progress-fill blue" style="width: 75%;"></div>
+                                <div class="goal-progress-container">
+                                    <div class="goal-progress-bar-track">
+                                        <div class="goal-progress-bar-fill blue" style="width: 75%;"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="goal-item">
-                                <div class="goal-header">
-                                    <span>Mathematics</span>
-                                    <span>62%</span>
-                                </div>
-                                <div class="goal-progress-track">
-                                    <div class="goal-progress-fill green" style="width: 62%;"></div>
-                                </div>
-                            </div>
-                            <div class="goal-item">
-                                <div class="goal-header">
-                                    <span>Physics</span>
-                                    <span>90%</span>
-                                </div>
-                                <div class="goal-progress-track">
-                                    <div class="goal-progress-fill purple" style="width: 90%;"></div>
+                                <div class="goal-card-footer">
+                                    <span class="goal-current-topic">Topic: <strong>Permutations & Combinations</strong></span>
+                                    <button class="goal-roadmap-btn">Roadmap <i data-lucide="chevron-right" style="width: 12px; height: 12px;"></i></button>
                                 </div>
                             </div>
-                            <div class="goal-item">
-                                <div class="goal-header">
-                                    <span>Chemistry</span>
-                                    <span>40%</span>
+
+                            <!-- Goal 2 -->
+                            <div class="goal-card-item">
+                                <div class="goal-card-header">
+                                    <div class="goal-title-wrapper">
+                                        <div class="goal-subject-icon green">
+                                            <i data-lucide="calculator"></i>
+                                        </div>
+                                        <span class="goal-card-title">Mathematics</span>
+                                    </div>
+                                    <span class="goal-percentage">62%</span>
                                 </div>
-                                <div class="goal-progress-track">
-                                    <div class="goal-progress-fill orange" style="width: 40%;"></div>
+                                <div class="goal-progress-container">
+                                    <div class="goal-progress-bar-track">
+                                        <div class="goal-progress-bar-fill green" style="width: 62%;"></div>
+                                    </div>
+                                </div>
+                                <div class="goal-card-footer">
+                                    <span class="goal-current-topic">Topic: <strong>Definite Integrals</strong></span>
+                                    <button class="goal-roadmap-btn">Roadmap <i data-lucide="chevron-right" style="width: 12px; height: 12px;"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Goal 3 -->
+                            <div class="goal-card-item">
+                                <div class="goal-card-header">
+                                    <div class="goal-title-wrapper">
+                                        <div class="goal-subject-icon purple">
+                                            <i data-lucide="atom"></i>
+                                        </div>
+                                        <span class="goal-card-title">Physics</span>
+                                    </div>
+                                    <span class="goal-percentage">90%</span>
+                                </div>
+                                <div class="goal-progress-container">
+                                    <div class="goal-progress-bar-track">
+                                        <div class="goal-progress-bar-fill purple" style="width: 90%;"></div>
+                                    </div>
+                                </div>
+                                <div class="goal-card-footer">
+                                    <span class="goal-current-topic">Topic: <strong>Electromagnetic Induction</strong></span>
+                                    <button class="goal-roadmap-btn">Roadmap <i data-lucide="chevron-right" style="width: 12px; height: 12px;"></i></button>
+                                </div>
+                            </div>
+
+                            <!-- Goal 4 -->
+                            <div class="goal-card-item">
+                                <div class="goal-card-header">
+                                    <div class="goal-title-wrapper">
+                                        <div class="goal-subject-icon orange">
+                                            <i data-lucide="beaker"></i>
+                                        </div>
+                                        <span class="goal-card-title">Chemistry</span>
+                                    </div>
+                                    <span class="goal-percentage">40%</span>
+                                </div>
+                                <div class="goal-progress-container">
+                                    <div class="goal-progress-bar-track">
+                                        <div class="goal-progress-bar-fill orange" style="width: 40%;"></div>
+                                    </div>
+                                </div>
+                                <div class="goal-card-footer">
+                                    <span class="goal-current-topic">Topic: <strong>Organic Chemistry Nomenclature</strong></span>
+                                    <button class="goal-roadmap-btn">Roadmap <i data-lucide="chevron-right" style="width: 12px; height: 12px;"></i></button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Recent Activity logs -->
-                    <div class="dashboard-card">
-                        <div class="card-header-row">
-                            <h3>Recent Activity</h3>
+                    <!-- 7. Recent Activity (Timeline Cards) -->
+                    <div class="premium-card" style="display: flex; flex-direction: column; justify-content: flex-start; height: 100%;">
+                        <div class="section-header" style="margin-bottom: 24px;">
+                            <h2>Recent Activity</h2>
                         </div>
                         
-                        <div class="activities-timeline">
-                            <div class="activity-item">
-                                <div class="activity-icon-wrap blue">
-                                    <i class="fas fa-calendar-check"></i>
-                                </div>
-                                <div class="activity-details">
-                                    <h4 class="activity-title">Session booked with Anjali Patel</h4>
-                                    <span class="activity-time">Today</span>
-                                </div>
-                            </div>
-                            <div class="activity-item">
-                                <div class="activity-icon-wrap green">
-                                    <i class="fas fa-check-circle"></i>
-                                </div>
-                                <div class="activity-details">
-                                    <h4 class="activity-title">Completed session with Rahul Sharma</h4>
-                                    <span class="activity-time">Yesterday, 07:00 PM</span>
+                        <div class="timeline-container">
+                            <!-- Activity 1 -->
+                            <div class="timeline-item">
+                                <span class="timeline-dot blue"></span>
+                                <div class="timeline-content">
+                                    <span class="timeline-title">Session booked with Anjali Patel</span>
+                                    <span class="timeline-time">Today, 12:00 PM</span>
                                 </div>
                             </div>
-                            <div class="activity-item">
-                                <div class="activity-icon-wrap orange">
-                                    <i class="fas fa-arrow-alt-circle-down"></i>
-                                </div>
-                                <div class="activity-details">
-                                    <h4 class="activity-title">Downloaded NEET Biology Notes</h4>
-                                    <span class="activity-time">22 May, 2025</span>
+
+                            <!-- Activity 2 -->
+                            <div class="timeline-item">
+                                <span class="timeline-dot green"></span>
+                                <div class="timeline-content">
+                                    <span class="timeline-title">Completed session with Rahul Sharma</span>
+                                    <span class="timeline-time">Yesterday, 07:00 PM</span>
                                 </div>
                             </div>
-                            <div class="activity-item">
-                                <div class="activity-icon-wrap purple">
-                                    <i class="fas fa-user-edit"></i>
+
+                            <!-- Activity 3 -->
+                            <div class="timeline-item">
+                                <span class="timeline-dot orange"></span>
+                                <div class="timeline-content">
+                                    <span class="timeline-title">Downloaded NEET Biology Notes (Botany Chapter 3)</span>
+                                    <span class="timeline-time">22 May, 2025</span>
                                 </div>
-                                <div class="activity-details">
-                                    <h4 class="activity-title">Profile details updated</h4>
-                                    <span class="activity-time">21 May, 2025</span>
+                            </div>
+
+                            <!-- Activity 4 -->
+                            <div class="timeline-item">
+                                <span class="timeline-dot purple"></span>
+                                <div class="timeline-content">
+                                    <span class="timeline-title">Profile credentials updated</span>
+                                    <span class="timeline-time">21 May, 2025</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Activity 5 -->
+                            <div class="timeline-item">
+                                <span class="timeline-dot green"></span>
+                                <div class="timeline-content">
+                                    <span class="timeline-title">Earned "Concept Master" Achievement Badges</span>
+                                    <span class="timeline-time">19 May, 2025</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Bottom section: Quick Actions -->
-                <section class="dashboard-card" style="background-color: transparent; border: none; padding: 0; box-shadow: none;">
-                    <div class="card-header-row" style="margin-bottom: 16px;">
-                        <h3>Quick Actions</h3>
+                <!-- 8. Quick Actions Section -->
+                <section class="animated-section delay-5" style="display: flex; flex-direction: column;">
+                    <div class="section-header">
+                        <h2>Quick Actions</h2>
                     </div>
                     
-                    <div class="quick-actions-row">
-                        <a href="/mentors.html" class="quick-action-btn-card">
-                            <div class="quick-action-icon purple">
-                                <i class="fas fa-user-friends"></i>
+                    <div class="quick-actions-grid">
+                        <!-- Find Mentor -->
+                        <a href="/mentors.html" class="quick-action-card">
+                            <div class="quick-action-icon-wrapper purple">
+                                <i data-lucide="search"></i>
                             </div>
-                            <span class="quick-action-label">Find Mentor</span>
+                            <span class="quick-action-title">Find Mentor</span>
                         </a>
-                        <a href="/mentors.html" class="quick-action-btn-card">
-                            <div class="quick-action-icon blue">
-                                <i class="fas fa-plus-circle"></i>
+                        
+                        <!-- Book Session -->
+                        <a href="/mentors.html" class="quick-action-card">
+                            <div class="quick-action-icon-wrapper blue">
+                                <i data-lucide="calendar-plus"></i>
                             </div>
-                            <span class="quick-action-label">Book Session</span>
+                            <span class="quick-action-title">Book Session</span>
                         </a>
-                        <a href="/mentors.html" class="quick-action-btn-card">
-                            <div class="quick-action-icon green">
-                                <i class="fas fa-book-open"></i>
+                        
+                        <!-- Browse Subjects -->
+                        <a href="/mentors.html" class="quick-action-card">
+                            <div class="quick-action-icon-wrapper green">
+                                <i data-lucide="book-open"></i>
                             </div>
-                            <span class="quick-action-label">Browse Subjects</span>
+                            <span class="quick-action-title">Browse Subjects</span>
                         </a>
-                        <a href="/student/profile" class="quick-action-btn-card">
-                            <div class="quick-action-icon orange">
-                                <i class="fas fa-id-card"></i>
+                        
+                        <!-- My Profile -->
+                        <a href="/student/profile" class="quick-action-card">
+                            <div class="quick-action-icon-wrapper orange">
+                                <i data-lucide="user"></i>
                             </div>
-                            <span class="quick-action-label">My Profile</span>
+                            <span class="quick-action-title">My Profile</span>
+                        </a>
+
+                        <!-- Study Goals -->
+                        <a href="/student-dashboard.html#goals" class="quick-action-card">
+                            <div class="quick-action-icon-wrapper purple">
+                                <i data-lucide="award"></i>
+                            </div>
+                            <span class="quick-action-title">Study Goals</span>
+                        </a>
+
+                        <!-- Saved Mentors -->
+                        <a href="/student-dashboard.html#saved" class="quick-action-card">
+                            <div class="quick-action-icon-wrapper red">
+                                <i data-lucide="heart" style="fill: currentColor;"></i>
+                            </div>
+                            <span class="quick-action-title">Saved Mentors</span>
                         </a>
                     </div>
                 </section>
@@ -417,6 +611,11 @@
             const slideLeftBtn = document.getElementById('slideLeftBtn');
             const slideRightBtn = document.getElementById('slideRightBtn');
 
+            // Render Lucide icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
             // Toggle Notification Dropdown
             notificationLink.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -446,8 +645,9 @@
                     const res = await fetch((typeof API_BASE !== 'undefined' ? API_BASE : '') + '/api/student/profile');
                     if (res.ok) {
                         const user = await res.json();
-                        studentName.textContent = user.name || 'Rahul';
-                        greetingMsg.textContent = `Good Evening, ${user.name || 'Rahul'} 👋`;
+                        const displayName = user.name || 'Rahul';
+                        studentName.textContent = displayName;
+                        greetingMsg.textContent = `Good Evening, ${displayName} 👋`;
                         if (user.photo) {
                             headerAvatar.src = (typeof API_BASE !== 'undefined' ? API_BASE : '') + `/uploads/${user.photo}`;
                         }
@@ -499,19 +699,26 @@
                                 <div class="recommended-mentor-card">
                                     <div class="rec-photo-wrap">
                                         <img src="${mentor.photo.startsWith('http') ? mentor.photo : (typeof API_BASE !== 'undefined' ? API_BASE : '') + mentor.photo}" alt="${mentor.name}" onerror="this.src='/default-avatar.svg'">
+                                        <span class="rec-rating-badge"><i data-lucide="star"></i> ${mentor.rating}</span>
                                     </div>
                                     <div class="rec-info">
                                         <h4 class="rec-name">${mentor.name}</h4>
                                         <p class="rec-subject">${mentor.designation}</p>
+                                        <p class="rec-org"><i data-lucide="building"></i> ${mentor.organization || 'Aakash BYJU\'S'}</p>
                                         <div class="rec-metrics">
-                                            <span>⭐ ${mentor.rating}</span>
-                                            <span>👨&zwj;🎓 ${formattedStudents}</span>
+                                            <span class="rec-metric-item"><i data-lucide="users"></i> ${formattedStudents} Students</span>
+                                            <span class="rec-metric-item"><i data-lucide="award"></i> ${mentor.experienceYears} yrs Exp</span>
                                         </div>
                                     </div>
-                                    <button class="rec-btn-view" onclick="window.location.href='/mentors.html'">View</button>
+                                    <button class="rec-btn-view" onclick="window.location.href='/mentors.html'">View Profile</button>
                                 </div>
                             `;
                         });
+                        
+                        // Re-render Lucide icons inside dynamic content
+                        if (typeof lucide !== 'undefined') {
+                            lucide.createIcons();
+                        }
                     })
                     .catch(err => {
                         console.error("Failed to load recommended mentors slider database: ", err);
@@ -530,10 +737,15 @@
             });
 
             // Initialize triggers
-            loadUserInfo();
+            loadUserInfo().then(() => {
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            });
             loadNotifications();
             loadRecommendedMentors();
         });
     </script>
+    <script src="/navigation-loader.js"></script>
 </body>
 </html>

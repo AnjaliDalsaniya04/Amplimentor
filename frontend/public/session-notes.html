@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Session Notes - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.3">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nav dropdown overrides */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        .more-dropdown {
+            position: relative;
+        }
+        .more-dropdown-trigger {
+            cursor: pointer;
+        }
+        .more-dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            z-index: 1000;
+            min-width: 190px;
+            margin-top: 6px;
+            padding: 6px 0;
+        }
+        .more-dropdown-menu a {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px !important;
+            color: var(--text-light) !important;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            text-decoration: none;
+            border-bottom: none !important;
+            border-radius: 0 !important;
+        }
+        .more-dropdown-menu a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary) !important;
+        }
+        .more-dropdown.open .more-dropdown-menu {
+            display: block;
+        }
+
+        /* Layout Grid */
+        .notes-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: minmax(240px, 280px) minmax(0, 1.8fr) minmax(280px, 320px);
+            gap: 24px;
+        }
+
+        .left-folder-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            align-self: start;
+        }
+
+        .main-notes-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .right-detail-panel {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            align-self: start;
+        }
+
+        /* Folder links styling */
+        .folder-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+        .folder-row:hover {
+            background-color: #F1F5F9;
+            color: var(--primary);
+        }
+        .folder-row.active {
+            background-color: #EFF6FF;
+            color: var(--primary);
+        }
+
+        /* Note card rows */
+        .note-card-item {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .note-card-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.02);
+        }
+        .note-card-item.active {
+            border-color: var(--primary);
+            background-color: #EFF6FF;
+        }
+
+        /* Tags Pill */
+        .tag-pill {
+            background-color: #F1F5F9;
+            color: #475569;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .mock-editor-textarea {
+            width: 100%;
+            height: 160px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            resize: none;
+            outline: none;
+            margin-top: 10px;
+        }
+
+        .version-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border);
+        }
+        .version-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Empty states */
+        .empty-illustration-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 992px) {
+            .notes-container { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar bar header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/quiz">Quizzes</a></li>
+                <li><a href="/study-resources">Resources</a></li>
+                <li class="more-dropdown" id="moreDropdownWrapper">
+                    <a href="#" class="more-dropdown-trigger" onclick="toggleMoreDropdown(event)">More Tools <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></a>
+                    <div class="more-dropdown-menu">
+                        <a href="/attendance.html"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+                        <a href="/session-notes.html" class="active"><i class="fa-solid fa-file-signature"></i> Session Notes</a>
+                        <a href="/recordings.html"><i class="fa-solid fa-video"></i> Video Recordings</a>
+                        <a href="/learning-goals"><i class="fa-solid fa-bullseye"></i> Learning Goals</a>
+                        <a href="/learning-progress"><i class="fa-solid fa-chart-line"></i> Progress Analytics</a>
+                        <a href="/reviews.html"><i class="fa-solid fa-star"></i> Reviews & Feedback</a>
+                        <a href="/certificates.html"><i class="fa-solid fa-certificate"></i> Certificates</a>
+                        <a href="/gamification.html"><i class="fa-solid fa-gamepad"></i> Achievements & XP</a>
+                    </div>
+                </li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Notes Dashboard Wrapper -->
+    <div class="notes-container">
+        
+        <!-- Left Panel: Folder Navigation & Search -->
+        <aside class="left-folder-panel">
+            <h3 style="font-size:14px; font-weight:800; margin:0 0 16px 0;">Folders Directory</h3>
+            
+            <div class="app-search-box" style="margin-bottom:16px; max-width:100%;">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" placeholder="Search notes..." class="app-search-input" id="notesSearchField" oninput="filterNotes()">
+            </div>
+
+            <div id="foldersListBody">
+                <div class="folder-row active" onclick="switchFolder('all', this)">
+                    <span><i class="fa-solid fa-folder-open" style="margin-right:6px;"></i> All Notes</span>
+                    <span id="badgeAll">0</span>
+                </div>
+                <div class="folder-row" onclick="switchFolder('Biology', this)">
+                    <span><i class="fa-solid fa-folder" style="margin-right:6px;"></i> Biology</span>
+                    <span id="badgeBio">0</span>
+                </div>
+                <div class="folder-row" onclick="switchFolder('Physics', this)">
+                    <span><i class="fa-solid fa-folder" style="margin-right:6px;"></i> Physics</span>
+                    <span id="badgePhys">0</span>
+                </div>
+                <div class="folder-row" onclick="switchFolder('Chemistry', this)">
+                    <span><i class="fa-solid fa-folder" style="margin-right:6px;"></i> Chemistry</span>
+                    <span id="badgeChem">0</span>
+                </div>
+                <div class="folder-row" onclick="switchFolder('bookmarks', this)">
+                    <span><i class="fa-solid fa-star" style="color:#F59E0B; margin-right:6px;"></i> Bookmarked</span>
+                    <span id="badgeFav">0</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Panel: Notes Feed & Mock Editor -->
+        <main class="main-notes-panel" id="mainNotesPanelBody">
+            <!-- Render notes list or rich text creator -->
+        </main>
+
+        <!-- Right Panel: Version Histories & Attachments -->
+        <aside class="right-detail-panel" id="rightDetailsPanelBody">
+            <!-- Loaded dynamically based on active selected note -->
+        </aside>
+
+    </div>
+
+    <!-- Floating Role Simulator Switcher -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: #FFFFFF; border: 1.5px solid var(--primary); padding: 12px 18px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 99999; display: flex; align-items: center; gap: 12px; font-family: sans-serif; font-size: 13px;">
+        <strong style="color:var(--primary);"><i class="fa-solid fa-user-gear"></i> Role Simulator:</strong>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="student" id="btnSimStudent" onclick="simRoleToggle('student')"> Student</label>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="mentor" id="btnSimMentor" onclick="simRoleToggle('mentor')"> Mentor</label>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let activeNoteId = null;
+        let selectedFolder = 'all';
+        let isCreatingNote = false;
+
+        // Mock Notes Database
+        let notesDatabase = [
+            { 
+                id: 'n-1', 
+                title: 'Genetics Mendel inheritance laws', 
+                subject: 'Biology', 
+                shared: true, 
+                content: 'Gregor Mendel utilized Pisum sativum crosses to derive basic properties: Laws of Dominance, Segregation, and Independent Assortment.', 
+                tags: ['NEET', 'Botany'],
+                bookmarked: true,
+                attachment: 'Mendelian_Inheritance_Laws.pdf',
+                voiceNote: 'Botany_Lesson_Summary.mp3',
+                versionHistory: [
+                    { date: 'July 5, 2026', author: 'Anjali Patel', desc: 'Added segregrations ratios calculation.' },
+                    { date: 'July 4, 2026', author: 'Anjali Patel', desc: 'Initial study draft notes.' }
+                ]
+            },
+            { 
+                id: 'n-2', 
+                title: 'Electrostatic field inside conducting sphere', 
+                subject: 'Physics', 
+                shared: true, 
+                content: 'Using Gauss law, the charge resides strictly on the outer boundary. Thus, field interior E = 0.', 
+                tags: ['Gauss Law', 'Fields'],
+                bookmarked: false,
+                attachment: 'Electrostatics_Shielding.pdf',
+                versionHistory: [
+                    { date: 'June 30, 2026', author: 'Priya Shah', desc: 'Formula derivation proof appended.' }
+                ]
+            },
+            { 
+                id: 'n-3', 
+                title: 'Halogenation of alkanes free radicals', 
+                subject: 'Chemistry', 
+                shared: false, 
+                content: 'Propagates via initiation, propagation, and termination chains inside methane reactions.', 
+                tags: ['Alkanes', 'Reactions'],
+                bookmarked: false,
+                versionHistory: [
+                    { date: 'June 28, 2026', author: 'Neha Joshi', desc: 'Created private lecture outlines draft.' }
+                ]
+            }
+        ];
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        function toggleMoreDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('moreDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('profileDropdownWrapper');
+            if (dropdown) dropdown.classList.remove('open');
+            const more = document.getElementById('moreDropdownWrapper');
+            if (more) more.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    
+                    const saved = localStorage.getItem('simulatedRole');
+                    currentRole = saved ? saved : profile.role;
+                    document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent').checked = true;
+
+                    const brand = document.getElementById('brandLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    updateFolderCounts();
+                    // select first note by default
+                    if (notesDatabase.length > 0) {
+                        activeNoteId = notesDatabase[0].id;
+                    }
+                    renderNotesView();
+                } else {
+                    const saved = localStorage.getItem('simulatedRole') || 'student';
+                    currentRole = saved;
+                    const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                    if (radio) radio.checked = true;
+                    updateFolderCounts();
+                    if (notesDatabase.length > 0) activeNoteId = notesDatabase[0].id;
+                    renderNotesView();
+                }
+            } catch (err) {
+                console.error(err);
+                const saved = localStorage.getItem('simulatedRole') || 'student';
+                currentRole = saved;
+                const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                if (radio) radio.checked = true;
+                updateFolderCounts();
+                if (notesDatabase.length > 0) activeNoteId = notesDatabase[0].id;
+                renderNotesView();
+            }
+        });
+
+        function updateFolderCounts() {
+            document.getElementById('badgeAll').textContent = notesDatabase.length;
+            document.getElementById('badgeBio').textContent = notesDatabase.filter(n => n.subject === 'Biology').length;
+            document.getElementById('badgePhys').textContent = notesDatabase.filter(n => n.subject === 'Physics').length;
+            document.getElementById('badgeChem').textContent = notesDatabase.filter(n => n.subject === 'Chemistry').length;
+            document.getElementById('badgeFav').textContent = notesDatabase.filter(n => n.bookmarked).length;
+        }
+
+        function switchFolder(folder, element) {
+            selectedFolder = folder;
+            isCreatingNote = false;
+            document.querySelectorAll('.folder-row').forEach(row => row.classList.remove('active'));
+            element.classList.add('active');
+            renderNotesView();
+        }
+
+        function renderNotesView() {
+            const main = document.getElementById('mainNotesPanelBody');
+            
+            if (isCreatingNote) {
+                renderCreateNoteForm(main);
+                document.getElementById('rightDetailsPanelBody').innerHTML = `
+                    <h4 style="font-size:13.5px; font-weight:800; margin:0 0 12px 0;">Editing Helper</h4>
+                    <p style="font-size:12px; color:#64748B; line-height:1.5;">You are creating a new lecture summary sheet. Choose tags and sharing controls before publishing.</p>
+                `;
+                return;
+            }
+
+            const filtered = filterNotesList();
+
+            // Empty states
+            if (filtered.length === 0) {
+                main.innerHTML = `
+                    <div class="empty-illustration-box">
+                        <i class="fa-regular fa-clipboard" style="font-size:48px; color:#94A3B8; margin-bottom:16px;"></i>
+                        <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:0 0 4px 0;">No notes found</h3>
+                        <p style="color:#64748B; font-size:13px; margin:0 0 20px 0;">We couldn't find any session notes in this directory.</p>
+                        ${currentRole === 'mentor' ? `<button class="btn-goal-primary" style="width:auto; padding:8px 16px;" onclick="triggerCreateNoteMode()">Create Note</button>` : ''}
+                    </div>
+                `;
+                document.getElementById('rightDetailsPanelBody').innerHTML = '';
+                return;
+            }
+
+            // Render Notes List Feed
+            main.innerHTML = `
+                <div class="section-header">
+                    <h2 style="font-size:18px; font-weight:800; margin:0;">${selectedFolder.toUpperCase()} NOTES</h2>
+                    ${currentRole === 'mentor' ? `<button class="btn-export" style="background:var(--primary); color:white; border:none; padding:6px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;" onclick="triggerCreateNoteMode()"><i class="fa-solid fa-plus"></i> Create Note</button>` : ''}
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    ${filtered.map(note => {
+                        const isActive = note.id === activeNoteId ? 'active' : '';
+                        const starClass = note.bookmarked ? 'fa-solid fa-star' : 'fa-regular fa-star';
+                        const starColor = note.bookmarked ? 'color:#F59E0B;' : 'color:#94A3B8;';
+                        
+                        return `
+                            <div class="note-card-item ${isActive}" onclick="selectNote('${note.id}')">
+                                <div style="display:flex; justify-content:space-between; align-items:start;">
+                                    <div>
+                                        <span class="m-lbl" style="font-size:10px; color:var(--primary);">${note.subject}</span>
+                                        <h4 style="font-size:14.5px; font-weight:800; margin:4px 0 8px 0; color:#0F172A;">${note.title}</h4>
+                                    </div>
+                                    <button style="background:transparent; border:none; cursor:pointer; font-size:14px;" onclick="event.stopPropagation(); toggleBookmark('${note.id}')">
+                                        <i class="${starClass}" style="${starColor}"></i>
+                                    </button>
+                                </div>
+                                <p style="font-size:12.5px; color:#475569; line-height:1.5; margin:0 0 12px 0;">${note.content.substring(0, 120)}...</p>
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <div style="display:flex; gap:6px;">
+                                        ${note.tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
+                                    </div>
+                                    <span style="font-size:11px; color:#94A3B8;">${note.shared ? '<i class="fa-solid fa-globe"></i> Shared' : '<i class="fa-solid fa-lock"></i> Private'}</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            renderRightSidebar();
+        }
+
+        function filterNotesList() {
+            const query = document.getElementById('notesSearchField').value.toLowerCase().trim();
+            return notesDatabase.filter(n => {
+                const matchesFolder = selectedFolder === 'all' || 
+                                      (selectedFolder === 'bookmarks' && n.bookmarked) || 
+                                      (n.subject === selectedFolder);
+                const matchesQuery = n.title.toLowerCase().includes(query) || n.content.toLowerCase().includes(query);
+                
+                // Student view can only see shared notes
+                const matchesRole = currentRole === 'mentor' || n.shared;
+
+                return matchesFolder && matchesQuery && matchesRole;
+            });
+        }
+
+        function filterNotes() {
+            renderNotesView();
+        }
+
+        function selectNote(id) {
+            activeNoteId = id;
+            isCreatingNote = false;
+            renderNotesView();
+        }
+
+        // --- MOCK CREATION FORM ---
+        function renderCreateNoteForm(container) {
+            container.innerHTML = `
+                <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:0 0 16px 0;">Create Lesson Note</h3>
+                
+                <label class="form-label">Subject</label>
+                <select class="settings-input" id="newNoteSubject">
+                    <option value="Biology">Biology</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                </select>
+
+                <label class="form-label" style="margin-top:12px; display:block;">Note Title</label>
+                <input type="text" placeholder="Lesson focus title..." class="settings-input" id="newNoteTitle">
+
+                <label class="form-label" style="margin-top:12px; display:block;">Editor Workspace (Shared with Student)</label>
+                <textarea class="mock-editor-textarea" placeholder="Start typing rich text notes content..." id="newNoteContent"></textarea>
+
+                <div style="margin-top:12px; display:flex; gap:16px; align-items:center;">
+                    <label style="font-size:12.5px; font-weight:700;"><input type="checkbox" id="newNoteShared" checked> Share with Student immediately</label>
+                </div>
+
+                <div style="margin-top:20px; display:flex; gap:12px;">
+                    <button class="btn-goal-primary" onclick="saveNewNote()">Publish Note</button>
+                    <button class="btn-export" style="background:#F1F5F9; border:1px solid #CBD5E1; cursor:pointer;" onclick="cancelCreateNote()">Cancel</button>
+                </div>
+            `;
+        }
+
+        function triggerCreateNoteMode() {
+            isCreatingNote = true;
+            renderNotesView();
+        }
+
+        function cancelCreateNote() {
+            isCreatingNote = false;
+            renderNotesView();
+        }
+
+        function saveNewNote() {
+            const sub = document.getElementById('newNoteSubject').value;
+            const title = document.getElementById('newNoteTitle').value;
+            const content = document.getElementById('newNoteContent').value;
+            const shared = document.getElementById('newNoteShared').checked;
+
+            if (title.trim() === '' || content.trim() === '') {
+                window.toast.warning("Inputs Missing", "Please enter title and content.");
+                return;
+            }
+
+            const newNote = {
+                id: `n-${Date.now()}`,
+                title,
+                subject: sub,
+                shared,
+                content,
+                tags: ['Revision'],
+                bookmarked: false,
+                versionHistory: [
+                    { date: 'Just now', author: 'Anjali Patel', desc: 'Created lecture outline notes.' }
+                ]
+            };
+
+            notesDatabase.unshift(newNote);
+            activeNoteId = newNote.id;
+            isCreatingNote = false;
+            
+            updateFolderCounts();
+            window.toast.success("Note Published", `${title} successfully shared.`);
+            renderNotesView();
+        }
+
+        // --- RIGHT SIDEBAR (Attachments & History) ---
+        function renderRightSidebar() {
+            const sidebar = document.getElementById('rightDetailsPanelBody');
+            const note = notesDatabase.find(n => n.id === activeNoteId);
+
+            if (!note) {
+                sidebar.innerHTML = `<div style="text-align:center; color:#64748B;">Select a note to view attachments.</div>`;
+                return;
+            }
+
+            sidebar.innerHTML = `
+                <h4 style="font-size:14px; font-weight:800; margin:0 0 16px 0; color:#0F172A;"><i class="fa-solid fa-paperclip" style="color:var(--primary);"></i> Files & References</h4>
+
+                ${note.attachment ? `
+                    <div style="background-color:#F8FAFC; border:1px solid var(--border); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <span style="font-size:12.5px; font-weight:700;"><i class="fa-solid fa-file-pdf" style="color:#EF4444; margin-right:6px;"></i> ${note.attachment}</span>
+                        <a href="#" onclick="event.preventDefault(); alert('Downloading note handout PDF...')" style="color:var(--primary); font-size:14px;"><i class="fa-solid fa-download"></i></a>
+                    </div>
+                ` : `
+                    <div style="font-size:12px; color:#64748B; margin-bottom:16px;">No file attachments references uploaded.</div>
+                `}
+
+                ${note.voiceNote ? `
+                    <div style="background-color:#F5F3FF; border:1px solid #DDD6FE; padding:12px; border-radius:8px; margin-bottom:20px;">
+                        <strong style="font-size:12px; color:#6B21A8;"><i class="fa-solid fa-microphone" style="margin-right:6px;"></i> Mentor Voice Notes</strong>
+                        <div style="display:flex; align-items:center; gap:8px; margin-top:8px;">
+                            <button style="border:none; background:#8B5CF6; color:white; width:28px; height:28px; border-radius:50%; cursor:pointer;" onclick="alert('Playing voice memo playback summary...')"><i class="fa-solid fa-play"></i></button>
+                            <div style="width:100%; height:4px; background:#DDD6FE; border-radius:2px; overflow:hidden;">
+                                <div style="width:40%; height:100%; background:#8B5CF6;"></div>
+                            </div>
+                            <span style="font-size:10px; color:#6B21A8; font-weight:700;">1:42</span>
+                        </div>
+                    </div>
+                ` : ''}
+
+                <div style="border-top:1px solid var(--border); padding-top:16px; margin-top:16px;">
+                    <h4 style="font-size:13.5px; font-weight:800; margin:0 0 12px 0; color:#0F172A;"><i class="fa-solid fa-clock-rotate-left"></i> Revision History</h4>
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        ${note.versionHistory.map(v => `
+                            <div class="version-row">
+                                <div>
+                                    <div style="font-weight:700; color:#475569;">${v.desc}</div>
+                                    <div style="font-size:10.5px; color:#94A3B8; margin-top:2px;">By: ${v.author}</div>
+                                </div>
+                                <span style="font-size:10px; color:#94A3B8;">${v.date}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <div style="margin-top:20px; display:flex; flex-direction:column; gap:8px;">
+                    <button class="btn-export" style="width:100%; background:var(--primary); color:white; border:none; padding:8px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;" onclick="exportPDFNote('${note.title}')"><i class="fa-solid fa-file-pdf"></i> Export Handout PDF</button>
+                    ${currentRole === 'mentor' ? `<button class="btn-export" style="width:100%; background:#F1F5F9; border:1px solid #CBD5E1; padding:8px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;" onclick="shareNoteClick('${note.title}')"><i class="fa-solid fa-share-nodes"></i> Share note links</button>` : ''}
+                </div>
+            `;
+        }
+
+        // Bookmarks toggles
+        function toggleBookmark(id) {
+            const note = notesDatabase.find(n => n.id === id);
+            if (note) {
+                note.bookmarked = !note.bookmarked;
+                updateFolderCounts();
+                window.toast.success(note.bookmarked ? "Bookmarked Notes" : "Bookmark Removed");
+                renderNotesView();
+            }
+        }
+
+        function exportPDFNote(title) {
+            window.toast.success("PDF Exported", `Handout for "${title}" saved as vector PDF.`);
+        }
+
+        function shareNoteClick(title) {
+            window.toast.success("Share link created", `Direct link to "${title}" copied to clipboard.`);
+        }
+
+        function simRoleToggle(role) {
+            localStorage.setItem('simulatedRole', role);
+            window.location.reload();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

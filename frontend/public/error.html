@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+
+        .error-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 48px;
+            max-width: 460px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: cardFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes cardFade {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .error-illustration {
+            width: 120px;
+            height: 120px;
+            background-color: #EFF6FF;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: #3B82F6;
+            margin-bottom: 24px;
+        }
+        .error-illustration.danger {
+            background-color: #FEF2F2;
+            color: #EF4444;
+        }
+        .error-illustration.warning {
+            background-color: #FEF3C7;
+            color: #F59E0B;
+        }
+
+        .error-code {
+            font-size: 14px;
+            font-weight: 800;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+        .error-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0 0 12px 0;
+            letter-spacing: -0.02em;
+        }
+        .error-desc {
+            font-size: 14px;
+            color: #64748B;
+            line-height: 1.5;
+            margin: 0 0 32px 0;
+        }
+
+        .btn-error-cta {
+            background-color: #3B82F6;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-error-cta:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-card">
+        <div class="error-illustration" id="illustrationBox">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <span class="error-code" id="codeLabel">Error Code</span>
+        <h1 class="error-title" id="titleText">Something went wrong</h1>
+        <p class="error-desc" id="descText">We apologize for the inconvenience. Please try again later.</p>
+        <a href="/" class="btn-error-cta" id="ctaBtn">Go to Homepage</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const code = params.get('code') || '404';
+
+            const ill = document.getElementById('illustrationBox');
+            const label = document.getElementById('codeLabel');
+            const title = document.getElementById('titleText');
+            const desc = document.getElementById('descText');
+            const cta = document.getElementById('ctaBtn');
+
+            if (code === '404') {
+                document.title = "Page Not Found - Amplimentor";
+                ill.className = "error-illustration warning";
+                ill.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
+                label.textContent = "404 Error";
+                title.textContent = "Page Not Found";
+                desc.textContent = "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.";
+            } else if (code === '401') {
+                document.title = "Unauthorized Access - Amplimentor";
+                ill.className = "error-illustration danger";
+                ill.innerHTML = '<i class="fa-solid fa-user-lock"></i>';
+                label.textContent = "401 Error";
+                title.textContent = "Unauthorized Access";
+                desc.textContent = "Please sign in to your credentials before attempting to access this dashboard terminal.";
+                cta.href = "/login.html";
+                cta.textContent = "Sign In";
+            } else if (code === '403') {
+                document.title = "Forbidden - Amplimentor";
+                ill.className = "error-illustration danger";
+                ill.innerHTML = '<i class="fa-solid fa-ban"></i>';
+                label.textContent = "403 Error";
+                title.textContent = "Forbidden Access";
+                desc.textContent = "You do not have credentials permissions to read this administrative resource page.";
+            } else if (code === '500') {
+                document.title = "Internal Server Error - Amplimentor";
+                ill.className = "error-illustration danger";
+                ill.innerHTML = '<i class="fa-solid fa-server"></i>';
+                label.textContent = "500 Error";
+                title.textContent = "Internal Server Error";
+                desc.textContent = "Our platform servers encountered an unexpected condition. Try reloading or checking back shortly.";
+                cta.href = "#";
+                cta.onclick = () => window.location.reload();
+                cta.textContent = "Reload Page";
+            } else if (code === 'offline') {
+                document.title = "No Internet Connection - Amplimentor";
+                ill.className = "error-illustration warning";
+                ill.innerHTML = '<i class="fa-solid fa-wifi"></i>';
+                label.textContent = "Offline";
+                title.textContent = "Connection Lost";
+                desc.textContent = "Check your hardware cables, router settings, or mobile data connection and try again.";
+                cta.href = "#";
+                cta.onclick = () => window.location.reload();
+                cta.textContent = "Try Reconnecting";
+            } else if (code === 'maintenance') {
+                document.title = "Platform Maintenance - Amplimentor";
+                ill.className = "error-illustration";
+                ill.innerHTML = '<i class="fa-solid fa-screwdriver-wrench"></i>';
+                label.textContent = "Maintenance";
+                title.textContent = "Under Scheduled Maintenance";
+                desc.textContent = "Amplimentor is upgrading to improve performance. We expect to be fully restored within the next few hours.";
+            }
+        });
+    </script>
+</body>
+</html>

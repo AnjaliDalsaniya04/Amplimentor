@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Students CRM Workspace - Amplimentor</title>
+    <title>My Mentors Workspace - Amplimentor</title>
     <!-- Google Font Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -135,7 +135,6 @@
             display: block;
         }
 
-        /* Fluid Responsive Layout Container */
         .crm-container {
             width: 100%;
             max-width: 100%;
@@ -145,22 +144,10 @@
 
         .metrics-grid {
             display: grid;
-            grid-template-columns: repeat(4, minmax(0, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
-            margin-bottom: 24px;
-            width: 100%;
+            margin-bottom: 32px;
         }
-        @media (max-width: 1024px) {
-            .metrics-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-        @media (max-width: 576px) {
-            .metrics-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .m-card {
             background: #FFFFFF;
             border: 1px solid var(--border);
@@ -194,19 +181,12 @@
             font-size: 18px;
         }
 
-        /* CRM Layout structure Split */
+        /* Split grid */
         .crm-main-split {
             display: grid;
-            grid-template-columns: minmax(0, 2.2fr) minmax(320px, 1fr);
-            gap: 24px;
-            margin-bottom: 32px;
-            width: 100%;
-            align-items: start;
-        }
-        @media (max-width: 1024px) {
-            .crm-main-split {
-                grid-template-columns: 1fr;
-            }
+            grid-template-columns: 2fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
         }
 
         .crm-card {
@@ -225,14 +205,13 @@
             margin-bottom: 20px;
         }
 
-        /* Grid directory cards */
+        /* Directory Cards */
         .directory-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-            width: 100%;
         }
-        .student-item-card {
+        .mentor-item-card {
             border: 1.5px solid var(--border);
             border-radius: 12px;
             padding: 16px;
@@ -243,20 +222,21 @@
             transition: all 0.2s;
             cursor: pointer;
         }
-        .student-item-card:hover {
+        .mentor-item-card:hover {
             border-color: var(--primary);
             box-shadow: 0 8px 24px rgba(59,130,246,0.02);
         }
 
-        .student-badge-status {
-            padding: 3px 8px;
-            border-radius: 20px;
+        .online-dot-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
             font-size: 10px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
         }
-        .student-badge-status.active { background-color: #D1FAE5; color: #065F46; }
-        .student-badge-status.inactive { background-color: #F1F5F9; color: #64748B; }
+        .online-dot-badge.online { color:#10B981; }
+        .online-dot-badge.offline { color:#64748B; }
 
         .btn-crm-action {
             padding: 6px 12px;
@@ -276,7 +256,7 @@
             color: var(--primary);
         }
 
-        /* Detail Drawer right overlay */
+        /* Detail Drawer */
         .drawer-overlay {
             position: fixed;
             top: 0; right: 0; width: 100vw; height: 100vh;
@@ -365,7 +345,6 @@
             border-radius: 3px 3px 0 0;
         }
 
-        /* Relationship timeline nodes vertical */
         .rel-timeline {
             display: flex;
             flex-direction: column;
@@ -406,10 +385,10 @@
     </style>
 </head>
 <body>
-    <!-- Nav header -->
+    <!-- Navbar Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="/mentor-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Workspace</a>
+            <a href="/student-dashboard" class="nav-brand" id="brandLink">Amplimentor Hub</a>
             <ul class="nav-menu">
                 <li><a href="/assignments">Assignments</a></li>
                 <li><a href="/quiz">Quizzes</a></li>
@@ -442,135 +421,98 @@
         </div>
     </nav>
 
-    <!-- Main CRM Content Layout -->
+    <!-- Content body -->
     <div class="crm-container">
         
-        <!-- Stats Cards Row (Dashboard KPI Style) -->
+        <!-- Welcome Header -->
+        <header style="margin-bottom:32px;">
+            <h1 style="font-size:26px; font-weight:800; margin:0;">My Mentors Workspace</h1>
+            <p style="color:#64748B; font-size:14.5px; margin-top:4px;">Manage your active instructors, schedule follow-up bookings, review session timelines, and access shared notes files.</p>
+        </header>
+
+        <!-- Metrics cards row -->
         <div class="metrics-grid">
             <div class="m-card">
                 <div>
-                    <span class="m-lbl">Total Students</span>
-                    <div class="m-val">128</div>
-                    <div style="font-size: 11px; color: #10B981; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-arrow-trend-up"></i> +12% this month</div>
+                    <span class="m-lbl">Active Mentors</span>
+                    <div class="m-val">3 Mentors</div>
                 </div>
-                <div class="m-icon" style="background:#EFF6FF; color:#2563EB;"><i class="fa-solid fa-users"></i></div>
+                <div class="m-icon" style="background:#EFF6FF; color:#3B82F6;"><i class="fa-solid fa-graduation-cap"></i></div>
             </div>
             <div class="m-card">
                 <div>
-                    <span class="m-lbl">Active Roster</span>
-                    <div class="m-val">94</div>
-                    <div style="font-size: 11px; color: #64748B; font-weight: 600; margin-top: 4px;">82% active engagement</div>
+                    <span class="m-lbl">Upcoming Sessions</span>
+                    <div class="m-val">2 Sessions</div>
                 </div>
-                <div class="m-icon" style="background:#D1FAE5; color:#059669;"><i class="fa-solid fa-user-check"></i></div>
+                <div class="m-icon" style="background:#FFFBEB; color:#D97706;"><i class="fa-solid fa-clock"></i></div>
             </div>
             <div class="m-card">
                 <div>
-                    <span class="m-lbl">New This Month</span>
-                    <div class="m-val">16</div>
-                    <div style="font-size: 11px; color: #8B5CF6; font-weight: 700; margin-top: 4px;">Joined Sept 2026</div>
+                    <span class="m-lbl">Completed Classes</span>
+                    <div class="m-val">12 Hours</div>
                 </div>
-                <div class="m-icon" style="background:#F3E8FF; color:#7C3AED;"><i class="fa-solid fa-user-plus"></i></div>
+                <div class="m-icon" style="background:#D1FAE5; color:#10B981;"><i class="fa-solid fa-circle-check"></i></div>
             </div>
             <div class="m-card">
                 <div>
-                    <span class="m-lbl">Average Progress</span>
-                    <div class="m-val">88.4%</div>
-                    <div style="font-size: 11px; color: #D97706; font-weight: 700; margin-top: 4px;"><i class="fa-solid fa-arrow-trend-up"></i> +5.4% overall</div>
+                    <span class="m-lbl">Learning Hours</span>
+                    <div class="m-val">11.5 Hrs</div>
                 </div>
-                <div class="m-icon" style="background:#FEF3C7; color:#D97706;"><i class="fa-solid fa-chart-line"></i></div>
+                <div class="m-icon" style="background:#F5F3FF; color:#8B5CF6;"><i class="fa-solid fa-hourglass-half"></i></div>
             </div>
         </div>
 
-        <!-- CRM Main Split Content -->
+        <!-- Directory main split split grid -->
         <div class="crm-main-split">
             
-            <!-- Left Side: Active Class Rosters -->
+            <!-- Left Side: Directory Cards -->
             <section class="crm-card">
-                <div class="card-header-flex" style="flex-wrap: wrap; gap: 12px; border-bottom: 1px solid #F1F5F9; padding-bottom: 16px; margin-bottom: 20px;">
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <h3 class="card-title" style="margin:0; font-size: 17px; font-weight: 800; color: #0F172A;">Active Class Rosters</h3>
-                        <span style="background: #EFF6FF; color: #2563EB; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 20px;">3 Active</span>
-                    </div>
-                    <div class="filter-bar-group">
-                        <div class="app-search-box">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            <input type="text" placeholder="Search student, grade, subject..." class="app-search-input" id="rosterSearch" oninput="filterRoster()">
-                        </div>
-                        <select id="statusFilterSelect" onchange="filterRoster()" class="app-select" style="min-width: 140px;">
-                            <option value="all">All Statuses</option>
-                            <option value="active">Active Only</option>
-                            <option value="completed">Completed</option>
-                        </select>
+                <div class="app-filter-bar">
+                    <h3 class="card-title" style="margin:0;"><i class="fa-solid fa-id-card-clip" style="color:var(--primary);"></i> My Instructors</h3>
+                    <div class="app-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search my mentors..." class="app-search-input" id="mentorSearch" oninput="filterMentors()">
                     </div>
                 </div>
 
-                <div class="directory-grid" id="rosterCardsContainer">
+                <div class="directory-grid" id="mentorCardsContainer">
                     <!-- Loaded dynamically -->
                 </div>
             </section>
 
-            <!-- Right Side: Performance Insights -->
+            <!-- Right Side: Performance Summary -->
             <section class="crm-card" style="align-self: start;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid #F1F5F9; padding-bottom: 12px;">
-                    <h3 class="card-title" style="margin:0; font-size: 16px; font-weight: 800; color: #0F172A;">Performance Insights</h3>
-                    <i class="fa-solid fa-chart-pie" style="color:#2563EB;"></i>
-                </div>
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-award" style="color:var(--primary);"></i> Weekly Progress Metrics</h3>
                 
                 <div style="display:flex; flex-direction:column; gap:16px;">
-                    
-                    <div style="background-color:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:12px;">
-                        <span style="font-size:11px; font-weight:700; color:#64748B; letter-spacing:0.05em; text-transform:uppercase;">CLASS AVERAGE PROGRESS</span>
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 8px;">
-                            <span style="font-size: 20px; font-weight: 800; color: #0F172A;">88.4%</span>
-                            <span style="background: #D1FAE5; color: #059669; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px;">On Target</span>
-                        </div>
-                        <div style="width: 100%; height: 8px; background: #E2E8F0; border-radius: 4px; margin-top: 10px; overflow: hidden;">
-                            <div style="width: 88.4%; height: 100%; background: linear-gradient(90deg, #3B82F6, #10B981); border-radius: 4px;"></div>
-                        </div>
-                    </div>
-
-                    <div style="background-color:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:12px;">
-                        <span style="font-size:11px; font-weight:700; color:#64748B; letter-spacing:0.05em; text-transform:uppercase;">STUDENTS NEEDING ATTENTION</span>
-                        <div style="margin-top:10px; display:flex; flex-direction:column; gap:10px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; padding-bottom: 8px; border-bottom: 1px solid #E2E8F0;">
-                                <div>
-                                    <strong style="color: #0F172A; display: block;">Aman Kumar</strong>
-                                    <span style="font-size: 11px; color: #64748B;">Physics • Vector math</span>
-                                </div>
-                                <span class="status-chip absent" style="font-size:10px; padding:3px 8px; border-radius: 12px; background: #FEF2F2; color: #DC2626; font-weight: 700;">72% Progress</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div style="background-color:#F8FAFC; border:1px solid #E2E8F0; padding:16px; border-radius:12px;">
-                        <span style="font-size:11px; font-weight:700; color:#64748B; letter-spacing:0.05em; text-transform:uppercase;">HOMEWORK SUBMISSIONS</span>
+                    <div style="background-color:#F8FAFC; border:1px solid var(--border); padding:16px; border-radius:12px;">
+                        <span style="font-size:11.5px; font-weight:700; color:#64748B;">CURRENT ACTIVE SUBJECTS</span>
                         <div style="margin-top:10px; display:flex; flex-direction:column; gap:8px;">
-                            <div style="display: flex; justify-content: space-between; font-size:12.5px; color:#475569;">
-                                <span>Biology Genetics</span>
-                                <strong style="color: #059669;">92% submitted</strong>
+                            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                                <strong>Biology</strong>
+                                <span style="color:#10B981; font-weight:700;">86.5% Done</span>
                             </div>
-                            <div style="display: flex; justify-content: space-between; font-size:12.5px; color:#475569;">
-                                <span>Physics Vectors</span>
-                                <strong style="color: #D97706;">75% submitted</strong>
+                            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                                <strong>Physics</strong>
+                                <span style="color:#F59E0B; font-weight:700;">72% Done</span>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </section>
 
         </div>
     </div>
 
-    <!-- Student Detail Drawer Right Sheet Overlay -->
-    <div class="drawer-overlay" id="studentDetailDrawer">
+    <!-- Mentor Detail Drawer Sheet overlay -->
+    <div class="drawer-overlay" id="mentorDetailDrawer">
         <div class="drawer-sheet">
             <div class="drawer-header">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <div class="avatar-let" id="drawerAvatarLet" style="width:44px; height:44px; font-size:16px;">RV</div>
+                    <div class="avatar-let" id="drawerAvatarLet" style="width:44px; height:44px; font-size:16px;">AP</div>
                     <div>
-                        <h3 style="font-size:16px; font-weight:800; margin:0;" id="drawerStudentName">Rahul Verma</h3>
-                        <p style="font-size:11.5px; color:#64748B; margin:2px 0 0 0;" id="drawerStudentClass">Grade 12 NEET Biology</p>
+                        <h3 style="font-size:16px; font-weight:800; margin:0;" id="drawerMentorName">Anjali Patel</h3>
+                        <p style="font-size:11.5px; color:#64748B; margin:2px 0 0 0;" id="drawerMentorSubject">Biology • Senior Faculty</p>
                     </div>
                 </div>
                 <button class="close-btn" onclick="closeDrawer()" title="Close Drawer"><i class="fa-solid fa-xmark"></i></button>
@@ -584,7 +526,7 @@
             </div>
 
             <div class="drawer-scroll-body" id="drawerBodyContent">
-                <!-- Loaded dynamically based on selected student and tab -->
+                <!-- Loaded dynamically -->
             </div>
         </div>
     </div>
@@ -597,24 +539,22 @@
     </div>
 
     <script>
-        let currentRole = 'mentor';
-        let selectedStudentId = null;
+        let currentRole = 'student';
+        let selectedMentorId = null;
         let activeTab = 'overview';
 
-        // Mock Students database CRM records
-        let studentsDatabase = [
+        // Mock Mentors database relationship profiles
+        let mentorsDatabase = [
             { 
-                id: 's-101', 
-                name: 'Rahul Verma', 
-                grade: 'Grade 12', 
-                subject: 'Botany', 
-                goal: 'NEET Biology boards scoring above 95%', 
-                progress: 86.5, 
-                attendance: 91, 
-                lastSession: 'July 5, 2026', 
-                nextSession: 'July 7, 2026',
-                status: 'active',
-                email: 'rahul.verma@gmail.com',
+                id: 'm-201', 
+                name: 'Anjali Patel', 
+                subject: 'Biology', 
+                rating: 4.8, 
+                experience: '8 Yrs Exp', 
+                nextSession: 'July 7, 2026', 
+                responseTime: 'Within 1 hour', 
+                status: 'online',
+                about: 'Senior Botany instructor from Allen Institute. Conceptual biological drawings specialist.',
                 timeline: [
                     { stage: 'Started Learning', date: 'May 1, 2026', status: 'completed' },
                     { stage: 'First Session', date: 'May 3, 2026', status: 'completed' },
@@ -624,62 +564,56 @@
                     { stage: 'Review submitted', date: 'July 5, 2026', status: 'completed' },
                     { stage: 'Next Session Scheduled', date: 'July 7, 2026', status: 'current' }
                 ],
-                quizzes: [
-                    { name: 'Optics Formula test', score: '88%' },
-                    { name: 'Cell divisions MCQ', score: '92%' }
+                notes: [
+                    { name: 'Mendelian_inheritance_laws.pdf', type: 'PDF' }
                 ],
-                assignments: [
-                    { name: 'Derivation curves sheet', status: 'Graded' },
-                    { name: 'Cell structure drawings', status: 'Submitted' }
+                homeworks: [
+                    { name: 'Punnett cross problems', status: 'Graded' }
                 ]
             },
             { 
-                id: 's-102', 
-                name: 'Aman Kumar', 
-                grade: 'Grade 11', 
+                id: 'm-202', 
+                name: 'Priya Shah', 
                 subject: 'Physics', 
-                goal: 'Force Vectors formulas comprehension', 
-                progress: 72.0, 
-                attendance: 80, 
-                lastSession: 'July 4, 2026', 
-                nextSession: 'July 9, 2026',
-                status: 'active',
-                email: 'aman.kumar@gmail.com',
+                rating: 4.9, 
+                experience: '5 Yrs Exp', 
+                nextSession: 'July 9, 2026', 
+                responseTime: 'Within 2 hours', 
+                status: 'offline',
+                about: 'Specializes in classical mechanics derivations. Interactive whiteboard builder.',
                 timeline: [
                     { stage: 'Started Learning', date: 'June 1, 2026', status: 'completed' },
                     { stage: 'First Session', date: 'June 3, 2026', status: 'completed' },
                     { stage: 'Homework Submissions', date: 'June 20, 2026', status: 'completed' },
                     { stage: 'Quiz Form evaluations', date: 'July 4, 2026', status: 'current' }
                 ],
-                quizzes: [
-                    { name: 'Vector systems calculations', score: '70%' }
+                notes: [
+                    { name: 'Vector_force_derivations.pdf', type: 'PDF' }
                 ],
-                assignments: [
-                    { name: 'Frictional vectors math', status: 'Pending' }
+                homeworks: [
+                    { name: 'Frictional vectors workbook', status: 'Pending' }
                 ]
             },
             { 
-                id: 's-103', 
-                name: 'Priya Singh', 
-                grade: 'Grade 12', 
+                id: 'm-203', 
+                name: 'Neha Joshi', 
                 subject: 'Chemistry', 
-                goal: 'Thermodynamics catalysis parameters mastery', 
-                progress: 94.0, 
-                attendance: 100, 
-                lastSession: 'July 5, 2026', 
-                nextSession: 'July 8, 2026',
-                status: 'active',
-                email: 'priya.singh@gmail.com',
+                rating: 4.7, 
+                experience: '6 Yrs Exp', 
+                nextSession: 'July 8, 2026', 
+                responseTime: 'Within 1 hour', 
+                status: 'online',
+                about: 'Organic chemistry reactions mapping expert. Conceptual molecules models.',
                 timeline: [
                     { stage: 'Started Learning', date: 'June 10, 2026', status: 'completed' },
                     { stage: 'First Session', date: 'June 12, 2026', status: 'completed' },
                     { stage: 'Homework Submissions', date: 'June 25, 2026', status: 'completed' }
                 ],
-                quizzes: [
-                    { name: 'Thermodynamics calculations', score: '96%' }
+                notes: [
+                    { name: 'Alkanes_radicals_chain.pdf', type: 'PDF' }
                 ],
-                assignments: [
-                    { name: 'Catalysts pathways drawing', status: 'Graded' }
+                homeworks: [
+                    { name: 'Organic catalysis diagram worksheet', status: 'Graded' }
                 ]
             }
         ];
@@ -720,134 +654,121 @@
                     }
 
                     if (currentRole === 'mentor') {
-                        brand.href = '/mentor-dashboard';
-                        brand.textContent = 'Amplimentor Workspace';
+                        // Mentor should not see this page, redirect to My Students
+                        window.location.replace('/my-students.html');
+                    } else {
+                        brand.href = '/student-dashboard';
+                        brand.textContent = 'Amplimentor Learning Hub';
                         dropdown.innerHTML = `
-                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
-                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
                             <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
                         `;
-                    } else {
-                        // Student shouldn't normally see this, but handle redirect just in case
-                        window.location.replace('/my-mentors.html');
                     }
 
-                    renderRosterList();
+                    renderMentorsGrid();
                 } else {
-                    const saved = localStorage.getItem('simulatedRole') || 'mentor';
+                    const saved = localStorage.getItem('simulatedRole') || 'student';
                     currentRole = saved;
                     const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
                     if (radio) radio.checked = true;
-                    if (currentRole !== 'mentor') {
-                        window.location.replace('/my-mentors.html');
+                    if (currentRole === 'mentor') {
+                        window.location.replace('/my-students.html');
                     } else {
-                        renderRosterList();
+                        renderMentorsGrid();
                     }
                 }
             } catch (err) {
                 console.error(err);
-                const saved = localStorage.getItem('simulatedRole') || 'mentor';
+                const saved = localStorage.getItem('simulatedRole') || 'student';
                 currentRole = saved;
                 const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
                 if (radio) radio.checked = true;
-                
-                if (currentRole !== 'mentor') {
-                    window.location.replace('/my-mentors.html');
+
+                if (currentRole === 'mentor') {
+                    window.location.replace('/my-students.html');
                 } else {
-                    renderRosterList();
+                    renderMentorsGrid();
                 }
             }
         });
 
-        function renderRosterList() {
-            const container = document.getElementById('rosterCardsContainer');
-            const filtered = filterRosterList();
+        function renderMentorsGrid() {
+            const container = document.getElementById('mentorCardsContainer');
+            const filtered = filterMentorsList();
 
             if (filtered.length === 0) {
                 container.innerHTML = `
-                    <div style="text-align:center; padding:40px 20px; grid-column: 1 / -1; color:#64748B; background: #F8FAFC; border-radius: 12px; border: 1px dashed #CBD5E1;">
-                        <i class="fa-solid fa-user-slash" style="font-size:36px; margin-bottom:12px; color: #94A3B8;"></i>
-                        <h4 style="font-size:15px; font-weight:700; margin:0 0 4px 0; color:#1E293B;">No students found</h4>
-                        <p style="font-size:13px; margin:0;">No roster records match your search or filter selection.</p>
+                    <div style="text-align:center; padding:30px; grid-column:span 2; color:#64748B;">
+                        <i class="fa-solid fa-user-slash" style="font-size:32px; margin-bottom:12px;"></i>
+                        <p style="font-size:13px; margin:0;">No mentors match your search criteria.</p>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = filtered.map(stud => `
-                <div class="student-item-card" onclick="openDrawer('${stud.id}')" style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; justify-content: space-between; transition: all 0.2s; cursor: pointer;">
-                    <div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                            <div style="display:flex; gap:12px; align-items:center;">
-                                <div class="avatar-let" style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #3B82F6, #1D4ED8); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px;">${stud.name.split(' ').map(n => n[0]).join('')}</div>
-                                <div>
-                                    <h4 style="font-size:14.5px; font-weight:800; margin:0; color:#0F172A;">${stud.name}</h4>
-                                    <span style="font-size:11.5px; color:#64748B; font-weight: 500;">${stud.grade} • ${stud.subject}</span>
-                                </div>
+            container.innerHTML = filtered.map(mentor => `
+                <div class="mentor-item-card" onclick="openDrawer('${mentor.id}')">
+                    <div style="display:flex; justify-content:space-between; align-items:start; margin-bottom:12px;">
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <div class="avatar-let">${mentor.name.split(' ').map(n => n[0]).join('')}</div>
+                            <div>
+                                <h4 style="font-size:14px; font-weight:800; margin:0; color:#0F172A;">${mentor.name}</h4>
+                                <span style="font-size:11px; color:#64748B;">${mentor.subject} • ${mentor.experience}</span>
                             </div>
-                            <span class="student-badge-status ${stud.status}" style="padding: 3px 10px; border-radius: 20px; font-size: 10px; font-weight: 700; text-transform: uppercase;">${stud.status}</span>
                         </div>
+                        <span class="online-dot-badge ${mentor.status}"><i class="fa-solid fa-circle" style="font-size:8px;"></i> ${mentor.status}</span>
+                    </div>
 
-                        <div style="background-color:#F8FAFC; border:1px solid #E2E8F0; padding:10px 12px; border-radius:8px; margin-bottom:14px; font-size:12px;">
-                            <strong style="color:#64748B; font-size:10px; text-transform:uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 2px;">Learning Goal:</strong>
-                            <div style="font-weight:700; color:#1E293B; font-size: 12px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap;">${stud.goal}</div>
-                        </div>
-
-                        <div style="margin-bottom:14px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; font-size:12px; margin-bottom:6px; color:#475569;">
-                                <span>Progress: <strong style="color:#0F172A;">${stud.progress}%</strong></span>
-                                <span>Attendance: <strong style="color:#0F172A;">${stud.attendance}%</strong></span>
-                            </div>
-                            <div style="width: 100%; height: 6px; background: #E2E8F0; border-radius: 3px; overflow: hidden;">
-                                <div style="width: ${stud.progress}%; height: 100%; background: #3B82F6; border-radius: 3px;"></div>
-                            </div>
+                    <div style="background-color:#F8FAFC; border:1px solid var(--border); padding:10px; border-radius:8px; margin-bottom:12px; font-size:12px;">
+                        <div style="display:flex; justify-content:space-between; color:#475569;">
+                            <span>Next Session: <strong>${mentor.nextSession}</strong></span>
                         </div>
                     </div>
 
-                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid #F1F5F9; padding-top:14px; gap:10px; margin-top: 4px;">
-                        <button class="btn-crm-action" style="flex:1; justify-content:center; background:#EFF6FF; color:#2563EB; border:none; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); window.location.href='/chat.html'"><i class="fa-solid fa-comment"></i> Chat</button>
-                        <button class="btn-crm-action" style="flex:1; justify-content:center; background:#FFFFFF; color:#475569; border:1px solid #CBD5E1; padding: 8px 12px; border-radius: 8px; font-weight: 700; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="event.stopPropagation(); openDrawer('${stud.id}')"><i class="fa-solid fa-user"></i> Profile</button>
+                    <div style="display:flex; justify-content:space-between; align-items:center; font-size:11.5px; margin-bottom:14px; color:#475569;">
+                        <span>Rating: <strong>★ ${mentor.rating}</strong></span>
+                        <span>Response: <strong>${mentor.responseTime}</strong></span>
+                    </div>
+
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:12px; gap:8px;">
+                        <button class="btn-crm-action" style="flex-grow:1; justify-content:center; background:#EFF6FF; color:var(--primary); border:none;" onclick="event.stopPropagation(); window.location.href='/chat.html'"><i class="fa-solid fa-message"></i> Message</button>
+                        <button class="btn-crm-action" style="flex-grow:1; justify-content:center;" onclick="event.stopPropagation(); window.location.href='/booking-wizard'"><i class="fa-solid fa-calendar-plus"></i> Book Again</button>
                     </div>
                 </div>
             `).join('');
         }
 
-        function filterRosterList() {
-            const query = document.getElementById('rosterSearch').value.toLowerCase().trim();
-            const statusVal = document.getElementById('statusFilterSelect') ? document.getElementById('statusFilterSelect').value : 'all';
-            
-            return studentsDatabase.filter(s => {
-                const matchesQuery = s.name.toLowerCase().includes(query) || s.grade.toLowerCase().includes(query) || s.subject.toLowerCase().includes(query);
-                const matchesStatus = statusVal === 'all' || s.status.toLowerCase() === statusVal.toLowerCase();
-                return matchesQuery && matchesStatus;
-            });
+        function filterMentorsList() {
+            const query = document.getElementById('mentorSearch').value.toLowerCase().trim();
+            return mentorsDatabase.filter(m => m.name.toLowerCase().includes(query));
         }
 
-        function filterRoster() {
-            renderRosterList();
+        function filterMentors() {
+            renderMentorsGrid();
         }
 
-        // --- DRAWER SHEET INTERACTION ---
+        // --- DRAWER INTERACTION ---
         function openDrawer(id) {
-            selectedStudentId = id;
-            const stud = studentsDatabase.find(s => s.id === id);
-            if (!stud) return;
+            selectedMentorId = id;
+            const mentor = mentorsDatabase.find(m => m.id === id);
+            if (!mentor) return;
 
-            document.getElementById('drawerAvatarLet').textContent = stud.name.split(' ').map(n => n[0]).join('');
-            document.getElementById('drawerStudentName').textContent = stud.name;
-            document.getElementById('drawerStudentClass').textContent = `${stud.grade} • ${stud.subject}`;
+            document.getElementById('drawerAvatarLet').textContent = mentor.name.split(' ').map(n => n[0]).join('');
+            document.getElementById('drawerMentorName').textContent = mentor.name;
+            document.getElementById('drawerMentorSubject').textContent = `${mentor.subject} • ${mentor.experience}`;
 
             // Reset tabs
             document.querySelectorAll('.drawer-tab-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelector('.drawer-tab-btn').classList.add('active');
             activeTab = 'overview';
 
-            renderDrawerBody(stud);
-            document.getElementById('studentDetailDrawer').style.display = 'flex';
+            renderDrawerBody(mentor);
+            document.getElementById('mentorDetailDrawer').style.display = 'flex';
         }
 
         function closeDrawer() {
-            document.getElementById('studentDetailDrawer').style.display = 'none';
+            document.getElementById('mentorDetailDrawer').style.display = 'none';
         }
 
         function switchDrawerTab(tab, element) {
@@ -855,25 +776,25 @@
             document.querySelectorAll('.drawer-tab-btn').forEach(btn => btn.classList.remove('active'));
             element.classList.add('active');
 
-            const stud = studentsDatabase.find(s => s.id === selectedStudentId);
-            if (stud) renderDrawerBody(stud);
+            const mentor = mentorsDatabase.find(m => m.id === selectedMentorId);
+            if (mentor) renderDrawerBody(mentor);
         }
 
-        function renderDrawerBody(stud) {
+        function renderDrawerBody(mentor) {
             const body = document.getElementById('drawerBodyContent');
             
             if (activeTab === 'overview') {
                 body.innerHTML = `
                     <div style="margin-bottom:20px;">
-                        <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">Student Goal Target</span>
-                        <p style="font-size:13.5px; font-weight:700; color:#1E293B; margin:4px 0 0 0;">"${stud.goal}"</p>
+                        <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase;">About Instructor</span>
+                        <p style="font-size:13.5px; font-weight:500; color:#1E293B; margin:4px 0 0 0; line-height:1.5;">${mentor.about}</p>
                     </div>
 
                     <div style="margin-bottom:24px;">
-                        <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; display:block; margin-bottom:12px;">Relationship Timeline</span>
+                        <span style="font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; display:block; margin-bottom:12px;">Learning Relationship Timeline</span>
                         
                         <div class="rel-timeline">
-                            ${stud.timeline.map(stage => `
+                            ${mentor.timeline.map(stage => `
                                 <div class="rel-node ${stage.status}">
                                     <span class="rel-node-dot"></span>
                                     <div style="font-size:13px; font-weight:800; color:#1E293B;">${stage.stage}</div>
@@ -886,24 +807,12 @@
             } else if (activeTab === 'academic') {
                 body.innerHTML = `
                     <div style="margin-bottom:20px;">
-                        <h4 style="font-size:13px; font-weight:800; color:#1E293B; margin:0 0 10px 0;">Quiz Scores</h4>
+                        <h4 style="font-size:13px; font-weight:800; color:#1E293B; margin:0 0 10px 0;">Assigned Homework tasks</h4>
                         <div style="display:flex; flex-direction:column; gap:8px;">
-                            ${stud.quizzes.map(q => `
+                            ${mentor.homeworks.map(h => `
                                 <div style="background:#F8FAFC; border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; font-size:12.5px;">
-                                    <span>${q.name}</span>
-                                    <strong style="color:var(--primary);">${q.score}</strong>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4 style="font-size:13px; font-weight:800; color:#1E293B; margin:0 0 10px 0;">Assignments Status</h4>
-                        <div style="display:flex; flex-direction:column; gap:8px;">
-                            ${stud.assignments.map(a => `
-                                <div style="background:#F8FAFC; border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; font-size:12.5px;">
-                                    <span>${a.name}</span>
-                                    <span class="status-chip ${a.status === 'Graded' ? 'present' : 'late'}" style="font-size:9px; padding:2px 6px;">${a.status}</span>
+                                    <span>${h.name}</span>
+                                    <span class="status-chip ${h.status === 'Graded' ? 'present' : 'late'}" style="font-size:9px; padding:2px 6px;">${h.status}</span>
                                 </div>
                             `).join('')}
                         </div>
@@ -911,22 +820,15 @@
                 `;
             } else if (activeTab === 'attendance') {
                 body.innerHTML = `
-                    <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:16px; border-radius:12px; margin-bottom:20px; display:flex; justify-content:space-between;">
-                        <div>
-                            <span style="font-size:11px; font-weight:700; color:#1E40AF; text-transform:uppercase;">Attendance Rate</span>
-                            <div style="font-size:24px; font-weight:800; color:#1E3A8A; margin-top:4px;">${stud.attendance}%</div>
-                        </div>
-                        <div>
-                            <span style="font-size:11px; font-weight:700; color:#1E40AF; text-transform:uppercase;">Learning Progress</span>
-                            <div style="font-size:24px; font-weight:800; color:#1E3A8A; margin-top:4px;">${stud.progress}%</div>
-                        </div>
-                    </div>
-
-                    <div style="border-top:1.5px solid var(--border); padding-top:16px;">
-                        <h4 style="font-size:13px; font-weight:800; color:#1E293B; margin:0 0 10px 0;">Shared Session Notes</h4>
-                        <div style="background:#F8FAFC; border:1px solid var(--border); padding:12px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px;">
-                            <span><i class="fa-solid fa-file-pdf" style="color:#EF4444; margin-right:6px;"></i> Mendel_inheritance_draft.pdf</span>
-                            <a href="#" onclick="event.preventDefault(); alert('Downloading note...')" style="color:var(--primary);"><i class="fa-solid fa-download"></i></a>
+                    <div style="margin-bottom:20px;">
+                        <h4 style="font-size:13px; font-weight:800; color:#1E293B; margin:0 0 10px 0;">Shared Note Handouts</h4>
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            ${mentor.notes.map(n => `
+                                <div style="background:#F8FAFC; border:1px solid var(--border); padding:10px 14px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; font-size:12.5px;">
+                                    <span><i class="fa-solid fa-file-pdf" style="color:#EF4444; margin-right:6px;"></i> ${n.name}</span>
+                                    <a href="#" onclick="event.preventDefault(); alert('Downloading file...')" style="color:var(--primary);"><i class="fa-solid fa-download"></i></a>
+                                </div>
+                            `).join('')}
                         </div>
                     </div>
                 `;
@@ -935,8 +837,8 @@
 
         function simRoleToggle(role) {
             localStorage.setItem('simulatedRole', role);
-            if (role === 'student') {
-                window.location.replace('/my-mentors.html');
+            if (role === 'mentor') {
+                window.location.replace('/my-students.html');
             } else {
                 window.location.reload();
             }

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help & Support Center - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.3">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Nav dropdown overrides */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        .more-dropdown {
+            position: relative;
+        }
+        .more-dropdown-trigger {
+            cursor: pointer;
+        }
+        .more-dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            z-index: 1000;
+            min-width: 190px;
+            margin-top: 6px;
+            padding: 6px 0;
+        }
+        .more-dropdown-menu a {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px !important;
+            color: var(--text-light) !important;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            text-decoration: none;
+            border-bottom: none !important;
+            border-radius: 0 !important;
+        }
+        .more-dropdown-menu a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary) !important;
+        }
+        .more-dropdown.open .more-dropdown-menu {
+            display: block;
+        }
+
+        /* Container */
+        .sup-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .m-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .m-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+        }
+        .m-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .m-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Support Split layout */
+        .sup-main-split {
+            display: grid;
+            grid-template-columns: 2fr 1.1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+        .sup-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            margin-bottom: 24px;
+        }
+
+        /* KB Cards categories */
+        .kb-categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 16px;
+        }
+        .kb-cat-card {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .kb-cat-card:hover {
+            border-color: var(--primary);
+            background:#F8FAFC;
+        }
+
+        /* FAQ Accordions */
+        .faq-accordion-item {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+        .faq-header {
+            width: 100%;
+            border: none;
+            background: none;
+            padding: 12px 16px;
+            font-weight: 700;
+            font-size: 13.5px;
+            color:#1E293B;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+        }
+        .faq-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background: #F8FAFC;
+            padding: 0 16px;
+            font-size: 12.5px;
+            color: #64748B;
+        }
+        .faq-accordion-item.active .faq-body {
+            padding: 12px 16px;
+            max-height: 120px;
+        }
+
+        /* Live Chat Frame */
+        .live-chat-card {
+            border: 1.5px solid var(--border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            height: 380px;
+            overflow: hidden;
+            background: #FFFFFF;
+        }
+        .chat-messages-log {
+            padding: 12px;
+            flex-grow: 1;
+            overflow-y: auto;
+            background: #F8FAFC;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chat-bubble {
+            max-width: 80%;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+        .chat-bubble.agent {
+            background-color: #E2E8F0;
+            color: #1E293B;
+            align-self: flex-start;
+        }
+        .chat-bubble.user {
+            background-color: var(--primary);
+            color: white;
+            align-self: flex-end;
+        }
+
+        .btn-sup-submit {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Dialog overlay document details modal */
+        .dialog-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(15,23,42,0.5);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .dialog-content {
+            background: #FFFFFF;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 600px;
+            padding: 24px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .status-chip {
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 9.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .status-chip.open { background:#EFF6FF; color:var(--primary); }
+        .status-chip.resolved { background:#D1FAE5; color:#065F46; }
+
+        @media (max-width: 992px) {
+            .sup-main-split { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .kb-categories-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 576px) {
+            .metrics-grid { grid-template-columns: 1fr; }
+            .kb-categories-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Header Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/quiz">Quizzes</a></li>
+                <li><a href="/study-resources">Resources</a></li>
+                <li class="more-dropdown" id="moreDropdownWrapper">
+                    <a href="#" class="more-dropdown-trigger" onclick="toggleMoreDropdown(event)">More Tools <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></a>
+                    <div class="more-dropdown-menu">
+                        <a href="/attendance.html"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+                        <a href="/session-notes.html"><i class="fa-solid fa-file-signature"></i> Session Notes</a>
+                        <a href="/recordings.html"><i class="fa-solid fa-video"></i> Video Recordings</a>
+                        <a href="/learning-goals"><i class="fa-solid fa-bullseye"></i> Learning Goals</a>
+                        <a href="/learning-progress"><i class="fa-solid fa-chart-line"></i> Progress Analytics</a>
+                        <a href="/reviews.html"><i class="fa-solid fa-star"></i> Reviews & Feedback</a>
+                        <a href="/certificates.html"><i class="fa-solid fa-certificate"></i> Certificates</a>
+                        <a href="/gamification.html"><i class="fa-solid fa-gamepad"></i> Achievements & XP</a>
+                        <a href="/finance.html"><i class="fa-solid fa-file-invoice-dollar"></i> Finance & Billing</a>
+                        <a href="/support.html" class="active"><i class="fa-solid fa-headset"></i> Support Center</a>
+                    </div>
+                </li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Support Content -->
+    <div class="sup-container">
+        
+        <!-- Header -->
+        <header style="margin-bottom:32px;">
+            <h1 style="font-size:26px; font-weight:800; margin:0;">Help & Support Center</h1>
+            <p style="color:#64748B; font-size:14.5px; margin-top:4px;">Submit support tickets, read knowledge base articles, and message our live customer assistant.</p>
+        </header>
+
+        <!-- Stats ribbon -->
+        <div class="metrics-grid">
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Open Tickets</span>
+                    <div class="m-val" id="openTicketsBadge">1 Pending</div>
+                </div>
+                <div class="m-icon" style="background:#FFFBEB; color:#D97706;"><i class="fa-solid fa-ticket"></i></div>
+            </div>
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Resolved Tickets</span>
+                    <div class="m-val">4 Resolved</div>
+                </div>
+                <div class="m-icon" style="background:#D1FAE5; color:#10B981;"><i class="fa-solid fa-circle-check"></i></div>
+            </div>
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Avg Response Time</span>
+                    <div class="m-val">&lt; 15 Mins</div>
+                </div>
+                <div class="m-icon" style="background:#EFF6FF; color:#3B82F6;"><i class="fa-solid fa-hourglass-half"></i></div>
+            </div>
+            <div class="m-card">
+                <div>
+                    <span class="m-lbl">Knowledge Articles</span>
+                    <div class="m-val">24 Sheets</div>
+                </div>
+                <div class="m-icon" style="background:#F5F3FF; color:#8B5CF6;"><i class="fa-solid fa-book-open"></i></div>
+            </div>
+        </div>
+
+        <!-- Main Workspace split -->
+        <div class="sup-main-split">
+            
+            <!-- Left Side: KB, Tickets list, Accordions -->
+            <div>
+                <!-- Knowledge Base Directory -->
+                <div class="sup-card">
+                    <h3 class="card-title" style="margin:0;"><i class="fa-solid fa-book-open-reader" style="color:var(--primary);"></i> Knowledge Base Library</h3>
+                    <div class="app-search-box" style="margin-top:12px;">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search knowledge articles..." class="app-search-input" id="kbSearch" oninput="filterKbArticles()">
+                    </div>
+                    
+                    <div class="kb-categories-grid" id="kbGridContainer">
+                        <div class="kb-cat-card" onclick="openDocModal('payments')">
+                            <strong style="font-size:13px; color:#1E293B;"><i class="fa-solid fa-credit-card" style="color:var(--primary);"></i> Payments & Fee</strong>
+                            <p style="font-size:11.5px; color:#64748B; margin:6px 0 0 0;">Billing, refund queries, platform commission rates.</p>
+                        </div>
+                        <div class="kb-cat-card" onclick="openDocModal('sessions')">
+                            <strong style="font-size:13px; color:#1E293B;"><i class="fa-solid fa-video" style="color:var(--primary);"></i> Video Workspaces</strong>
+                            <p style="font-size:11.5px; color:#64748B; margin:6px 0 0 0;">Mic/Camera permissions setup, whiteboard failures.</p>
+                        </div>
+                        <div class="kb-cat-card" onclick="openDocModal('account')">
+                            <strong style="font-size:13px; color:#1E293B;"><i class="fa-solid fa-user-gear" style="color:var(--primary);"></i> Account Settings</strong>
+                            <p style="font-size:11.5px; color:#64748B; margin:6px 0 0 0;">Reset passcodes, upload profile avatars.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tickets List table -->
+                <div class="sup-card">
+                    <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-receipt" style="color:var(--primary);"></i> My Ticket History</h3>
+                    <div class="app-table-wrapper">
+                        <table class="app-table att-table">
+                            <thead>
+                                <tr>
+                                    <th class="att-th col-id">ID</th>
+                                    <th class="att-th col-main">Subject</th>
+                                    <th class="att-th col-badge">Priority</th>
+                                    <th class="att-th col-badge">Status</th>
+                                    <th class="att-th col-date">Created Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ticketsTableBody">
+                                <!-- Loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- FAQ Accordion -->
+                <div class="sup-card">
+                    <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-question-circle" style="color:var(--primary);"></i> Frequently Asked Questions</h3>
+                    <div class="faq-accordion-group">
+                        <div class="faq-accordion-item" onclick="toggleFaq(this)">
+                            <button class="faq-header">How do I request a refund for a missed session? <i class="fa-solid fa-chevron-down"></i></button>
+                            <div class="faq-body">Refund requests can be filed within 24 hours of scheduled missed sessions directly under the Finance invoice logs or by contacting helpdesk support.</div>
+                        </div>
+                        <div class="faq-accordion-item" onclick="toggleFaq(this)">
+                            <button class="faq-header">Can I change my booked slot timing? <i class="fa-solid fa-chevron-down"></i></button>
+                            <div class="faq-body">Yes, sessions can be rescheduled up to 12 hours before start times directly under your student sessions booking calendar list.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side: Submit Ticket, Live Chat, Support Contacts -->
+            <div>
+                <!-- Ticket Creator Form -->
+                <div class="sup-card">
+                    <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-ticket-simple" style="color:var(--primary);"></i> Submit Support Ticket</h3>
+                    
+                    <label class="form-label">Subject</label>
+                    <input type="text" placeholder="Payments failed during checkout..." class="settings-input" id="tktSubject">
+
+                    <label class="form-label" style="margin-top:12px; display:block;">Category</label>
+                    <select class="settings-input app-select" id="tktCategory">
+                        <option value="Payments">Payments & Billing</option>
+                        <option value="Sessions">Sessions & Whiteboards</option>
+                        <option value="Account">Account Security</option>
+                    </select>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:12px; margin-top:12px;">
+                        <div>
+                            <label class="form-label">Priority</label>
+                            <select class="settings-input app-select" id="tktPriority">
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="form-label">Attachments</label>
+                            <label class="app-file-upload" for="tktFiles">
+                                <span class="app-file-upload-btn"><i class="fa-solid fa-paperclip"></i> Upload</span>
+                                <span class="app-file-upload-label" id="tktFilesLabel">No file chosen</span>
+                                <input type="file" id="tktFiles" style="display:none;" onchange="const l=document.getElementById('tktFilesLabel'); if(this.files&&this.files[0]){l.textContent=this.files[0].name;}else{l.textContent='No file chosen';}">
+                            </label>
+                        </div>
+                    </div>
+
+                    <label class="form-label" style="margin-top:12px; display:block;">Issue Description</label>
+                    <textarea class="form-input" style="height:90px; resize:none;" placeholder="Detail the problem step-by-step..." id="tktDesc"></textarea>
+
+                    <button class="btn-sup-submit" style="margin-top:16px; width:100%;" onclick="submitSupportTicket()">Submit Support Ticket</button>
+                </div>
+
+                <!-- Mock Live chat screen -->
+                <div class="sup-card" style="padding:16px;">
+                    <h3 class="card-title" style="margin-bottom:12px;"><i class="fa-solid fa-comments" style="color:var(--primary);"></i> Live Assistance Chat</h3>
+                    <div class="live-chat-card">
+                        <div class="chat-messages-log" id="chatMessageLog">
+                            <div class="chat-bubble agent">Hello! I am your Amplimentor support virtual bot. How can I assist you with payments or session settings today?</div>
+                        </div>
+                        <div style="display:flex; border-top:1px solid var(--border); padding:8px; gap:8px; align-items:center;">
+                            <input type="text" placeholder="Type question..." class="settings-input" style="margin:0; font-size:12px; padding:8px;" id="chatInputText" onkeydown="if(event.key==='Enter') sendChatMessage()">
+                            <button style="border:none; background:var(--primary); color:white; border-radius:8px; width:34px; height:34px; cursor:pointer;" onclick="sendChatMessage()"><i class="fa-solid fa-paper-plane"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact & Legal -->
+                <div class="sup-card">
+                    <h3 class="card-title" style="margin-bottom:12px;"><i class="fa-solid fa-file-shield" style="color:var(--primary);"></i> Support Disclosures & Legal</h3>
+                    <div style="display:flex; flex-direction:column; gap:8px; font-size:12.5px;">
+                        <a href="#" style="color:var(--primary); font-weight:700;" onclick="event.preventDefault(); openLegalModal('Terms & Conditions', 'These represent general operational guidelines binding mentors and students.')">Terms & Conditions</a>
+                        <a href="#" style="color:var(--primary); font-weight:700;" onclick="event.preventDefault(); openLegalModal('Refund Policy', 'Standard full refund applies for classes missed by mentors with prior 12 hours notification.')">Refund & Cancellations Policies</a>
+                        <div style="margin-top:8px; font-size:11.5px; color:#64748B;">Business hours: 9:00 AM - 6:00 PM IST</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- DOCUMENTATION / ARTICLE VIEW MODAL OVERLAY -->
+    <div class="dialog-overlay" id="articleDialog">
+        <div class="dialog-content">
+            <h3 style="font-size:16px; font-weight:800; margin:0 0 12px 0;" id="articleDialogTitle">Documentation Article</h3>
+            <p style="font-size:13.5px; color:#475569; line-height:1.6;" id="articleDialogText">Article details description content...</p>
+            <div style="margin-top:20px; display:flex; justify-content:flex-end;">
+                <button class="btn-fin-cta" style="background:#CBD5E1; color:#334155;" onclick="closeDocModal()">Close Handout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Role Simulator Switcher -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: #FFFFFF; border: 1.5px solid var(--primary); padding: 12px 18px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 99999; display: flex; align-items: center; gap: 12px; font-family: sans-serif; font-size: 13px;">
+        <strong style="color:var(--primary);"><i class="fa-solid fa-user-gear"></i> Role Simulator:</strong>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="student" id="btnSimStudent" onclick="simRoleToggle('student')"> Student</label>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="mentor" id="btnSimMentor" onclick="simRoleToggle('mentor')"> Mentor</label>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+
+        // Mock Tickets database
+        let ticketsDatabase = [
+            { id: 'TKT-901', subject: 'Refund delay status request', priority: 'Medium', status: 'open', date: 'July 4, 2026' },
+            { id: 'TKT-895', subject: 'Microphone camera permission error', priority: 'High', status: 'resolved', date: 'June 28, 2026' },
+            { id: 'TKT-874', subject: 'Calculus resources worksheet download failed', priority: 'Low', status: 'resolved', date: 'June 20, 2026' }
+        ];
+
+        let articleTexts = {
+            payments: 'We secure checkouts using Stripe gateway. Standard mentor commission is 10% which is automatically deducted from gross student bookings. Student refunds are credited back to saved payment cards in 5-7 business banking days.',
+            sessions: 'Whiteboard canvases sync vector strokes in real-time. If you experience drawing latency or camera blockages, confirm that browser chrome permissions are permitted for mic & webcam settings.',
+            account: 'Passcode resets can be initiated directly under profile settings. For updating active subject profiles or pricing cards, mentors should edit active details under Public Profile portals.'
+        };
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        function toggleMoreDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('moreDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const dropdown = document.getElementById('profileDropdownWrapper');
+            if (dropdown) dropdown.classList.remove('open');
+            const more = document.getElementById('moreDropdownWrapper');
+            if (more) more.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    
+                    const saved = localStorage.getItem('simulatedRole');
+                    currentRole = saved ? saved : profile.role;
+                    document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent').checked = true;
+
+                    const brand = document.getElementById('brandLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    renderTickets();
+                } else {
+                    const saved = localStorage.getItem('simulatedRole') || 'student';
+                    currentRole = saved;
+                    const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                    if (radio) radio.checked = true;
+                    renderTickets();
+                }
+            } catch (err) {
+                console.error(err);
+                const saved = localStorage.getItem('simulatedRole') || 'student';
+                currentRole = saved;
+                const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                if (radio) radio.checked = true;
+                renderTickets();
+            }
+        });
+
+        function renderTickets() {
+            const table = document.getElementById('ticketsTableBody');
+            table.innerHTML = ticketsDatabase.map(tkt => `
+                <tr style="cursor:pointer;" onclick="openTicketDetail('${tkt.subject.replace(/'/g, "\\'")}', '${tkt.priority}', '${tkt.status}', '${tkt.date}')">
+                    <td class="fin-td col-id"><strong>${tkt.id}</strong></td>
+                    <td class="fin-td col-main" title="${tkt.subject}">${tkt.subject}</td>
+                    <td class="fin-td col-badge"><span style="font-weight:700; color:${tkt.priority==='High'?'#EF4444':'#475569'};">${tkt.priority}</span></td>
+                    <td class="fin-td col-badge"><span class="status-chip ${tkt.status}">${tkt.status}</span></td>
+                    <td class="fin-td col-date">${tkt.date}</td>
+                </tr>
+            `).join('');
+
+            // Update open ticket badge
+            const pending = ticketsDatabase.filter(t => t.status === 'open').length;
+            document.getElementById('openTicketsBadge').textContent = `${pending} Pending`;
+        }
+
+        // Support tickets submission
+        function submitSupportTicket() {
+            const subject = document.getElementById('tktSubject').value;
+            const category = document.getElementById('tktCategory').value;
+            const priority = document.getElementById('tktPriority').value;
+            const desc = document.getElementById('tktDesc').value;
+
+            if (subject.trim() === '' || desc.trim() === '') {
+                window.toast.warning("Fields missing", "Please fill in the subject and details.");
+                return;
+            }
+
+            const newTkt = {
+                id: `TKT-${Math.floor(Math.random() * 200) + 900}`,
+                subject,
+                priority,
+                status: 'open',
+                date: 'July 5, 2026'
+            };
+
+            ticketsDatabase.unshift(newTkt);
+            document.getElementById('tktSubject').value = '';
+            document.getElementById('tktDesc').value = '';
+
+            window.toast.success("Ticket Submitted", `Successfully logged support ticket: ${newTkt.id}`);
+            renderTickets();
+        }
+
+        function openTicketDetail(subject, priority, status, date) {
+            document.getElementById('articleDialogTitle').textContent = `Ticket Details`;
+            document.getElementById('articleDialogText').innerHTML = `
+                <strong>Subject:</strong> ${subject}<br>
+                <strong>Priority:</strong> ${priority}<br>
+                <strong>Status:</strong> ${status}<br>
+                <strong>Created Date:</strong> ${date}<br><br>
+                <strong>Admin Remarks:</strong> Support staff are currently verifying logs with bank gateways. Standard response times apply.
+            `;
+            document.getElementById('articleDialog').style.display = 'flex';
+        }
+
+        // Accordions
+        function toggleFaq(element) {
+            element.classList.toggle('active');
+        }
+
+        // Doc Article Open Overlay
+        function openDocModal(cat) {
+            document.getElementById('articleDialogTitle').textContent = `${cat.toUpperCase()} Help Article`;
+            document.getElementById('articleDialogText').textContent = articleTexts[cat];
+            document.getElementById('articleDialog').style.display = 'flex';
+        }
+        function openLegalModal(title, text) {
+            document.getElementById('articleDialogTitle').textContent = title;
+            document.getElementById('articleDialogText').textContent = text;
+            document.getElementById('articleDialog').style.display = 'flex';
+        }
+        function closeDocModal() {
+            document.getElementById('articleDialog').style.display = 'none';
+        }
+
+        // Chat triggers
+        function sendChatMessage() {
+            const txt = document.getElementById('chatInputText').value;
+            if (txt.trim() === '') return;
+
+            const log = document.getElementById('chatMessageLog');
+            log.innerHTML += `<div class="chat-bubble user">${txt}</div>`;
+            document.getElementById('chatInputText').value = '';
+            log.scrollTop = log.scrollHeight;
+
+            // Mock automated bot response
+            setTimeout(() => {
+                let botRes = "We are forwarding your request to support teams. Let us know if you need any other help!";
+                if (txt.toLowerCase().includes('refund')) {
+                    botRes = "Refunds can be initiated directly. Check your active invoice statements in payments ledger.";
+                } else if (txt.toLowerCase().includes('mic') || txt.toLowerCase().includes('camera')) {
+                    botRes = "Please verify browser webcam lock statuses. Refresh your active live session workspace.";
+                }
+                log.innerHTML += `<div class="chat-bubble agent">${botRes}</div>`;
+                log.scrollTop = log.scrollHeight;
+            }, 1000);
+        }
+
+        function simRoleToggle(role) {
+            localStorage.setItem('simulatedRole', role);
+            window.location.reload();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

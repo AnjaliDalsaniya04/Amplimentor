@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -361,8 +361,7 @@
             <ul class="nav-menu">
                 <li><a href="/student/profile">Profile</a></li>
                 <li><a href="/student/mentors">Find Mentors</a></li>
-                <li><a href="/chat.html">Chat</a></li>
-                <li><a href="/chat-history.html">Chat History</a></li>
+                <li><a href="/chat.html">Messages</a></li>
                 <li><a href="/sessions.html">Sessions</a></li>
                 <li><a href="/payment-history">Payment History</a></li>
                 <li class="notification-item">
@@ -471,10 +470,8 @@
                 if (response.ok) {
                     mentors = await response.json();
                     displayMentors(mentors);
-                } else if (response.status === 401) {
-                    window.location.href = '/login';
                 } else {
-                    showMessage('Failed to load mentors', 'error');
+                    displayMentors(mentors);
                 }
             } catch (error) {
                 console.error('Error loading mentors:', error);

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice Quizzes - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Layout Grid */
+        .quiz-grid-layout {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: minmax(0, 2fr) minmax(300px, 340px);
+            gap: 24px;
+        }
+        .quiz-grid-layout.taking {
+            grid-template-columns: 1fr;
+            max-width: 760px;
+        }
+
+        .list-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        .list-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        /* Quiz Item Card */
+        .quiz-row-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quiz-row-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(15,23,42,0.03);
+        }
+        .quiz-meta-left {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .quiz-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background-color: #F0FDF4;
+            color: #10B981;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .info-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #1E293B;
+            margin: 0;
+        }
+        .info-subtext {
+            font-size: 12px;
+            color: #64748B;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Interactive Quiz options */
+        .quiz-option-btn {
+            width: 100%;
+            background-color: #FFFFFF;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            cursor: pointer;
+            text-align: left;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+        }
+        .quiz-option-btn:hover {
+            border-color: #94A3B8;
+            background-color: #F8FAFC;
+        }
+        .quiz-option-btn.selected {
+            border-color: var(--primary);
+            background-color: #EFF6FF;
+        }
+
+        /* Leaderboard and sidebar widgets */
+        .leaderboard-widget {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            align-self: start;
+        }
+        .leaderboard-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 13.5px;
+        }
+        .leaderboard-row:last-child {
+            border-bottom: none;
+        }
+        .user-rank-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rank-badge {
+            font-weight: 800;
+            font-size: 12px;
+            background-color: #F1F5F9;
+            color: #475569;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .rank-badge.top-1 { background-color: #FEF3C7; color: #92400E; }
+
+        .btn-quiz-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Nav bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li id="dynamicNavLink"><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Filled by JS -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Content Workspace -->
+    <div class="quiz-grid-layout" id="quizLayout">
+        
+        <!-- Left Column: list of active practice tests -->
+        <main class="quiz-list-panel" id="quizListPanel">
+            <div class="app-filter-bar">
+                <div class="app-search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="quizSearchInput" placeholder="Search practice quizzes..." class="app-search-input" oninput="filterQuizzesList()">
+                </div>
+                <div class="filter-bar-group">
+                    <span style="font-size:13px; font-weight:700; color:#64748B;">Active practice quizzes</span>
+                </div>
+            </div>
+
+            <!-- List box -->
+            <div id="quizzesContainer">
+                <!-- Loaded dynamically by JS -->
+            </div>
+        </main>
+
+        <!-- Right Column: leaderboard info / creator widget -->
+        <aside class="leaderboard-widget" id="sidebarWidget">
+            <!-- Loaded dynamically by JS -->
+        </aside>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let quizzes = [];
+        let activeQuiz = null;
+        let activeQuestionIndex = 0;
+        let selectedOptionText = null;
+        let correctCount = 0;
+        let activeQuizTimer = null;
+        let timerSeconds = 120;
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentRole = profile.role;
+
+                    const brand = document.getElementById('brandLink');
+                    const dynLink = document.getElementById('dynamicNavLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    document.getElementById('navName').textContent = profile.name;
+
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        brand.href = '/mentor-dashboard.html';
+                        brand.textContent = 'Amplimentor Workspace';
+                        dynLink.innerHTML = '<a href="/my-students.html">My Students</a>';
+                        dropdown.innerHTML = `
+                            <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    } else {
+                        brand.href = '/student-dashboard.html';
+                        brand.textContent = 'Amplimentor Learning Hub';
+                        dynLink.innerHTML = '<a href="/student/mentors">Find Mentors</a>';
+                        dropdown.innerHTML = `
+                            <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                            <a href="/student-settings.html"><i class="fa-solid fa-gear"></i> Settings</a>
+                            <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                        `;
+                    }
+
+                    seedMockQuizzes();
+                } else {
+                    seedMockQuizzes();
+                }
+            } catch (err) {
+                console.error(err);
+                seedMockQuizzes();
+            }
+        });
+
+        function seedMockQuizzes() {
+            quizzes = [
+                {
+                    id: 'q-1',
+                    title: 'Botany Genetics Mendelian laws revision test',
+                    subject: 'Biology',
+                    timeLimit: '2 Mins',
+                    questionsCount: 2,
+                    questions: [
+                        {
+                            text: 'Which laws of inheritance states that alleles segregate randomly so that each gamete receives one?',
+                            options: ['Law of Dominance', 'Law of Segregation', 'Law of Independent Assortment'],
+                            correctAnswer: 'Law of Segregation'
+                        },
+                        {
+                            text: 'What is the standard phenotypic ratio of Mendelian dihybrid inheritance cross?',
+                            options: ['3:1', '9:3:3:1', '1:2:1'],
+                            correctAnswer: '9:3:3:1'
+                        }
+                    ]
+                },
+                {
+                    id: 'q-2',
+                    title: 'Gauss Law electrostatic physics quiz',
+                    subject: 'Physics',
+                    timeLimit: '5 Mins',
+                    questionsCount: 1,
+                    questions: [
+                        {
+                            text: 'Gauss Law is active for which type of surfaces?',
+                            options: ['Closed Gaussian Surfaces', 'Open flat surfaces', 'Spherical only'],
+                            correctAnswer: 'Closed Gaussian Surfaces'
+                        }
+                    ]
+                }
+            ];
+
+            renderQuizzesList();
+            renderSidebarWidget();
+        }
+
+        function renderQuizzesList() {
+            const container = document.getElementById('quizzesContainer');
+            container.innerHTML = '';
+
+            quizzes.forEach(q => {
+                container.innerHTML += `
+                    <div class="quiz-row-card" onclick="startQuizAttempt('${q.id}')">
+                        <div class="quiz-meta-left">
+                            <div class="quiz-icon-box"><i class="fa-solid fa-circle-question"></i></div>
+                            <div>
+                                <h3 class="info-title">${q.title}</h3>
+                                <div class="info-subtext">
+                                    <span>Subject: <strong>${q.subject}</strong></span>
+                                    <span>Questions: <strong>${q.questionsCount}</strong></span>
+                                    <span>Time: <strong>${q.timeLimit}</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quiz-meta-right">
+                            <button class="btn-quiz-primary" style="font-size:12px; padding:6px 12px;">Attempt Quiz</button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function renderSidebarWidget() {
+            const widget = document.getElementById('sidebarWidget');
+
+            if (currentRole === 'student') {
+                widget.innerHTML = `
+                    <h3 style="font-size:15px; font-weight:800; color:#0F172A; margin:0 0 16px 0; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-trophy" style="color:#F59E0B;"></i> Weekly Leaderboard</h3>
+                    <div class="leaderboard-row">
+                        <div class="user-rank-info">
+                            <span class="rank-badge top-1">1</span>
+                            <strong>Rahul Verma (You)</strong>
+                        </div>
+                        <span style="font-weight:700; color:var(--success);">340 XP</span>
+                    </div>
+                    <div class="leaderboard-row">
+                        <div class="user-rank-info">
+                            <span class="rank-badge">2</span>
+                            <span>Aman Kumar</span>
+                        </div>
+                        <span>280 XP</span>
+                    </div>
+                    <div class="leaderboard-row">
+                        <div class="user-rank-info">
+                            <span class="rank-badge">3</span>
+                            <span>Aarti Shah</span>
+                        </div>
+                        <span>210 XP</span>
+                    </div>
+
+                    <div style="margin-top:24px; border-top:1px solid var(--border); padding-top:16px;">
+                        <h4 class="form-label">My Analytics</h4>
+                        <div style="font-size:12.5px; display:flex; justify-content:space-between; margin-bottom:6px;">
+                            <span>Average Score:</span>
+                            <strong>88%</strong>
+                        </div>
+                        <div style="font-size:12.5px; display:flex; justify-content:space-between;">
+                            <span>Quizzes Taken:</span>
+                            <strong>4 Completed</strong>
+                        </div>
+                    </div>
+                `;
+            } else {
+                widget.innerHTML = `
+                    <h3 style="font-size:15px; font-weight:800; color:#0F172A; margin:0 0 16px 0;">Create Practice Quiz</h3>
+                    
+                    <label class="form-label">Quiz Title</label>
+                    <input type="text" placeholder="Genetics dihybrid cross test" class="form-input" id="newQuizTitle">
+
+                    <label class="form-label">Subject</label>
+                    <input type="text" placeholder="Biology" class="form-input" id="newQuizSubject">
+
+                    <label class="form-label">Question Type</label>
+                    <select class="form-input" id="newQuizType">
+                        <option value="MCQ">Multiple Choice (MCQ)</option>
+                        <option value="True/False">True / False</option>
+                        <option value="Short Answer">Short Answer</option>
+                        <option value="Essay">Essay</option>
+                    </select>
+
+                    <label class="form-label">Time limit (e.g. 5 Mins)</label>
+                    <input type="text" placeholder="5 Mins" class="form-input" id="newQuizTime">
+
+                    <label class="form-label">Passing Marks (%)</label>
+                    <input type="number" value="60" class="form-input" id="newQuizPassing">
+
+                    <button class="btn-quiz-primary" style="width:100%;" onclick="createQuiz()">Publish Quiz</button>
+                `;
+            }
+        }
+
+        // Mentor quiz creation
+        function createQuiz() {
+            const title = document.getElementById('newQuizTitle').value;
+            const sub = document.getElementById('newQuizSubject').value;
+            const time = document.getElementById('newQuizTime').value;
+            const type = document.getElementById('newQuizType').value;
+            const passing = document.getElementById('newQuizPassing').value;
+
+            if (!title || !sub) {
+                window.toast.warning("Missing Fields", "Please complete all quiz parameters.");
+                return;
+            }
+
+            quizzes.push({
+                id: `q-${Date.now()}`,
+                title: `${title} (${type})`,
+                subject: sub,
+                timeLimit: time || '5 Mins',
+                passingMarks: passing || 60,
+                questionsCount: 1,
+                questions: [
+                    {
+                        text: type === 'True/False' ? 'Mendel\'s first law is the Law of Dominance.' : 'Default practice quiz revision question details.',
+                        options: type === 'True/False' ? ['True', 'False'] : ['Option A', 'Option B', 'Option C'],
+                        correctAnswer: type === 'True/False' ? 'True' : 'Option A'
+                    }
+                ]
+            });
+
+            document.getElementById('newQuizTitle').value = '';
+            document.getElementById('newQuizSubject').value = '';
+            document.getElementById('newQuizTime').value = '';
+
+            window.toast.success("Quiz Created", `${title} has been added for students.`);
+            renderQuizzesList();
+        }
+
+        // Student attempt state machine
+        function startQuizAttempt(id) {
+            if (currentRole === 'mentor') return;
+
+            activeQuiz = quizzes.find(q => q.id === id);
+            if (!activeQuiz) return;
+
+            activeQuestionIndex = 0;
+            correctCount = 0;
+            selectedOptionText = null;
+            timerSeconds = 120; // 2 minutes
+
+            // Switch layout to taking mode
+            const layout = document.getElementById('quizLayout');
+            layout.className = "quiz-grid-layout taking";
+            document.getElementById('sidebarWidget').style.display = 'none';
+
+            // Start Timer loop
+            clearInterval(activeQuizTimer);
+            activeQuizTimer = setInterval(() => {
+                timerSeconds--;
+                const min = Math.floor(timerSeconds / 60);
+                const sec = timerSeconds % 60;
+                const timerSpan = document.getElementById('quizTimerLabel');
+                if (timerSpan) {
+                    timerSpan.textContent = `Time Remaining: ${min}:${sec < 10 ? '0' + sec : sec}`;
+                }
+
+                if (timerSeconds <= 0) {
+                    clearInterval(activeQuizTimer);
+                    submitQuizAttempt();
+                }
+            }, 1000);
+
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('quizListPanel');
+            const q = activeQuiz.questions[activeQuestionIndex];
+
+            container.innerHTML = `
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:16px; padding:32px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:20px;">
+                        <span style="font-size:11px; font-weight:800; text-transform:uppercase; color:var(--primary);">Question ${activeQuestionIndex + 1} of ${activeQuiz.questions.length}</span>
+                        <span style="font-weight:700; color:#EF4444; font-size:13.5px;" id="quizTimerLabel">Time Remaining: 2:00</span>
+                    </div>
+
+                    <h2 style="font-size:18px; font-weight:800; color:#0F172A; margin-bottom:24px; line-height:1.4;">${q.text}</h2>
+
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        ${q.options.map(opt => `
+                            <button class="quiz-option-btn" onclick="selectOption('${opt}')" id="opt-${opt}">${opt}</button>
+                        `).join('')}
+                    </div>
+
+                    <div style="display:flex; justify-content:flex-end; margin-top:24px;">
+                        <button class="btn-quiz-primary" onclick="nextQuizStep()">
+                            ${activeQuestionIndex + 1 === activeQuiz.questions.length ? 'Submit Quiz' : 'Next Question'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectOption(opt) {
+            selectedOptionText = opt;
+            document.querySelectorAll('.quiz-option-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById(`opt-${opt}`).classList.add('selected');
+        }
+
+        function nextQuizStep() {
+            if (!selectedOptionText) {
+                window.toast.warning("Option missing", "Please select an answer option.");
+                return;
+            }
+
+            const q = activeQuiz.questions[activeQuestionIndex];
+            if (selectedOptionText === q.correctAnswer) {
+                correctCount++;
+            }
+
+            if (activeQuestionIndex + 1 < activeQuiz.questions.length) {
+                activeQuestionIndex++;
+                selectedOptionText = null;
+                renderQuestion();
+            } else {
+                submitQuizAttempt();
+            }
+        }
+
+        function submitQuizAttempt() {
+            clearInterval(activeQuizTimer);
+            const container = document.getElementById('quizListPanel');
+
+            const scorePercent = Math.round((correctCount / activeQuiz.questions.length) * 100);
+            const xpEarned = correctCount * 50;
+
+            container.innerHTML = `
+                <div style="background:#FFFFFF; border:1px solid var(--border); border-radius:16px; padding:32px; text-align:center;">
+                    <div style="width:72px; height:72px; border-radius:50%; background-color:#EFF6FF; color:var(--primary); font-size:32px; display:inline-flex; align-items:center; justify-content:center; margin-bottom:16px;">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h2 class="booking-section-title">Quiz Completed!</h2>
+                    <p class="booking-section-desc">You scored <strong>${scorePercent}%</strong> (${correctCount}/${activeQuiz.questions.length} correct answers).</p>
+                    
+                    <div style="background:#F8FAFC; border:1px dashed var(--border); border-radius:8px; padding:16px; max-width:240px; margin:0 auto 24px auto;">
+                        <span style="font-size:11px; font-weight:800; color:#64748B;">REWARDS EARNED</span>
+                        <div style="font-size:24px; font-weight:800; color:var(--success); margin-top:4px;">+${xpEarned} XP</div>
+                        <span style="font-size:11px; color:#10B981; font-weight:700;"><i class="fa-solid fa-fire"></i> Streak Maintained!</span>
+                    </div>
+
+                    <button class="btn-quiz-primary" onclick="resetQuizLayout()">Go Back to Quiz List</button>
+                </div>
+            `;
+
+            window.toast.success("Practice test logged", `Added +${xpEarned} XP to your student profile.`);
+        }
+
+        function resetQuizLayout() {
+            const layout = document.getElementById('quizLayout');
+            layout.className = "quiz-grid-layout";
+            document.getElementById('sidebarWidget').style.display = 'block';
+
+            renderQuizzesList();
+            renderSidebarWidget();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

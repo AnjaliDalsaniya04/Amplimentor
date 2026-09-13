@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Manager - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Platform style baseline -->
+    <link rel="stylesheet" href="/style.css?v=1.3">
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <script src="/custom-select.js"></script>
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #0F172A;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Compact Table Action Segmented Control */
+        .att-seg-control {
+            display: inline-flex;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 2px;
+            gap: 2px;
+        }
+        .att-seg-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #64748B;
+            font-size: 11.5px;
+            font-weight: 600;
+            padding: 4px 9px;
+            border-radius: 6px;
+            cursor: pointer;
+            line-height: 1.2;
+            white-space: nowrap;
+            transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+            outline: none !important;
+        }
+        .att-seg-btn:hover:not(.active) {
+            background: #FFFFFF;
+            color: #0F172A;
+            border-color: #CBD5E1;
+        }
+        .att-seg-btn:focus-visible {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+        }
+        .att-seg-btn.present.active {
+            background: #D1FAE5 !important;
+            border-color: #A7F3D0 !important;
+            color: #065F46 !important;
+            font-weight: 700 !important;
+            box-shadow: 0 1px 2px rgba(6, 95, 70, 0.08) !important;
+        }
+        .att-seg-btn.late.active {
+            background: #FEF3C7 !important;
+            border-color: #FDE68A !important;
+            color: #D97706 !important;
+            font-weight: 700 !important;
+            box-shadow: 0 1px 2px rgba(217, 119, 6, 0.08) !important;
+        }
+        .att-seg-btn.absent.active {
+            background: #FEE2E2 !important;
+            border-color: #FCA5A5 !important;
+            color: #991B1B !important;
+            font-weight: 700 !important;
+            box-shadow: 0 1px 2px rgba(153, 27, 27, 0.08) !important;
+        }
+
+        /* Nav dropdown overrides */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        .more-dropdown {
+            position: relative;
+        }
+        .more-dropdown-trigger {
+            cursor: pointer;
+        }
+        .more-dropdown-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+            z-index: 1000;
+            min-width: 190px;
+            margin-top: 6px;
+            padding: 6px 0;
+        }
+        .more-dropdown-menu a {
+            display: flex !important;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px !important;
+            color: var(--text-light) !important;
+            font-size: 13.5px !important;
+            font-weight: 500 !important;
+            text-decoration: none;
+            border-bottom: none !important;
+            border-radius: 0 !important;
+        }
+        .more-dropdown-menu a:hover {
+            background-color: #F8FAFC;
+            color: var(--primary) !important;
+        }
+        .more-dropdown.open .more-dropdown-menu {
+            display: block;
+        }
+
+        /* Container */
+        .att-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+        .m-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .m-val {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0F172A;
+            margin-top: 4px;
+        }
+        .m-lbl {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .m-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Main structure Split */
+        .att-split-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .att-section-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.01);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* Calendar grid */
+        .cal-grid-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+        .cal-day-header {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #64748B;
+            padding-bottom: 6px;
+        }
+        .cal-cell {
+            height: 44px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+        }
+        .cal-cell.present { background-color: #D1FAE5; color: #065F46; border-color: #A7F3D0; }
+        .cal-cell.late { background-color: #FEF3C7; color: #D97706; border-color: #FDE68A; }
+        .cal-cell.absent { background-color: #FEE2E2; color: #991B1B; border-color: #FCA5A5; }
+        .cal-cell.excused { background-color: #F3E8FF; color: #6B21A8; border-color: #E9D5FF; }
+
+        /* Dedicated Table Scroll Wrapper */
+        .responsive-table-wrapper {
+            max-height: calc(100vh - 340px);
+            min-height: 360px;
+            overflow-y: auto;
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #E2E8F0;
+            position: relative;
+        }
+
+        /* Subtle Modern Scrollbar for Table */
+        .responsive-table-wrapper::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .responsive-table-wrapper::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 4px;
+        }
+        .responsive-table-wrapper::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        .responsive-table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+
+        /* Sticky Table Header */
+        .att-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .att-th {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #64748B;
+            padding: 12px 14px;
+            text-align: left;
+            border-bottom: 1.5px solid #E2E8F0;
+            position: sticky;
+            top: 0;
+            background: #F8FAFC;
+            z-index: 10;
+            box-shadow: 0 1px 0 #E2E8F0;
+        }
+        .att-td {
+            padding: 10px 14px;
+            font-size: 13px;
+            border-bottom: 1px solid #E2E8F0;
+            vertical-align: middle;
+            background: #FFFFFF;
+        }
+        .att-table tbody tr:hover td {
+            background-color: #F8FAFC;
+        }
+
+        .status-chip {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 10.5px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+        .status-chip.present { background:#D1FAE5; color:#065F46; }
+        .status-chip.late { background:#FEF3C7; color:#D97706; }
+        .status-chip.absent { background:#FEE2E2; color:#991B1B; }
+        .status-chip.excused { background:#F3E8FF; color:#6B21A8; }
+
+        /* Compact Segmented Control inside Table Actions */
+        .att-seg-control {
+            display: inline-flex;
+            align-items: center;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 6px;
+            padding: 2px;
+            gap: 0;
+            height: 32px;
+            box-sizing: border-box;
+        }
+        .att-seg-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: #64748B;
+            font-size: 11.5px;
+            font-weight: 500;
+            padding: 4px 9px;
+            border-radius: 4px;
+            cursor: pointer;
+            line-height: 1;
+            white-space: nowrap;
+            transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+            outline: none !important;
+            position: relative;
+        }
+        .att-seg-btn * {
+            pointer-events: none;
+        }
+        .att-seg-btn:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 25%;
+            height: 50%;
+            width: 1px;
+            background: #E2E8F0;
+            pointer-events: none;
+        }
+        .att-seg-btn.active::after,
+        .att-seg-btn.active + .att-seg-btn::after {
+            display: none;
+        }
+        .att-seg-btn:hover:not(.active) {
+            background: #FFFFFF;
+            color: #0F172A;
+        }
+        .att-seg-btn:focus-visible {
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4) !important;
+        }
+        .att-seg-btn.present.active {
+            background: #D1FAE5 !important;
+            border-color: #A7F3D0 !important;
+            color: #065F46 !important;
+            font-weight: 700 !important;
+        }
+        .att-seg-btn.late.active {
+            background: #FEF3C7 !important;
+            border-color: #FDE68A !important;
+            color: #D97706 !important;
+            font-weight: 700 !important;
+        }
+        .att-seg-btn.absent.active {
+            background: #FEE2E2 !important;
+            border-color: #FCA5A5 !important;
+            color: #991B1B !important;
+            font-weight: 700 !important;
+        }
+
+        /* Empty state styling */
+        .empty-illustration-box {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 992px) {
+            .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+            .att-split-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard" class="nav-brand" id="brandLink">Amplimentor Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/assignments">Assignments</a></li>
+                <li><a href="/quiz">Quizzes</a></li>
+                <li><a href="/study-resources">Resources</a></li>
+                <li class="more-dropdown" id="moreDropdownWrapper">
+                    <a href="#" class="more-dropdown-trigger" onclick="toggleMoreDropdown(event)">More Tools <i class="fa-solid fa-chevron-down" style="font-size:10px;"></i></a>
+                    <div class="more-dropdown-menu">
+                        <a href="/attendance.html" class="active"><i class="fa-solid fa-clipboard-user"></i> Attendance</a>
+                        <a href="/session-notes.html"><i class="fa-solid fa-file-signature"></i> Session Notes</a>
+                        <a href="/recordings.html"><i class="fa-solid fa-video"></i> Video Recordings</a>
+                        <a href="/learning-goals"><i class="fa-solid fa-bullseye"></i> Learning Goals</a>
+                        <a href="/learning-progress"><i class="fa-solid fa-chart-line"></i> Progress Analytics</a>
+                        <a href="/reviews.html"><i class="fa-solid fa-star"></i> Reviews & Feedback</a>
+                        <a href="/certificates.html"><i class="fa-solid fa-certificate"></i> Certificates</a>
+                        <a href="/gamification.html"><i class="fa-solid fa-gamepad"></i> Achievements & XP</a>
+                    </div>
+                </li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu" id="dropdownMenu">
+                        <!-- Loaded dynamically -->
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Container Layout -->
+    <div class="att-container">
+        
+        <!-- Header Ribbon -->
+        <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; flex-wrap:wrap; gap:16px;">
+            <div>
+                <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.02em; margin:0;" id="pageTitleHeading">Attendance Registry</h1>
+                <p style="color: #64748B; font-size: 14px; margin-top: 4px;" id="pageSubtitleDesc">Verify details, manage daily session streaks logs, and export calendars.</p>
+            </div>
+            
+            <div id="studentFilterPanel" style="display:none; align-items:center; gap:16px; flex-wrap:wrap;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-weight:700; font-size:13px; color:#475569;"><i class="fa-regular fa-calendar" style="color:#3B82F6;"></i> Session Date:</span>
+                    <input type="date" value="2026-07-08" style="padding: 7px 12px; border-radius: 8px; border:1.5px solid #CBD5E1; font-size:13px; font-weight:600; cursor:pointer;" />
+                </div>
+                <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="font-weight:700; font-size:13px; color:#475569;"><i class="fa-solid fa-filter" style="color:#3B82F6;"></i> Target Student:</span>
+                    <select class="student-select-box" onchange="switchStudentFilter(this.value)">
+                        <option value="Rahul Verma">Rahul Verma (Grade 12 Biology)</option>
+                        <option value="Aman Kumar">Aman Kumar (Grade 11 Physics)</option>
+                        <option value="Priya Singh">Priya Singh (Grade 12 Chemistry)</option>
+                    </select>
+                </div>
+            </div>
+        </header>
+
+        <!-- Metric cards -->
+        <div class="metrics-grid" id="metricsCardsRow">
+            <!-- Dynamic columns -->
+        </div>
+
+        <!-- Main Body Grid Split -->
+        <div class="att-split-grid">
+            
+            <!-- Left Side: Table List (Mentor) / Calendar Grid (Student) -->
+            <section class="att-section-card" id="leftSectionCard">
+                <!-- Loaded Dynamically -->
+            </section>
+
+            <!-- Right Side: Analytics & Calendar Grid (Mentor) / Progress (Student) -->
+            <section class="att-section-card" id="rightSectionCard">
+                <!-- Loaded Dynamically -->
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Floating Role Simulator Switcher -->
+    <div style="position: fixed; bottom: 20px; right: 20px; background: #FFFFFF; border: 1.5px solid var(--primary); padding: 12px 18px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.15); z-index: 99999; display: flex; align-items: center; gap: 12px; font-family: sans-serif; font-size: 13px;">
+        <strong style="color:var(--primary);"><i class="fa-solid fa-user-gear"></i> Role Simulator:</strong>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="student" id="btnSimStudent" onclick="simRoleToggle('student')"> Student</label>
+        <label style="cursor:pointer; display:inline-flex; align-items:center; gap:4px; font-weight:700;"><input type="radio" name="simRole" value="mentor" id="btnSimMentor" onclick="simRoleToggle('mentor')"> Mentor</label>
+    </div>
+
+    <script>
+        let currentRole = 'student';
+        let selectedStudent = 'Rahul Verma';
+
+        // High fidelity mock data database
+        let attendanceDatabase = [
+            { id: 'att-1', student: 'Rahul Verma', subject: 'Botany Biology', date: 'July 8, 2026', time: '10:00 AM', status: 'present', duration: '60 mins', mentor: 'Anjali Patel', remarks: 'Joined on time. Actively solved worksheets.' },
+            { id: 'att-2', student: 'Aman Kumar', subject: 'Physics Mechanics', date: 'July 8, 2026', time: '11:00 AM', status: 'late', duration: '50 mins', mentor: 'Priya Shah', remarks: 'Joined 10 minutes late due to network delay.' },
+            { id: 'att-3', student: 'Priya Singh', subject: 'Organic Chemistry', date: 'July 8, 2026', time: '11:30 AM', status: 'present', duration: '60 mins', mentor: 'Neha Joshi', remarks: 'Perfect organic mechanisms drawings.' },
+            { id: 'att-4', student: 'Rohan Gupta', subject: 'Mathematics Algebra', date: 'July 8, 2026', time: '01:00 PM', status: 'absent', duration: '0 mins', mentor: 'Anjali Patel', remarks: 'Unexcused absence.' },
+            { id: 'att-5', student: 'Sneha Reddy', subject: 'Zoology Biology', date: 'July 8, 2026', time: '02:00 PM', status: 'present', duration: '60 mins', mentor: 'Anjali Patel', remarks: 'Excellent participation.' },
+            { id: 'att-6', student: 'Vikram Joshi', subject: 'Physical Chemistry', date: 'July 7, 2026', time: '03:00 PM', status: 'late', duration: '45 mins', mentor: 'Neha Joshi', remarks: 'Late arrival.' },
+            { id: 'att-7', student: 'Ananya Sharma', subject: 'Botany Genetics', date: 'July 7, 2026', time: '04:00 PM', status: 'present', duration: '60 mins', mentor: 'Anjali Patel', remarks: 'Completed Punnett square exercise.' },
+            { id: 'att-8', student: 'Karan Patel', subject: 'Electrostatics', date: 'July 7, 2026', time: '05:00 PM', status: 'absent', duration: '0 mins', mentor: 'Priya Shah', remarks: 'Sick leave requested.' },
+            { id: 'att-9', student: 'Meera Nair', subject: 'Inorganic Chemistry', date: 'July 6, 2026', time: '10:00 AM', status: 'present', duration: '60 mins', mentor: 'Neha Joshi', remarks: 'Active response.' },
+            { id: 'att-10', student: 'Devendra Rao', subject: 'Thermodynamics', date: 'July 6, 2026', time: '11:00 AM', status: 'late', duration: '50 mins', mentor: 'Priya Shah', remarks: 'Joined mid-session.' },
+            { id: 'att-11', student: 'Pooja Agarwal', subject: 'Cell Biology', date: 'July 5, 2026', time: '10:00 AM', status: 'present', duration: '60 mins', mentor: 'Anjali Patel', remarks: 'Lab diagram review complete.' },
+            { id: 'att-12', student: 'Aditya Roy', subject: 'Optics & Waves', date: 'July 5, 2026', time: '02:00 PM', status: 'absent', duration: '0 mins', mentor: 'Priya Shah', remarks: 'No show.' }
+        ];
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        function toggleMoreDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('moreDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const prof = document.getElementById('profileDropdownWrapper');
+            if (prof) prof.classList.remove('open');
+            const more = document.getElementById('moreDropdownWrapper');
+            if (more) more.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    
+                    const saved = localStorage.getItem('simulatedRole');
+                    currentRole = saved ? saved : profile.role;
+                    const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                    if (radio) radio.checked = true;
+
+                    const brand = document.getElementById('brandLink');
+                    const dropdown = document.getElementById('dropdownMenu');
+                    const navName = document.getElementById('navName');
+                    const navAvatar = document.getElementById('navAvatar');
+
+                    if (navName) navName.textContent = profile.name;
+                    if (profile.photo && navAvatar) {
+                        navAvatar.src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    if (currentRole === 'mentor') {
+                        if (brand) { brand.href = '/mentor-dashboard'; brand.textContent = 'Amplimentor Workspace'; }
+                        if (dropdown) {
+                            dropdown.innerHTML = `
+                                <a href="/mentor/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                                <a href="/mentor/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                                <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                            `;
+                        }
+                    } else {
+                        if (brand) { brand.href = '/student-dashboard'; brand.textContent = 'Amplimentor Learning Hub'; }
+                        if (dropdown) {
+                            dropdown.innerHTML = `
+                                <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                                <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                                <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                            `;
+                        }
+                    }
+
+                    renderDashboard();
+                } else {
+                    const saved = localStorage.getItem('simulatedRole') || 'student';
+                    currentRole = saved;
+                    const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                    if (radio) radio.checked = true;
+                    renderDashboard();
+                }
+            } catch (err) {
+                console.error(err);
+                const saved = localStorage.getItem('simulatedRole') || 'student';
+                currentRole = saved;
+                const radio = document.getElementById(currentRole === 'mentor' ? 'btnSimMentor' : 'btnSimStudent');
+                if (radio) radio.checked = true;
+                renderDashboard();
+            }
+        });
+
+        function renderDashboard() {
+            const sfp = document.getElementById('studentFilterPanel');
+            const pth = document.getElementById('pageTitleHeading');
+            const psd = document.getElementById('pageSubtitleDesc');
+
+            if (currentRole === 'mentor') {
+                if (sfp) sfp.style.display = 'flex';
+                if (pth) pth.textContent = "Log Student Attendance";
+                if (psd) psd.textContent = "Select students, log attendance tags, manage monthly grids, and export reports.";
+                
+                renderMentorMetrics();
+                renderMentorList();
+                renderMentorSidebar();
+            } else {
+                if (sfp) sfp.style.display = 'none';
+                if (pth) pth.textContent = "My Attendance Logs";
+                if (psd) psd.textContent = "Review your lecture timeline records, target analytics percentages, and monthly grids.";
+
+                renderStudentMetrics();
+                renderStudentList();
+                renderStudentSidebar();
+            }
+        }
+
+        // --- MENTOR METRICS ---
+        function renderMentorMetrics() {
+            const row = document.getElementById('metricsCardsRow');
+            if (!row) return;
+            const total = attendanceDatabase.length;
+            const present = attendanceDatabase.filter(r => r.status === 'present').length;
+            const absent = attendanceDatabase.filter(r => r.status === 'absent').length;
+            const pct = total > 0 ? Math.round((present / total) * 100) : 0;
+
+            row.innerHTML = `
+                <div class="m-card" style="border-top:3px solid #10B981;">
+                    <div>
+                        <span class="m-lbl" style="color:#047857;">Present</span>
+                        <div class="m-val">${present} Students</div>
+                    </div>
+                    <div class="m-icon" style="background:#ECFDF5; color:#10B981;"><i class="fa-solid fa-circle-check"></i></div>
+                </div>
+                <div class="m-card" style="border-top:3px solid #EF4444;">
+                    <div>
+                        <span class="m-lbl" style="color:#B91C1C;">Absent</span>
+                        <div class="m-val">${absent} Students</div>
+                    </div>
+                    <div class="m-icon" style="background:#FEF2F2; color:#EF4444;"><i class="fa-solid fa-circle-xmark"></i></div>
+                </div>
+                <div class="m-card" style="border-top:3px solid #6366F1;">
+                    <div>
+                        <span class="m-lbl" style="color:#4338CA;">Total Sessions</span>
+                        <div class="m-val">${total} Logs</div>
+                    </div>
+                    <div class="m-icon" style="background:#EEF2FF; color:#6366F1;"><i class="fa-solid fa-clipboard-list"></i></div>
+                </div>
+                <div class="m-card" style="border-top:3px solid #3B82F6;">
+                    <div>
+                        <span class="m-lbl" style="color:#1D4ED8;">Attendance Rate</span>
+                        <div class="m-val">${pct}%</div>
+                    </div>
+                    <div class="m-icon" style="background:#EFF6FF; color:#3B82F6;"><i class="fa-solid fa-chart-line"></i></div>
+                </div>
+            `;
+        }
+
+        // --- STUDENT METRICS ---
+        function renderStudentMetrics() {
+            const row = document.getElementById('metricsCardsRow');
+            if (!row) return;
+            const records = attendanceDatabase.filter(r => r.student === 'Rahul Verma');
+            const total = records.length;
+            const present = records.filter(r => r.status === 'present').length;
+            const absent = records.filter(r => r.status === 'absent').length;
+            const pct = total > 0 ? Math.round((present / total) * 100) : 0;
+
+            row.innerHTML = `
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Attendance Rate</span>
+                        <div class="m-val">${pct}%</div>
+                    </div>
+                    <div class="m-icon" style="background:#EEF2FF; color:#4F46E5;"><i class="fa-solid fa-gauge-high"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Present Sessions</span>
+                        <div class="m-val">${present} Class</div>
+                    </div>
+                    <div class="m-icon" style="background:#D1FAE5; color:#10B981;"><i class="fa-solid fa-check"></i></div>
+                </div>
+                <div class="m-card">
+                    <div>
+                        <span class="m-lbl">Missed Sessions</span>
+                        <div class="m-val">${absent} Absences</div>
+                    </div>
+                    <div class="m-icon" style="background:#FEE2E2; color:#EF4444;"><i class="fa-solid fa-xmark"></i></div>
+                </div>
+            `;
+        }
+
+        // --- MENTOR LEFT PANEL (Attendance Table with Checkbox Selection & Save Button) ---
+        function renderMentorList() {
+            const card = document.getElementById('leftSectionCard');
+            if (!card) return;
+            
+            if (attendanceDatabase.length === 0) {
+                card.innerHTML = `
+                    <div class="empty-illustration-box">
+                        <i class="fa-regular fa-clipboard" style="font-size:48px; color:#94A3B8; margin-bottom:16px;"></i>
+                        <h3 style="font-size:16px; font-weight:800; color:#0F172A; margin:0 0 4px 0;">No attendance records yet</h3>
+                        <p style="color:#64748B; font-size:13px; margin:0 0 20px 0;">Create learning goals or schedule calendars lectures to log attendance profiles.</p>
+                        <button class="btn-goal-primary" style="width:auto; padding:8px 16px;" onclick="window.location.href='/calendar'">Go to Calendar</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const allChecked = attendanceDatabase.length > 0 && attendanceDatabase.every(r => r.status === 'present');
+
+            card.innerHTML = `
+                <div class="section-header" style="display:flex; justify-content:flex-start; align-items:center; margin-bottom:16px; text-align:left; width:100%;">
+                    <h3 class="card-title" style="margin:0; font-size:15px; font-weight:700; text-align:left; display:inline-flex; align-items:center; gap:8px;"><i class="fa-solid fa-list-check" style="color:var(--primary);"></i> Lecture Attendance Sheet</h3>
+                </div>
+
+                <div class="responsive-table-wrapper">
+                    <table class="app-table att-table">
+                        <thead>
+                            <tr>
+                                <th class="att-th col-main">Student</th>
+                                <th class="att-th col-subject">Subject</th>
+                                <th class="att-th col-date">Date & Time</th>
+                                <th class="att-th col-badge">Status</th>
+                                <th class="att-th col-select" style="width:90px !important; min-width:90px !important; text-align:center !important; padding:14px 8px !important;">
+                                    <input type="checkbox" id="selectAllCheckbox" ${allChecked ? 'checked' : ''} onchange="toggleSelectAllAttendance(this.checked)" style="width:17px; height:17px; cursor:pointer; accent-color:#10B981; vertical-align:middle; display:inline-block; margin:0 auto;" title="Select All Students" />
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${attendanceDatabase.map(rec => {
+                                const isPresent = (rec.status === 'present');
+                                const displayStatus = isPresent ? 'present' : 'absent';
+                                return `
+                                    <tr>
+                                        <td class="att-td col-main"><strong>${rec.student}</strong></td>
+                                        <td class="att-td col-subject">${rec.subject}</td>
+                                        <td class="att-td col-date">${rec.date} • ${rec.time}</td>
+                                        <td class="att-td col-badge"><span class="status-chip ${displayStatus}">${displayStatus}</span></td>
+                                        <td class="att-td col-select" style="width:90px !important; min-width:90px !important; text-align:center !important; padding:14px 8px !important;">
+                                            <input type="checkbox" class="student-att-checkbox" data-id="${rec.id}" ${isPresent ? 'checked' : ''} onchange="toggleRowAttendance('${rec.id}', this.checked)" style="width:17px; height:17px; cursor:pointer; accent-color:#10B981; vertical-align:middle; display:inline-block; margin:0 auto;" />
+                                        </td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+                    <button type="button" id="btnSaveAttendance" onclick="saveAttendanceState()" style="background:#10B981; color:#FFFFFF; border:none; padding:10px 22px; border-radius:8px; font-size:13.5px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:8px; box-shadow:0 2px 6px rgba(16,185,129,0.25); transition:all 0.2s ease;">
+                        <i class="fa-solid fa-floppy-disk"></i> Save Attendance
+                    </button>
+                </div>
+            `;
+        }
+
+        // --- STUDENT LEFT PANEL (Monthly Calendar Grid) ---
+        function renderStudentList() {
+            const card = document.getElementById('leftSectionCard');
+            if (!card) return;
+            const records = attendanceDatabase.filter(r => r.student === 'Rahul Verma');
+
+            card.innerHTML = `
+                <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h3 class="card-title" style="margin:0; font-size:15px; font-weight:700;"><i class="fa-solid fa-calendar-days" style="color:var(--primary);"></i> Attendance Grid: July 2026</h3>
+                    <div style="display:flex; gap:12px; font-size:11px; font-weight:700; flex-wrap:wrap;">
+                        <span style="color:#10B981;"><i class="fa-solid fa-square"></i> Present</span>
+                        <span style="color:#EF4444;"><i class="fa-solid fa-square"></i> Absent</span>
+                    </div>
+                </div>
+
+                <div class="cal-grid-grid">
+                    <div class="cal-day-header">Mon</div>
+                    <div class="cal-day-header">Tue</div>
+                    <div class="cal-day-header">Wed</div>
+                    <div class="cal-day-header">Thu</div>
+                    <div class="cal-day-header">Fri</div>
+                    <div class="cal-day-header">Sat</div>
+                    <div class="cal-day-header">Sun</div>
+                    
+                    <!-- Offset Empty cells (July 2026 starts on Wednesday) -->
+                    <div style="border:none;"></div>
+                    <div style="border:none;"></div>
+
+                    ${Array.from({ length: 31 }, (_, i) => {
+                        const day = i + 1;
+                        const dateStr = `July ${day}, 2026`;
+                        const session = records.find(r => r.date === dateStr);
+                        
+                        let cellClass = '';
+                        if (session) cellClass = session.status === 'present' ? 'present' : 'absent';
+                        
+                        return `
+                            <div class="cal-cell ${cellClass}" onclick="showDayDetails('${dateStr}', '${session ? session.remarks : 'No class scheduled'}')">
+                                ${day}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        // --- MENTOR RIGHT PANEL (Calendar + Export) ---
+        function renderMentorSidebar() {
+            const card = document.getElementById('rightSectionCard');
+            if (!card) return;
+            const studentRecords = attendanceDatabase.filter(r => r.student === selectedStudent);
+
+            card.innerHTML = `
+                <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h3 class="card-title" style="margin:0; font-size:15px; font-weight:700;"><i class="fa-solid fa-chart-pie" style="color:var(--primary);"></i> Attendance Analytics</h3>
+                    <div style="display:flex; gap:6px;">
+                        <button class="btn-export" style="background:#F1F5F9; border:1px solid #CBD5E1; padding:6px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;" onclick="exportReports('CSV')"><i class="fa-solid fa-file-csv"></i> Export CSV</button>
+                        <button class="btn-export" style="background:#F1F5F9; border:1px solid #CBD5E1; padding:6px 12px; border-radius:6px; font-size:11.5px; font-weight:700; cursor:pointer;" onclick="exportReports('PDF')"><i class="fa-solid fa-file-pdf"></i> Export PDF</button>
+                    </div>
+                </div>
+
+                <div style="display:flex; flex-direction:column; gap:16px;">
+                    <div style="background-color:#F8FAFC; border:1px solid var(--border); padding:16px; border-radius:12px;">
+                        <span style="font-size:11.5px; font-weight:700; color:#64748B;">MOST ABSENT STUDENTS</span>
+                        <div style="margin-top:8px; display:flex; flex-direction:column; gap:8px;">
+                            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                                <strong>Rahul Verma</strong>
+                                <span style="color:#EF4444; font-weight:700;">1 Absence</span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; font-size:12.5px;">
+                                <strong>Aman Kumar</strong>
+                                <span style="color:#64748B; font-weight:500;">0 Absence</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background-color:#F8FAFC; border:1px solid var(--border); padding:16px; border-radius:12px;">
+                        <span style="font-size:11.5px; font-weight:700; color:#64748B;">MONTHLY ACTIVE TREND</span>
+                        <div style="margin-top:10px; display:flex; gap:8px; align-items:flex-end; height:70px;">
+                            <div style="width:100%; height:40%; background:#10B981; border-radius:4px; text-align:center; font-size:9px; color:white;">May</div>
+                            <div style="width:100%; height:75%; background:#10B981; border-radius:4px; text-align:center; font-size:9px; color:white;">Jun</div>
+                            <div style="width:100%; height:91%; background:#3B82F6; border-radius:4px; text-align:center; font-size:9px; color:white;">Jul</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // --- STUDENT RIGHT PANEL (Attendance timeline + Goal Card) ---
+        function renderStudentSidebar() {
+            const card = document.getElementById('rightSectionCard');
+            if (!card) return;
+            const records = attendanceDatabase.filter(r => r.student === 'Rahul Verma');
+
+            card.innerHTML = `
+                <h3 class="card-title" style="margin-bottom:16px;"><i class="fa-solid fa-square-poll-vertical" style="color:var(--primary);"></i> Progress & Timeline</h3>
+                
+                <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:16px; border-radius:12px; margin-bottom:20px;">
+                    <div style="display:flex; justify-content:space-between; font-size:13px; font-weight:800; color:#1E40AF;">
+                        <span>Current Attendance %</span>
+                        <span>Target: 90%</span>
+                    </div>
+                    <div style="font-size:24px; font-weight:800; color:#1E3A8A; margin:6px 0;">86.5%</div>
+                    <div style="font-size:11px; color:#1E40AF;"><i class="fa-solid fa-arrow-trend-up"></i> Tending positive (+2.5% this week)</div>
+                </div>
+
+                <span class="form-label" style="margin-bottom:8px; display:block;">Recent History Logs</span>
+                <div style="display:flex; flex-direction:column; gap:12px; max-height:220px; overflow-y:auto;">
+                    ${records.map(rec => `
+                        <div style="border:1.5px solid var(--border); border-radius:8px; padding:10px; font-size:12px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong>${rec.date}</strong>
+                                <span class="status-chip ${rec.status}" style="font-size:9px; padding:2px 6px;">${rec.status}</span>
+                            </div>
+                            <div style="color:#64748B; margin-top:4px;">Mentor: ${rec.mentor} • Duration: ${rec.duration}</div>
+                            ${rec.remarks ? `<div style="margin-top:6px; font-style:italic; color:#475569;">"${rec.remarks}"</div>` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // Action controls
+        function toggleSelectAllAttendance(isChecked) {
+            const newStatus = isChecked ? 'present' : 'absent';
+            attendanceDatabase.forEach(rec => {
+                rec.status = newStatus;
+            });
+            renderDashboard();
+        }
+
+        function toggleRowAttendance(recId, isChecked) {
+            const rec = attendanceDatabase.find(r => r.id === recId);
+            if (rec) {
+                rec.status = isChecked ? 'present' : 'absent';
+            }
+            const selectAll = document.getElementById('selectAllCheckbox');
+            if (selectAll) {
+                selectAll.checked = attendanceDatabase.length > 0 && attendanceDatabase.every(r => r.status === 'present');
+            }
+            renderMentorMetrics();
+            renderMentorList();
+        }
+
+        function saveAttendanceState() {
+            try {
+                if (window.toast && typeof window.toast.success === 'function') {
+                    window.toast.success("Success", "Attendance saved successfully.");
+                }
+            } catch (err) {
+                console.warn("Toast alert error:", err);
+            }
+            renderDashboard();
+        }
+
+        function switchStudentFilter(val) {
+            selectedStudent = val;
+            renderDashboard();
+        }
+
+        function bulkAttendanceMark() {
+            toggleSelectAllAttendance(true);
+            try {
+                if (window.toast && typeof window.toast.success === 'function') {
+                    window.toast.success("Bulk Success", "All student sessions set to Present.");
+                }
+            } catch(e){}
+        }
+
+        function exportReports(type) {
+            if (window.toast && typeof window.toast.success === 'function') {
+                window.toast.success(`${type} Exported`, `Monthly attendance data downloaded successfully in ${type} format.`);
+            }
+        }
+
+        function showDayDetails(date, remarks) {
+            if (window.toast && typeof window.toast.info === 'function') {
+                window.toast.info(date, remarks);
+            }
+        }
+
+        function simRoleToggle(role) {
+            localStorage.setItem('simulatedRole', role);
+            window.location.reload();
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>

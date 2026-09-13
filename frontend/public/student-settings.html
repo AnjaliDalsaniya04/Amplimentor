@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Account Settings - Amplimentor</title>
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="/config.js"></script>
+    <script src="/toast-manager.js"></script>
+    <script src="/uploader-helper.js"></script>
+    <!-- Platform base styles -->
+    <link rel="stylesheet" href="/style.css?v=1.2">
+    <style>
+        body {
+            background-color: #F8FAFC;
+            color: #1E1B4B;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Specificity updates for navbar profile dropdown */
+        .profile-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .nav-menu a.profile-dropdown-trigger {
+            display: flex !important;
+            align-items: center !important;
+            gap: 8px !important;
+            cursor: pointer !important;
+            padding: 4px 8px !important;
+            border-radius: 8px !important;
+            color: var(--text-secondary) !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+            text-decoration: none !important;
+            line-height: 1 !important;
+            height: 32px !important;
+            box-sizing: border-box !important;
+        }
+        .nav-menu a.profile-dropdown-trigger:hover {
+            background-color: #F1F5F9 !important;
+            color: var(--primary) !important;
+        }
+        .nav-avatar-container {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1.5px solid var(--border-color);
+            flex-shrink: 0;
+        }
+        .nav-avatar-img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+            margin-top: 3px;
+        }
+        .profile-dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            min-width: 160px;
+            margin-top: 4px;
+            padding: 4px 0;
+        }
+        .profile-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            color: var(--text-secondary) !important;
+            font-size: 13.5px;
+            font-weight: 500;
+            text-decoration: none;
+        }
+        .profile-dropdown-menu a:hover {
+            background-color: #F1F5F9;
+            color: var(--primary) !important;
+        }
+        .profile-dropdown-wrapper.open .profile-dropdown-menu {
+            display: block;
+        }
+
+        /* Settings grid structure */
+        .settings-workspace-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            grid-template-columns: minmax(260px, 280px) minmax(0, 1fr);
+            gap: 24px;
+        }
+
+        /* Vertical Tabs Panel */
+        .settings-sidebar-tabs {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 0;
+            align-self: start;
+        }
+        .settings-tab-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14.5px;
+            color: #475569;
+            transition: background 0.2s, color 0.2s;
+        }
+        .settings-tab-link:hover {
+            background-color: #F8FAFC;
+            color: var(--primary);
+        }
+        .settings-tab-link.active {
+            background-color: #EFF6FF;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            padding-left: 20px;
+        }
+
+        /* Main Form Panel */
+        .settings-content-card {
+            background: #FFFFFF;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 4px 12px rgba(15,23,42,0.02);
+        }
+        .settings-section-header {
+            margin-bottom: 28px;
+        }
+        .settings-section-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+        .settings-section-desc {
+            font-size: 13.5px;
+            color: #64748B;
+            margin-top: 4px;
+        }
+
+        /* Form Controls */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .form-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-item.full-width {
+            grid-column: span 2;
+        }
+        .settings-label {
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748B;
+        }
+        .settings-input {
+            width: 100%;
+            box-sizing: border-box;
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        .settings-input:focus {
+            border-color: var(--primary);
+            background-color: #FFFFFF;
+        }
+
+        /* Profile photo drag area */
+        .upload-drag-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .upload-drag-area:hover {
+            border-color: var(--primary);
+        }
+
+        /* Toggle switch row */
+        .toggle-switch-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .toggle-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .toggle-title { font-size: 14.5px; font-weight: 700; color: #1E293B; }
+        .toggle-desc { font-size: 12.5px; color: #64748B; }
+
+        /* Danger zone card */
+        .danger-zone-card {
+            border: 1px solid #FEE2E2;
+            background-color: #FEF2F2;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 32px;
+        }
+
+        .btn-settings-save {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .btn-settings-save:hover {
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .settings-workspace-container {
+                grid-template-columns: 1fr;
+            }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            .form-item.full-width {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Navigation Header -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/student-dashboard.html" class="nav-brand" id="brandLink">Amplimentor Learning Hub</a>
+            <ul class="nav-menu">
+                <li><a href="/student/mentors">Find Mentors</a></li>
+                <li><a href="/chat.html">Messages</a></li>
+                <li><a href="/sessions.html">Sessions</a></li>
+                <li class="profile-dropdown-wrapper" id="profileDropdownWrapper">
+                    <a href="#" class="profile-dropdown-trigger" onclick="toggleProfileDropdown(event)">
+                        <div class="nav-avatar-container">
+                            <img src="/default-avatar.png" id="navAvatar" class="nav-avatar-img">
+                        </div>
+                        <span id="navName">Profile</span> <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:4px;"></i>
+                    </a>
+                    <div class="profile-dropdown-menu">
+                        <a href="/student/profile"><i class="fa-solid fa-user"></i> My Profile</a>
+                        <a href="/student/settings"><i class="fa-solid fa-gear"></i> Settings</a>
+                        <a href="/logout" class="logout-btn" style="color:var(--danger) !important;"><i class="fa-solid fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main settings framework -->
+    <div class="settings-workspace-container">
+        
+        <!-- Sidebar tabs -->
+        <aside class="settings-sidebar-tabs">
+            <div class="settings-tab-link active" onclick="switchSettingsTab('account', this)">
+                <i class="fa-solid fa-user-gear"></i> Account Settings
+            </div>
+            <div class="settings-tab-link" onclick="switchSettingsTab('security', this)">
+                <i class="fa-solid fa-shield-halved"></i> Security & Password
+            </div>
+            <div class="settings-tab-link" onclick="switchSettingsTab('notifications', this)">
+                <i class="fa-solid fa-bell"></i> Notifications
+            </div>
+            <div class="settings-tab-link" onclick="switchSettingsTab('privacy', this)">
+                <i class="fa-solid fa-user-lock"></i> Language & Privacy
+            </div>
+            <div class="settings-tab-link" onclick="switchSettingsTab('connected', this)">
+                <i class="fa-solid fa-network-wired"></i> Connected Accounts
+            </div>
+        </aside>
+
+        <!-- Form settings content -->
+        <main class="settings-content-card" id="settingsFormCard">
+            <!-- Loaded dynamically based on selected tab -->
+        </main>
+    </div>
+
+    <script>
+        let currentUserId = null;
+
+        function toggleProfileDropdown(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            document.getElementById('profileDropdownWrapper').classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            const wrap = document.getElementById('profileDropdownWrapper');
+            if (wrap) wrap.classList.remove('open');
+        });
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch(API_BASE + '/api/profile', { credentials: 'include' });
+                if (response.ok) {
+                    const profile = await response.json();
+                    currentUserId = profile.id;
+                    document.getElementById('navName').textContent = profile.name;
+                    if (profile.photo) {
+                        document.getElementById('navAvatar').src = API_BASE + '/uploads/' + profile.photo;
+                    }
+
+                    // Default to account tab loading
+                    switchSettingsTab('account', document.querySelector('.settings-tab-link.active'));
+                } else {
+                    switchSettingsTab('account', document.querySelector('.settings-tab-link.active'));
+                }
+            } catch (err) {
+                console.error(err);
+                // Fallback simulation loading
+                switchSettingsTab('account', document.querySelector('.settings-tab-link.active'));
+            }
+        });
+
+        function switchSettingsTab(tabName, element) {
+            document.querySelectorAll('.settings-tab-link').forEach(link => link.classList.remove('active'));
+            element.classList.add('active');
+
+            const card = document.getElementById('settingsFormCard');
+
+            if (tabName === 'account') {
+                card.innerHTML = `
+                    <div class="settings-section-header">
+                        <h2 class="settings-section-title">Account Profiles</h2>
+                        <p class="settings-section-desc">Manage your public information and avatar files.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-item">
+                            <label class="settings-label">Full Name</label>
+                            <input type="text" value="Rahul Verma" class="settings-input" id="setName">
+                        </div>
+                        <div class="form-item">
+                            <label class="settings-label">Email Address</label>
+                            <input type="email" value="rahul.verma@student.in" class="settings-input" id="setEmail" disabled>
+                        </div>
+                        <div class="form-item full-width">
+                            <label class="settings-label">Avatar Photo</label>
+                            <div id="avatarUploaderContainer"></div>
+                        </div>
+                    </div>
+                    <div style="margin-top:28px;">
+                        <button class="btn-settings-save" onclick="saveSettings('Account Profile saved successfully!')">Save Account Updates</button>
+                    </div>
+                `;
+                setTimeout(() => {
+                    new ReusableUploader('avatarUploaderContainer', {
+                        accept: 'image/*',
+                        maxSizeMb: 2
+                    });
+                }, 50);
+            } else if (tabName === 'security') {
+                card.innerHTML = `
+                    <div class="settings-section-header">
+                        <h2 class="settings-section-title">Security & Password</h2>
+                        <p class="settings-section-desc">Manage credentials and protect your student access.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-item">
+                            <label class="settings-label">Current Password</label>
+                            <input type="password" class="settings-input">
+                        </div>
+                        <div class="form-item">
+                            <label class="settings-label">New Password</label>
+                            <input type="password" class="settings-input">
+                        </div>
+                        <div class="form-item">
+                            <label class="settings-label">Confirm New Password</label>
+                            <input type="password" class="settings-input">
+                        </div>
+                    </div>
+                    <div style="margin-top:28px;">
+                        <button class="btn-settings-save" onclick="saveSettings('Password updated successfully!')">Update Password</button>
+                    </div>
+                `;
+            } else if (tabName === 'notifications') {
+                card.innerHTML = `
+                    <div class="settings-section-header">
+                        <h2 class="settings-section-title">Notification Preferences</h2>
+                        <p class="settings-section-desc">Toggle updates delivery preferences.</p>
+                    </div>
+                    <div>
+                        <div class="toggle-switch-row">
+                            <div class="toggle-details">
+                                <span class="toggle-title">Email Notifications</span>
+                                <span class="toggle-desc">Bookings, reminders, and payment invoices.</span>
+                            </div>
+                            <input type="checkbox" checked style="width:18px; height:18px;">
+                        </div>
+                        <div class="toggle-switch-row">
+                            <div class="toggle-details">
+                                <span class="toggle-title">SMS Doubts & Session Alerts</span>
+                                <span class="toggle-desc">Reminders 30 minutes before active live sessions.</span>
+                            </div>
+                            <input type="checkbox" checked style="width:18px; height:18px;">
+                        </div>
+                        <div class="toggle-switch-row">
+                            <div class="toggle-details">
+                                <span class="toggle-title">Weekly Learning Recommendations</span>
+                                <span class="toggle-desc">Periodic subject tips and learning track progression alerts.</span>
+                            </div>
+                            <input type="checkbox" style="width:18px; height:18px;">
+                        </div>
+                    </div>
+                    <div style="margin-top:28px;">
+                        <button class="btn-settings-save" onclick="saveSettings('Notification preferences updated!')">Save Preferences</button>
+                    </div>
+                `;
+            } else if (tabName === 'privacy') {
+                card.innerHTML = `
+                    <div class="settings-section-header">
+                        <h2 class="settings-section-title">Language & Privacy</h2>
+                        <p class="settings-section-desc">Manage regional and profile search configurations.</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-item">
+                            <label class="settings-label">Preferred Language</label>
+                            <select class="settings-input" style="height:42px;">
+                                <option value="en">English (US)</option>
+                                <option value="hi">Hindi</option>
+                                <option value="es">Spanish</option>
+                            </select>
+                        </div>
+                        <div class="form-item">
+                            <label class="settings-label">Profile Visibility</label>
+                            <select class="settings-input" style="height:42px;">
+                                <option value="public">Visible to all registered mentors</option>
+                                <option value="private">Only visible to my booked mentors</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="margin-top:28px;">
+                        <button class="btn-settings-save" onclick="saveSettings('Privacy settings updated!')">Save Privacy Settings</button>
+                    </div>
+                `;
+            } else if (tabName === 'connected') {
+                card.innerHTML = `
+                    <div class="settings-section-header">
+                        <h2 class="settings-section-title">Connected Accounts</h2>
+                        <p class="settings-section-desc">Link platform credentials with external services.</p>
+                    </div>
+                    <div>
+                        <div class="toggle-switch-row">
+                            <div class="toggle-details">
+                                <span class="toggle-title"><i class="fa-brands fa-google" style="color:#EA4335;"></i> Google Integration</span>
+                                <span class="toggle-desc">Sign in with Google and sync Google Calendar.</span>
+                            </div>
+                            <button class="btn-notif-action" onclick="alert('Google account linked!')">Link Google</button>
+                        </div>
+                        <div class="toggle-switch-row">
+                            <div class="toggle-details">
+                                <span class="toggle-title"><i class="fa-brands fa-apple" style="color:#000000;"></i> Apple Sign-In</span>
+                                <span class="toggle-desc">Authorized with Heli\'s Apple ID.</span>
+                            </div>
+                            <span style="font-size:12px; font-weight:700; color:var(--success);">Connected</span>
+                        </div>
+                    </div>
+                    <div class="danger-zone-card">
+                        <h4 style="margin:0 0 8px 0; color:#991B1B; font-size:15px; font-weight:800;">Danger Zone: Delete Student Account</h4>
+                        <p style="margin:0 0 16px 0; font-size:13px; color:#7F1D1D;">Once deleted, all history, completed sessions, and payouts logs cannot be retrieved.</p>
+                        <button class="btn-dialog-action danger" onclick="simulateAccountDeletion()">Delete Account Permanently</button>
+                    </div>
+                `;
+            }
+        }
+
+        function saveSettings(message) {
+            alert(message);
+        }
+
+        function simulateAvatarUpload() {
+            alert('Simulating Drag & Drop upload. Uploaded generic student avatar successfully!');
+        }
+
+        function simulateAccountDeletion() {
+            const confirmDel = confirm('Are you sure you want to delete your student account?');
+            if (confirmDel) {
+                alert('Account deleted. Redirecting...');
+                window.location.href = '/logout';
+            }
+        }
+    </script>
+    <script src="/navigation-loader.js"></script>
+</body>
+</html>
